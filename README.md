@@ -1,2 +1,2 @@
-# CSC207-Project
+# Pentagon-113
 A unique stock analysis software.

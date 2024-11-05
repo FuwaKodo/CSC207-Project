@@ -1,15 +1,22 @@
 package main.java.entities;
 
+import java.util.List;
+
 /**
  * Stock: the stocks of a single company.
  */
 public class Stock {
-    private String company;
-    private String symbol;
+    private final String company;
+    private final String symbol;
+    private final Metrics metrics;
 
-    private Stock(String company, String symbol) {
-        this.company = company;
-        this.symbol = symbol;
+    public Stock(StockDataLoader loader) {
+        this.company = loader.getCompany();
+        this.symbol = loader.getSymbol();
+
+        List<Double> sharePrices = loader.getSharePrices();
+        List<Double> earnings = loader.getEarnings();
+        this.metrics = new Metrics(sharePrices, earnings);
     }
 
     public String getCompany() {
@@ -18,5 +25,14 @@ public class Stock {
 
     public String getSymbol() {
         return symbol;
+    }
+
+    /**
+     * Get share price at a specific day.
+     * @param day the number of days before today
+     * @return share price
+     */
+    public Double getSharePrice(int day) {
+        return metrics.sharePrice(day);
     }
 }

@@ -1,4 +1,6 @@
-package main.java.entities;
+package main.java.use_cases.compare_stocks;
+
+import main.java.entities.Stock;
 
 public class SharePriceComparator implements StockComparator {
     @Override

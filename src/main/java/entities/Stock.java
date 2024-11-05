@@ -1,5 +1,7 @@
 package main.java.entities;
 
+import main.java.use_cases.load_data.StockDataLoader;
+
 import java.util.List;
 
 /**

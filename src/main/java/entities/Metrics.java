@@ -14,6 +14,12 @@ public class Metrics {
         this.earnings = new MetricValues(earnings);
     }
 
+    /**
+     * Get share price at day. Day parameter represents the number of days before
+     * today.
+     * @param day number of days before today
+     * @return share price
+     */
     public Double sharePrice(int day) {
         return sharePrices.getValue(day);
     }

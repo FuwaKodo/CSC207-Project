@@ -13,6 +13,11 @@ class MetricValues {
         this.values = values;
     }
 
+    /**
+     * Get value on day. `day` parameter represents the number of days before today.
+     * @param day number of days before today
+     * @return the value on day
+     */
     public Double getValue(int day) {
         final int index = dayToIndex(day);
         return values.get(index);

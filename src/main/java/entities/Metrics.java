@@ -26,8 +26,9 @@ public class Metrics {
      * @return the growth percentage
      */
     public Double growthPercentage(int startDay, int endDay) {
-        List<Double> pricesInInterval = sharePrices.getInterval(startDay, endDay);
-        return pricesInInterval.getFirst() * 100 / pricesInInterval.getLast();
+        Double startPrice = sharePrices.getValue(startDay);
+        Double endPrice = sharePrices.getValue(endDay);
+        return startPrice * 100 / endPrice;
     }
 
     /**

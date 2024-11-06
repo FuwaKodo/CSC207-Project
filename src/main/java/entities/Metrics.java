@@ -1,9 +1,18 @@
 package main.java.entities;
 
+import java.util.List;
+
 /**
  * Metrics: the metrics of a stock.
  */
-public interface Metrics {
+public class Metrics {
+    private final MetricValues sharePrices;
+    private final MetricValues earnings;
+
+    public Metrics(List<Double> sharePrices, List<Double> earnings) {
+        this.sharePrices = new MetricValues(sharePrices);
+        this.earnings = new MetricValues(earnings);
+    }
 
     /**
      * Get share price at day. Day parameter represents the number of days before
@@ -11,7 +20,9 @@ public interface Metrics {
      * @param day number of days before today
      * @return share price
      */
-    Double sharePrice(int day);
+    public Double sharePrice(int day) {
+        return sharePrices.getValue(day);
+    }
 
     /**
      * Calculate growth percentage between the stock at startDay and
@@ -20,7 +31,11 @@ public interface Metrics {
      * @param endDay the end of the interval exclusive in terms of number of days before today
      * @return the growth percentage
      */
-    Double growthPercentage(int startDay, int endDay);
+    public Double growthPercentage(int startDay, int endDay) {
+        Double startPrice = sharePrices.getValue(startDay);
+        Double endPrice = sharePrices.getValue(endDay);
+        return startPrice * 100 / endPrice;
+    }
 
     /**
      * Calculate earnings per share by aggregating earnings between the interval
@@ -29,5 +44,16 @@ public interface Metrics {
      * @param endDay the end of the interval exclusive in terms of number of days before today
      * @return earnings per share
      */
-    Double earningsPerShare(int startDay, int endDay);
+    public Double earningsPerShare(int startDay, int endDay) {
+        return getTotalEarnings(startDay, endDay) / sharePrices.getLatest();
+    }
+
+    private Double getTotalEarnings(int startDay, int endDay) {
+        List<Double> earningsInInterval = earnings.getInterval(startDay, endDay);
+        double total = 0;
+        for (Double earning : earningsInInterval) {
+            total += earning;
+        }
+        return total;
+    }
 }

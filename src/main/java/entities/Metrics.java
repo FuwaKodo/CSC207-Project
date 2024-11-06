@@ -1,18 +1,9 @@
 package main.java.entities;
 
-import java.util.List;
-
 /**
  * Metrics: the metrics of a stock.
  */
-public class Metrics {
-    private final MetricValues sharePrices;
-    private final MetricValues earnings;
-
-    public Metrics(List<Double> sharePrices, List<Double> earnings) {
-        this.sharePrices = new MetricValues(sharePrices);
-        this.earnings = new MetricValues(earnings);
-    }
+public interface Metrics {
 
     /**
      * Get share price at day. Day parameter represents the number of days before
@@ -20,9 +11,7 @@ public class Metrics {
      * @param day number of days before today
      * @return share price
      */
-    public Double sharePrice(int day) {
-        return sharePrices.getValue(day);
-    }
+    Double sharePrice(int day);
 
     /**
      * Calculate growth percentage between the stock at startDay and
@@ -31,11 +20,7 @@ public class Metrics {
      * @param endDay the end of the interval exclusive in terms of number of days before today
      * @return the growth percentage
      */
-    public Double growthPercentage(int startDay, int endDay) {
-        Double startPrice = sharePrices.getValue(startDay);
-        Double endPrice = sharePrices.getValue(endDay);
-        return startPrice * 100 / endPrice;
-    }
+    Double growthPercentage(int startDay, int endDay);
 
     /**
      * Calculate earnings per share by aggregating earnings between the interval
@@ -44,16 +29,5 @@ public class Metrics {
      * @param endDay the end of the interval exclusive in terms of number of days before today
      * @return earnings per share
      */
-    public Double earningsPerShare(int startDay, int endDay) {
-        return getTotalEarnings(startDay, endDay) / sharePrices.getLatest();
-    }
-
-    private Double getTotalEarnings(int startDay, int endDay) {
-        List<Double> earningsInInterval = earnings.getInterval(startDay, endDay);
-        double total = 0;
-        for (Double earning : earningsInInterval) {
-            total += earning;
-        }
-        return total;
-    }
+    Double earningsPerShare(int startDay, int endDay);
 }

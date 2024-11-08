@@ -1,16 +1,19 @@
 package main.java.entities;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * Stores the values of a metric. For example, the share price of a stock is a metric and its value
  * is the ordered list of share prices over the reporting period.
  */
-class MetricValues {
+public class MetricValues {
     private final List<Double> values;
+    private final List<Date> dates;
 
-    public MetricValues(List<Double> values) {
+    public MetricValues(List<Double> values, List<Date> dates) {
         this.values = values;
+        this.dates = dates;
     }
 
     /**

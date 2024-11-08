@@ -6,12 +6,16 @@ import java.util.List;
  * Metrics: the metrics of a stock.
  */
 public class Metrics {
-    private final MetricValues sharePrices;
+    private final SharePrices sharePrices;
     private final MetricValues earnings;
+    private final MetricValues volumes;
 
-    public Metrics(List<Double> sharePrices, List<Double> earnings) {
-        this.sharePrices = new MetricValues(sharePrices);
-        this.earnings = new MetricValues(earnings);
+    public Metrics(SharePrices sharePrices,
+                   MetricValues earnings,
+                   MetricValues volumes) {
+        this.sharePrices = sharePrices;
+        this.earnings = earnings;
+        this.volumes = volumes;
     }
 
     /**

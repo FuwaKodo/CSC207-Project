@@ -1,4 +1,4 @@
-package main.java.use_cases.load_data;
+package use_cases.load_data;
 
 import java.util.List;
 

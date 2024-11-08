@@ -8,4 +8,6 @@ Output: Relevant data to be displayed
     // Contains the following
     // String company: name of company
     // String symbol: stock symbol
-    // TODO add other information to be displayed after stock prices' type is decided and wrote
+    // List<Double> sharePrices: share prices in last five years
+    // List<Double> earnings: earnings in last five years
+    // TODO add other information to be displayed

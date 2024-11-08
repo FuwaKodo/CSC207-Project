@@ -31,6 +31,15 @@ public class Metrics {
     }
 
     /**
+     * Get volume at number of day before latest data point.
+     * @param day number of days to backtrack
+     * @return volume at given days back
+     */
+    public Double volume(int day) {
+        return volumes.getValue(day);
+    }
+
+    /**
      * Calculate growth percentage between the stock at startDay and
      * stock at endDay.
      * @param startDay the start of the interval in terms of number of days before the latest data point

@@ -31,7 +31,7 @@ public class Stock {
 
     /**
      * Get share price at a specific day.
-     * @param day the number of days before today
+     * @param day the number of days before the latest data point
      * @return share price
      */
     public Double getSharePrice(int day) {

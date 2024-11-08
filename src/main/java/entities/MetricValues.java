@@ -14,8 +14,8 @@ class MetricValues {
     }
 
     /**
-     * Get value on day. `day` parameter represents the number of days before today.
-     * @param day number of days before today
+     * Get value on day
+     * @param day number of days before the latest data point
      * @return the value on day
      */
     public Double getValue(int day) {
@@ -26,8 +26,8 @@ class MetricValues {
     /**
      * A sublist of the total values stored.
      * @param startDay the start of the interval in terms of the number of days
-     *                 before today, inclusive
-     * @param endDay the end of the interval in terms of the number of days before today,
+     *                 before the latest data point, inclusive
+     * @param endDay the end of the interval in terms of the number of days before the latest data point,
      *               exclusive
      * @return a sublist inside the interval
      */

@@ -37,4 +37,13 @@ public class Stock {
     public Double getSharePrice(int day) {
         return metrics.sharePrice(day);
     }
+
+    /**
+     * Get volume at a specific day.
+     * @param day the number of days before the latest data point
+     * @return volume
+     */
+    public Double getVolume(int day) {
+        return metrics.volume(day);
+    }
 }

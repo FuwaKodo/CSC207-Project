@@ -1,7 +1,5 @@
 package main.java.entities;
 
-import java.util.List;
-
 import main.java.use_cases.load_data.StockDataLoader;
 
 /**
@@ -16,9 +14,11 @@ public class Stock {
         this.company = loader.getCompany();
         this.symbol = loader.getSymbol();
 
-        final List<Double> sharePrices = loader.getSharePrices();
-        final List<Double> earnings = loader.getEarnings();
-        this.metrics = new Metrics(sharePrices, earnings);
+        this.metrics = new Metrics(
+                loader.getSharePrices(),
+                loader.getEarnings(),
+                loader.getVolumes()
+        );
     }
 
     public String getCompany() {
@@ -31,7 +31,7 @@ public class Stock {
 
     /**
      * Get share price at a specific day.
-     * @param day the number of days before today
+     * @param day the number of days before the latest data point
      * @return share price
      */
     public Double getSharePrice(int day) {

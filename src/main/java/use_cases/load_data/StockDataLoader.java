@@ -1,6 +1,7 @@
 package main.java.use_cases.load_data;
 
-import java.util.List;
+import main.java.entities.MetricValues;
+import main.java.entities.SharePrices;
 
 /**
  * Stores relevant data for creating a stock entity.
@@ -18,6 +19,9 @@ public interface StockDataLoader {
      * @return the symbol of the stock
      */
     String getSymbol();
+    SharePrices getSharePrices();
+    MetricValues getEarnings();
+    MetricValues getVolumes();
 
     /**
      * Get historical share prices of a stock.

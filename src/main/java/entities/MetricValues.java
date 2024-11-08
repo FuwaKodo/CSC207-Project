@@ -9,7 +9,7 @@ import java.util.List;
 class MetricValues {
     private final List<Double> values;
 
-    public MetricValues(List<Double> values) {
+    MetricValues(List<Double> values) {
         this.values = values;
     }
 

@@ -1,0 +1,11 @@
+Processes the use case of viewing information relating to a stock.
+
+Input:
+    String symbol: the symbol of a stock
+
+Output: Relevant data to be displayed
+    ViewStockOutputData viewStockOutputData
+    // Contains the following
+    // String company: name of company
+    // String symbol: stock symbol
+    // TODO add other information to be displayed after stock prices' type is decided and wrote

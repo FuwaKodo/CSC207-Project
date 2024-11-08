@@ -2,6 +2,8 @@ package main.java.entities;
 
 import java.util.List;
 
+import main.java.Constants;
+
 /**
  * Metrics: the metrics of a stock.
  */
@@ -32,9 +34,9 @@ public class Metrics {
      * @return the growth percentage
      */
     public Double growthPercentage(int startDay, int endDay) {
-        Double startPrice = sharePrices.getValue(startDay);
-        Double endPrice = sharePrices.getValue(endDay);
-        return startPrice * 100 / endPrice;
+        final Double startPrice = sharePrices.getValue(startDay);
+        final Double endPrice = sharePrices.getValue(endDay);
+        return startPrice * Constants.PERCENTAGE / endPrice;
     }
 
     /**
@@ -49,7 +51,7 @@ public class Metrics {
     }
 
     private Double getTotalEarnings(int startDay, int endDay) {
-        List<Double> earningsInInterval = earnings.getInterval(startDay, endDay);
+        final List<Double> earningsInInterval = earnings.getInterval(startDay, endDay);
         double total = 0;
         for (Double earning : earningsInInterval) {
             total += earning;

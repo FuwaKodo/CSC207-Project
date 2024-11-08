@@ -2,8 +2,6 @@ package main.java.entities;
 
 import main.java.use_cases.load_data.StockDataLoader;
 
-import java.util.List;
-
 /**
  * Stock: the stocks of a single company.
  */
@@ -16,9 +14,11 @@ public class Stock {
         this.company = loader.getCompany();
         this.symbol = loader.getSymbol();
 
-        List<Double> sharePrices = loader.getSharePrices();
-        List<Double> earnings = loader.getEarnings();
-        this.metrics = new Metrics(sharePrices, earnings);
+        this.metrics = new Metrics(
+                loader.getSharePrices(),
+                loader.getEarnings(),
+                loader.getVolumes()
+        );
     }
 
     public String getCompany() {

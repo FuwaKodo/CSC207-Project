@@ -1,10 +1,12 @@
 package main.java.use_cases.load_data;
 
-import java.util.List;
+import main.java.entities.MetricValues;
+import main.java.entities.SharePrices;
 
 public interface StockDataLoader {
     String getCompany();
     String getSymbol();
-    List<Double> getSharePrices();
-    List<Double> getEarnings();
+    SharePrices getSharePrices();
+    MetricValues getEarnings();
+    MetricValues getVolumes();
 }

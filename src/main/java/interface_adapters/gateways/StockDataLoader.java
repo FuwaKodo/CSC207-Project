@@ -1,4 +1,4 @@
-package main.java.use_cases.load_data;
+package main.java.interface_adapters.gateways;
 
 import main.java.entities.MetricValues;
 import main.java.entities.SharePrices;

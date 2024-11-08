@@ -3,7 +3,10 @@ package main.java.entities;
 import java.util.Date;
 import java.util.List;
 
-public class SharePrices extends MetricValues{
+/**
+ * A subclass of MetricValues. Stores information about share prices.
+ */
+public class SharePrices extends MetricValues {
     private final List<Double> openPrices;
     private final List<Double> closePrices;
     private final List<Double> highPrices;

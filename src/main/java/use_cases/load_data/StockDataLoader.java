@@ -19,19 +19,22 @@ public interface StockDataLoader {
      * @return the symbol of the stock
      */
     String getSymbol();
-    SharePrices getSharePrices();
-    MetricValues getEarnings();
-    MetricValues getVolumes();
 
     /**
      * Get historical share prices of a stock.
      * @return list of share prices
      */
-    List<Double> getSharePrices();
+    SharePrices getSharePrices();
 
     /**
      * Get historical earnings of a stock.
      * @return list of earnings
      */
-    List<Double> getEarnings();
+    MetricValues getEarnings();
+
+    /**
+     * Get volumes of a stock.
+     * @return volume of stock
+     */
+    MetricValues getVolumes();
 }

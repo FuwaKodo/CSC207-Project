@@ -17,7 +17,7 @@ public class MetricValues {
     }
 
     /**
-     * Get value on day
+     * Get value on day.
      * @param day number of days before the latest data point
      * @return the value on day
      */

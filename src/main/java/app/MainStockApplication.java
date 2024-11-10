@@ -1,5 +1,7 @@
 package main.java.app;
 
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * Main application for stock analysis and comparison.
@@ -12,7 +14,18 @@ package main.java.app;
  */
 public class MainStockApplication {
     public static void main(String[] args) {
-        System.out.println("Hello world");
+        // Set up the main application frame
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Stock Analysis Application");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(600, 400);
 
+            // Initialize ViewStockView and add it to the frame
+            ViewStockView viewStockView = new ViewStockView();
+            frame.add(viewStockView.getMainPanel());
+
+            // Display the GUI
+            frame.setVisible(true);
+        });
     }
 }

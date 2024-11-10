@@ -12,4 +12,6 @@ public class Constants {
     //         LocalDate.now().minusYears(5));
     public static final int FIVE_YEARS = 5 * 365;
 
+    public static final String VIEW_STOCK = "view stock";
+
 }

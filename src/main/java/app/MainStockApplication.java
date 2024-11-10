@@ -1,7 +1,9 @@
 package main.java.app;
 
+
 import javax.swing.*;
 import java.awt.*;
+
 
 /**
  * Main application for stock analysis and comparison.

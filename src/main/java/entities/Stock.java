@@ -1,6 +1,6 @@
 package main.java.entities;
 
-import main.java.interface_adapters.gateways.StockDataLoader;
+import main.java.interface_adapters.StockDataLoader;
 
 /**
  * Stock: the stocks of a single company.

@@ -1,4 +1,4 @@
-package main.java.interface_adapters.gateways;
+package main.java.interface_adapters;
 
 import main.java.entities.MetricValues;
 import main.java.entities.SharePrices;

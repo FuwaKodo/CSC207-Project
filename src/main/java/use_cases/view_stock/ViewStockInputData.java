@@ -7,7 +7,7 @@ public class ViewStockInputData {
     private final String symbol;
 
     public ViewStockInputData(String symbol) {
-        this.symbol = symbol;
+        this.symbol = symbol.strip().toUpperCase();
     }
 
     String getSymbol() {

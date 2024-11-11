@@ -1,5 +1,6 @@
 package main.java.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,12 +9,12 @@ import java.util.List;
  * is the ordered list of share prices over the reporting period.
  */
 public class MetricValues {
-    private final List<Double> values;
-    private final List<Date> dates;
+    private final ArrayList<Double> values;
+    private final ArrayList<Date> dates;
 
     public MetricValues(List<Double> values, List<Date> dates) {
-        this.values = values;
-        this.dates = dates;
+        this.values = new ArrayList<>(values);
+        this.dates = new ArrayList<>(dates);
     }
 
     /**

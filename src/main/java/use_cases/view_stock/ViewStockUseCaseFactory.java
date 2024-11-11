@@ -1,10 +1,7 @@
-package main.java.app;
+package main.java.use_cases.view_stock;
 
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.*;
-import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
-import main.java.use_cases.view_stock.ViewStockInputBoundary;
-import main.java.use_cases.view_stock.ViewStockInteractor;
 
 /**
  * Factory class responsible for creating and assembling all components needed for the view stock use case.

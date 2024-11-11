@@ -5,10 +5,11 @@ import main.java.entities.Stock;
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;
 import main.java.interface_adapters.view_stock.ViewStockViewModel;
+import main.java.ui.ViewStockView;
 import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
+import main.java.use_cases.view_stock.ViewStockUseCaseFactory;
 
 import javax.swing.*;
-import java.awt.*;
 
 
 /**

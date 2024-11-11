@@ -1,4 +1,4 @@
-package main.java.view;
+package main.java.ui;
 
 import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;

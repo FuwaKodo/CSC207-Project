@@ -1,12 +1,9 @@
-package main.java.app;
+package main.java.ui;
 
 import main.java.Constants;
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;
-import main.java.interface_adapters.view_stock.ViewStockState;
 import main.java.interface_adapters.view_stock.ViewStockViewModel;
-import main.java.view.StockDataView;
-import main.java.view.ViewManager;
 
 import javax.swing.*;
 import java.awt.*;

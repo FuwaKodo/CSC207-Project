@@ -9,7 +9,7 @@ import main.java.interface_adapters.ViewModel;
 public class ViewStockViewModel extends ViewModel<ViewStockState> {
 
     public ViewStockViewModel() {
-        super(Constants.VIEW_STOCK);
+        super(Constants.STOCK_VIEW);
         setState(new ViewStockState());
     }
 }

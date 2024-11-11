@@ -1,6 +1,5 @@
 package main.java.app;
 
-
 import main.java.entities.Stock;
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;
@@ -9,7 +8,6 @@ import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
 
 import javax.swing.*;
 import java.awt.*;
-
 
 /**
  * Main application for stock analysis and comparison.
@@ -43,7 +41,15 @@ public class MainStockApplication {
         SwingUtilities.invokeLater(() -> {
             final JFrame frame = new JFrame("Stock Analysis Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(600, 400);
+
+            // Increased window size to better accommodate the graph
+            frame.setSize(800, 600);
+
+            // Set minimum size to prevent the window from becoming too small
+            frame.setMinimumSize(new Dimension(600, 400));
+
+            // Center the window on the screen
+            frame.setLocationRelativeTo(null);
 
             // Initialize ViewStockView and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(viewStockViewModel, viewStockController);

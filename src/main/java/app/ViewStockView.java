@@ -1,5 +1,22 @@
 package main.java.app;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 import main.java.Constants;
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;
@@ -7,16 +24,8 @@ import main.java.interface_adapters.view_stock.ViewStockViewModel;
 import main.java.view.StockDataView;
 import main.java.view.ViewManager;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Objects;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * View for the application
+ * View for the application.
  */
 public class ViewStockView {
     private JPanel mainPanel;
@@ -65,7 +74,7 @@ public class ViewStockView {
 
         mainPanel.add(stockViews, BorderLayout.CENTER);
 
-        // Manages which stock is displayed
+        // Manages which panel in stockViews is displayed
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(stockViews, cardLayout, viewManagerModel);
 
@@ -84,8 +93,9 @@ public class ViewStockView {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (symbol.equals(Constants.SELECT_STOCK)) {
                     cardLayout.show(stockViews, Constants.SELECT_STOCK);
-                } else {
-                    // Update the stock view with new data
+                }
+                else {
+                    // Update the stock view with new data, only for when controller is not usable
                     stockViewObject.setSymbol(symbol);
                     stockViewObject.setCompany("Company " + symbol);
 
@@ -103,7 +113,7 @@ public class ViewStockView {
                     }
                     stockViewObject.setSharePrices(prices);
 
-                    // Show the stock view
+                    // Show the stock view, only for when controller is not usable
                     cardLayout.show(stockViews, Constants.VIEW_STOCK);
                     viewManagerModel.setState(Constants.VIEW_STOCK);
                     viewManagerModel.firePropertyChanged();

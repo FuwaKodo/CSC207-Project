@@ -1,0 +1,3 @@
+ViewManager:
+ - manages which view in JPanel views with CardLayout cardLayout based on
+        ViewManagerModel viewManagerModel.get

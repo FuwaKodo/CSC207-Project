@@ -1,13 +1,18 @@
 package main.java.view;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  * The view the user sees when checking the information of a stock (view_stock use case).
@@ -74,7 +79,7 @@ public class StockDataView {
     }
 
     /**
-     * Custom panel for drawing the stock price graph
+     * Custom panel for drawing the stock price graph.
      */
     private class StockGraphPanel extends JPanel {
         private static final int PADDING = 50;

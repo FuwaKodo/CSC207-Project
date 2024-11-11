@@ -15,7 +15,7 @@ public class Constants {
     public static final int ONE_YEAR = 365;
 
     public static final String VIEW_STOCK = "Stock statistics";
-    public static final String PLACE_HOLDER = "View Stock Data";
+    public static final String PLACE_HOLDER = "Stock Statistics Viewer";
     public static final String SELECT_STOCK = "Select stock";
 
 }

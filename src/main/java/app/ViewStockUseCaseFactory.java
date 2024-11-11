@@ -1,7 +1,9 @@
 package main.java.app;
 
 import main.java.interface_adapters.ViewManagerModel;
-import main.java.interface_adapters.view_stock.*;
+import main.java.interface_adapters.view_stock.ViewStockController;
+import main.java.interface_adapters.view_stock.ViewStockPresenter;
+import main.java.interface_adapters.view_stock.ViewStockViewModel;
 import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
 import main.java.use_cases.view_stock.ViewStockInputBoundary;
 import main.java.use_cases.view_stock.ViewStockInteractor;

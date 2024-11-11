@@ -60,7 +60,7 @@ public class StockDataView {
         stockView.add(labelPanel);
 
         // Add graph panel
-        graphPanel.setPreferredSize(Constants.STOCK_GRAPH_DIMENSION);
+        graphPanel.setPreferredSize(Constants.GRAPH_DIMENSION);
         stockView.add(graphPanel);
     }
 
@@ -151,7 +151,7 @@ public class StockDataView {
             }
 
             // Draw the line graph
-            g2d.setColor(Constants.STOCK_GRAPH_COLOR); // Nice blue color
+            g2d.setColor(Constants.GRAPH_COLOR);
             g2d.setStroke(new BasicStroke(2f));
 
             for (int i = 0; i < sharePrices.size() - 1; i++) {

@@ -9,5 +9,5 @@ Output: Relevant data to be displayed
     // String company: name of company
     // String symbol: stock symbol
     // List<Double> sharePrices: share prices in last five years
-    // List<Double> earnings: earnings in last five years
+    // /* List<Double> earnings: earnings in last five years */
     // TODO add other information to be displayed

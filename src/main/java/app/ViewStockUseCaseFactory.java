@@ -1,4 +1,4 @@
-package main.java.entities;
+package main.java.app;
 
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.*;
@@ -25,13 +25,13 @@ public class ViewStockUseCaseFactory {
             ViewStockDataAccessInterface dataAccessObject) {
 
         // Create the view model and state
-        ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
+        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
 
         // Create the presenter with its required dependencies
-        ViewStockPresenter viewStockPresenter = new ViewStockPresenter(viewManagerModel, viewStockViewModel);
+        final ViewStockPresenter viewStockPresenter = new ViewStockPresenter(viewManagerModel, viewStockViewModel);
 
         // Create the interactor with its dependencies
-        ViewStockInputBoundary viewStockInteractor = new ViewStockInteractor(
+        final ViewStockInputBoundary viewStockInteractor = new ViewStockInteractor(
                 viewStockPresenter,
                 dataAccessObject
         );

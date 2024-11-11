@@ -2,7 +2,6 @@ package main.java.app;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -28,14 +27,14 @@ import main.java.view.ViewManager;
  * View for the application.
  */
 public class ViewStockView {
-    private JPanel mainPanel;
-    private JButton compareButton;
-    private JComboBox<String> stockDropdown;
-    private JButton buyButton;
+    private final JPanel mainPanel;
+    private final JButton compareButton;
+    private final JComboBox<String> stockDropdown;
+    private final JButton buyButton;
     private final StockDataView stockViewObject;
 
-    private ViewStockViewModel viewStockViewModel;
-    private ViewStockController viewStockController;
+    private final ViewStockViewModel viewStockViewModel;
+    private final ViewStockController viewStockController;
 
     public ViewStockView(ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController) {
@@ -49,7 +48,7 @@ public class ViewStockView {
         // Placeholder panel for when no stock is selected
         final JPanel defaultBox = new JPanel(new BorderLayout());
         final JLabel placeholderLabel = new JLabel(Constants.PLACE_HOLDER, SwingConstants.CENTER);
-        placeholderLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        placeholderLabel.setFont(new Font("Arial", Font.BOLD, Constants.PLACEHOLDER_FONT_SIZE));
         defaultBox.add(placeholderLabel, BorderLayout.CENTER);
 
         // Initialize StockDataView with sample data
@@ -57,7 +56,7 @@ public class ViewStockView {
         stockViewObject.generatePanel();
 
         // Generate sample data for testing
-        List<Double> samplePrices = new ArrayList<>();
+        final List<Double> samplePrices = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             samplePrices.add(100.0 + Math.random() * 20);
         }
@@ -66,11 +65,11 @@ public class ViewStockView {
         // CardLayout panel for displaying panels according to stocks selected
         final CardLayout cardLayout = new CardLayout();
         final JPanel stockViews = new JPanel(cardLayout);
-        stockViews.add(defaultBox, Constants.SELECT_STOCK);
-        stockViews.add(stockViewObject.getStockView(), Constants.VIEW_STOCK);
+        stockViews.add(defaultBox, Constants.NO_STOCKS_SELECTED);
+        stockViews.add(stockViewObject.getStockView(), Constants.STOCK_VIEW);
 
         // Make sure the stock view panel has a preferred size
-        stockViewObject.getStockView().setPreferredSize(new Dimension(700, 500));
+        stockViewObject.getStockView().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
 
         mainPanel.add(stockViews, BorderLayout.CENTER);
 
@@ -83,7 +82,7 @@ public class ViewStockView {
         bottomPanel.setLayout(new FlowLayout());
 
         // Dropdown menu for selecting stocks
-        stockDropdown = new JComboBox<>(new String[]{Constants.SELECT_STOCK, "Stock A", "Stock B", "Stock C"});
+        stockDropdown = new JComboBox<>(new String[]{Constants.NO_STOCKS_SELECTED, "Stock A", "Stock B", "Stock C"});
         bottomPanel.add(stockDropdown);
 
         // Response to selecting a stock in dropdown menu
@@ -91,36 +90,35 @@ public class ViewStockView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
-                if (symbol.equals(Constants.SELECT_STOCK)) {
-                    cardLayout.show(stockViews, Constants.SELECT_STOCK);
-                }
-                else {
-                    // Update the stock view with new data, only for when controller is not usable
+                // Check if a stock is selected
+                if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
+                    // Update the stock view with new data, only for when controller is unusable
                     stockViewObject.setSymbol(symbol);
                     stockViewObject.setCompany("Company " + symbol);
-
-                    // Generate new random data for the selected stock
-                    List<Double> prices = new ArrayList<>();
-                    double basePrice = switch (symbol) {
+                    // Generate new random data for the selected stock, only for when controller is unusable
+                    final List<Double> prices = new ArrayList<>();
+                    final double basePrice = switch (symbol) {
                         case "Stock A" -> 100.0;
                         case "Stock B" -> 150.0;
                         case "Stock C" -> 200.0;
                         default -> 100.0;
                     };
-
                     for (int i = 0; i < 10; i++) {
                         prices.add(basePrice + Math.random() * 20);
                     }
                     stockViewObject.setSharePrices(prices);
-
-                    // Show the stock view, only for when controller is not usable
-                    cardLayout.show(stockViews, Constants.VIEW_STOCK);
-                    viewManagerModel.setState(Constants.VIEW_STOCK);
+                    // Show the stock view, only for when controller is unusable
+                    cardLayout.show(stockViews, Constants.STOCK_VIEW);
+                    viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
                     // Ensure the panel is revalidated and repainted
                     stockViewObject.getStockView().revalidate();
                     stockViewObject.getStockView().repaint();
+                }
+                else {
+                    // No stock is selected
+                    cardLayout.show(stockViews, Constants.NO_STOCKS_SELECTED);
                 }
             }
         });
@@ -155,6 +153,10 @@ public class ViewStockView {
         return buyButton;
     }
 
+    /**
+     * Action performed.
+     * @param evt event
+     */
     public void actionPerformed(ActionEvent evt) {
         System.out.println("Click " + evt.getActionCommand());
     }

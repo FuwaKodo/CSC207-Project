@@ -1,16 +1,18 @@
 package main.java.app;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import main.java.Constants;
 import main.java.entities.Stock;
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;
 import main.java.interface_adapters.view_stock.ViewStockViewModel;
 import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
 
-import javax.swing.*;
-import java.awt.*;
-
 /**
  * Main application for stock analysis and comparison.
+ *
  * <p>
  * This application provides functionality to:
  * - View individual stock data and metrics
@@ -43,10 +45,10 @@ public class MainStockApplication {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             // Increased window size to better accommodate the graph
-            frame.setSize(800, 600);
+            frame.setSize(Constants.MAIN_FRAME_DIMENSION);
 
             // Set minimum size to prevent the window from becoming too small
-            frame.setMinimumSize(new Dimension(600, 400));
+            frame.setMinimumSize(Constants.MAIN_FRAME_MIN_DIMENSION);
 
             // Center the window on the screen
             frame.setLocationRelativeTo(null);

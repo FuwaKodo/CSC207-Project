@@ -1,4 +1,4 @@
-package main.java.app;
+package main.java.use_cases.view_stock;
 
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;

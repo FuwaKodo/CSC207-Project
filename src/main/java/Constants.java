@@ -23,10 +23,10 @@ public class Constants {
     public static final Dimension MAIN_FRAME_DIMENSION = new Dimension(800, 600);
     public static final Dimension MAIN_FRAME_MIN_DIMENSION = new Dimension(600, 400);
     public static final Dimension STOCK_VIEW_DIMENSION = new Dimension(700, 500);
-    public static final Dimension STOCK_GRAPH_DIMENSION = new Dimension(600, 400);
-    public static final Color STOCK_GRAPH_COLOR = new Color(0, 123, 255);
+    public static final Dimension GRAPH_DIMENSION = new Dimension(600, 400);
+    public static final Color GRAPH_COLOR = new Color(0, 123, 255); // Nice blue color
     public static final Font GRAPH_VALUE_FONT = new Font("Arial", Font.PLAIN, 12);
-    public static final String PLACE_HOLDER = "Stock Statistics Viewer";
+    public static final String PLACEHOLDER_TEXT = "Stock Statistics Viewer";
     public static final int PLACEHOLDER_FONT_SIZE = 24;
     public static final Font METRICS_FONT = new Font("Arial", Font.PLAIN, 16);
 

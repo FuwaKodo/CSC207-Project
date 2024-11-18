@@ -45,7 +45,7 @@ public class ViewStockView {
 
         // Placeholder panel for when no stock is selected
         final JPanel defaultBox = new JPanel(new BorderLayout());
-        final JLabel placeholderLabel = new JLabel(Constants.PLACE_HOLDER, SwingConstants.CENTER);
+        final JLabel placeholderLabel = new JLabel(Constants.PLACEHOLDER_TEXT, SwingConstants.CENTER);
         placeholderLabel.setFont(new Font("Arial", Font.BOLD, Constants.PLACEHOLDER_FONT_SIZE));
         defaultBox.add(placeholderLabel, BorderLayout.CENTER);
 

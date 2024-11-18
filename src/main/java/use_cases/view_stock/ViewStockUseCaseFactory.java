@@ -4,9 +4,6 @@ import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;
 import main.java.interface_adapters.view_stock.ViewStockPresenter;
 import main.java.interface_adapters.view_stock.ViewStockViewModel;
-import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
-import main.java.use_cases.view_stock.ViewStockInputBoundary;
-import main.java.use_cases.view_stock.ViewStockInteractor;
 
 /**
  * Factory class responsible for creating and assembling all components needed for the view stock use case.
@@ -19,7 +16,7 @@ public class ViewStockUseCaseFactory {
      * This method wires up all the dependencies following clean architecture principles.
      *
      * @param viewManagerModel The view manager model that handles view switching
-     * @param dataAccessObject The concrete implementation of StockDataLoader to use
+     * @param dataAccessObject The concrete implementation of ViewStockDataAccessInterface to use
      * @return A configured ViewStockController ready for use
      */
     public static ViewStockController create(

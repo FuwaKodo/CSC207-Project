@@ -13,6 +13,7 @@ public class CompareStocksInputData {
     private final Stock stock2;
     private final Date beginDate; // The date of beginning of the period of comparison.
     private final Date endDate;   // The date of the end of the period of comparison.
+    private final MetricToCompare metricToCompare;
 
     /**
      * Initialize the compare stock use case input data.
@@ -25,11 +26,13 @@ public class CompareStocksInputData {
             Stock stock1,
             Stock stock2,
             Date beginDate,
-            Date endDate) {
+            Date endDate,
+            MetricToCompare metricToCompare) {
         this.stock1 = stock1;
         this.stock2 = stock2;
         this.beginDate = beginDate;
         this.endDate = endDate;
+        this.metricToCompare = metricToCompare;
     }
 
     public Stock getFirstStock() {
@@ -46,5 +49,15 @@ public class CompareStocksInputData {
 
     public Date getEndDate() {
         return endDate;
+    }
+
+    public MetricToCompare getMetricToCompare() {
+        return metricToCompare;
+    }
+
+    public enum MetricToCompare {
+        EARNINGS_PER_SHARE,
+        DIVIDENDS,
+        GROWTH_PERCENTAGE
     }
 }

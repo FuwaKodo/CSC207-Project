@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class MetricValues {
     private final ArrayList<Double> values;
-    private final ArrayList<Date> dates;
+    private final ArrayList<LocalDate> dates;
 
     /**
      * Constructor.
@@ -20,31 +20,30 @@ public class MetricValues {
      * @param dates date associated with each value, sorted from past to present.
      *              The last element is the latest.
      */
-    public MetricValues(List<Double> values, List<Date> dates) {
+    public MetricValues(List<Double> values, List<LocalDate> dates) {
         this.values = new ArrayList<>(values);
         this.dates = new ArrayList<>(dates);
     }
 
     /**
-     * Get value on day.
-     * @param day number of days before the latest data point
+     * Get value on a date.
+     * @param date the date. If there is no value associated with this date,
+     *             then return the value on the closest date.
      * @return the value on day
      */
-    public Double getValue(int day) {
-        return values.get(dayToIndex(day));
+    public Double getValue(LocalDate date) {
+        return values.get(dateToIndex(date));
     }
 
     /**
      * A sublist of the total values stored.
-     * @param startDay the start of the interval in terms of the number of days
-     *                 before the latest data point, inclusive
-     * @param endDay the end of the interval in terms of the number of days before the latest data point,
-     *               exclusive
+     * @param start the start of the interval as a date, inclusive.
+     * @param end the end of the interval as a date, exclusive
      * @return a sublist inside the interval
      */
-    public List<Double> getInterval(int startDay, int endDay) {
-        final int startIndex = dayToIndex(startDay);
-        final int endIndex = dayToIndex(endDay);
+    public List<Double> getInterval(LocalDate start, LocalDate end) {
+        final int startIndex = dateToIndex(start);
+        final int endIndex = dateToIndex(end);
         return values.subList(startIndex, endIndex);
     }
 
@@ -52,11 +51,10 @@ public class MetricValues {
         return values.getLast();
     }
 
-    private int dayToIndex(int days) {
-        final LocalDate daysAsDate = LocalDate.now().minusDays(days);
+    private int dateToIndex(LocalDate date) {
         for (int i = 0; i < dates.size(); i++) {
-            LocalDate comparisonDate = LocalDate.ofInstant(dates.get(i).toInstant(), ZoneId.systemDefault());
-            if (!comparisonDate.isBefore(daysAsDate)) {
+            LocalDate comparisonDate = dates.get(i);
+            if (!comparisonDate.isBefore(date)) {
                 return i;
             }
         }

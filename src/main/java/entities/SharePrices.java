@@ -1,6 +1,6 @@
 package main.java.entities;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -12,7 +12,7 @@ public class SharePrices extends MetricValues {
     private final List<Double> highPrices;
     private final List<Double> lowPrices;
 
-    public SharePrices(List<Date> dates,
+    public SharePrices(List<LocalDate> dates,
                        List<Double> openPrices,
                        List<Double> closePrices,
                        List<Double> highPrices,

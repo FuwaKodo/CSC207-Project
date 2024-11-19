@@ -2,6 +2,8 @@ package main.java.entities;
 
 import main.java.interface_adapters.gateways.StockDataLoader;
 
+import java.time.LocalDate;
+
 /**
  * Stock: the stocks of a single company.
  */
@@ -30,20 +32,22 @@ public class Stock {
     }
 
     /**
-     * Get share price at a specific day.
-     * @param day the number of days before the latest data point
+     * Get share price at a specific date.
+     * @param date the date. If there is no value for the date, return the
+     *             value on the date immediately after it.
      * @return share price
      */
-    public Double getSharePrice(int day) {
-        return metrics.sharePrice(day);
+    public Double getSharePrice(LocalDate date) {
+        return metrics.sharePrice(date);
     }
 
     /**
-     * Get volume at a specific day.
-     * @param day the number of days before the latest data point
+     * Get volume on a date.
+     * @param date the date. If there is no value for the date, return
+     *             the value on the date immediately after it.
      * @return volume
      */
-    public Double getVolume(int day) {
-        return metrics.volume(day);
+    public Double getVolume(LocalDate date) {
+        return metrics.volume(date);
     }
 }

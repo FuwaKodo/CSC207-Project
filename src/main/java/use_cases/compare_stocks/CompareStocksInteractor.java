@@ -27,15 +27,16 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
         presenter.displayResult(outputData);
     }
 
-    private Double compareEarningsPerShare(CompareStocksInputData compareStocksInputData) {
+    private Double compareEarningsPerShare(CompareStocksInputData inputData) {
+
         return 0.0;
     }
 
-    private Double compareDividends(CompareStocksInputData compareStocksInputData) {
+    private Double compareDividends(CompareStocksInputData inputData) {
         return 0.0;
     }
 
-    private Double compareGrowthPercentage(CompareStocksInputData compareStocksInputData) {
+    private Double compareGrowthPercentage(CompareStocksInputData inputData) {
         return 0.0;
     }
 }

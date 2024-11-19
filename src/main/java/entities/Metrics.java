@@ -45,7 +45,7 @@ public class Metrics {
      * Calculate growth percentage between the stock at the start and
      * end of an interval.
      * @param start the starting date of the interval, inclusive.
-     * @param end the end date of the interval, exclusive.
+     * @param end the end date of the interval, inclusive.
      * @return the growth percentage
      */
     public Double growthPercentage(LocalDate start, LocalDate end) {
@@ -57,7 +57,7 @@ public class Metrics {
     /**
      * Calculate earnings per share by aggregating earnings between an interval.
      * @param start the starting date of the interval, inclusive.
-     * @param end the end date of the interval, exclusive.
+     * @param end the end date of the interval, inclusive.
      * @return earnings per share
      */
     public Double earningsPerShare(LocalDate start, LocalDate end) {

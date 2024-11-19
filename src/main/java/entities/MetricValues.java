@@ -38,12 +38,12 @@ public class MetricValues {
     /**
      * A sublist of the total values stored.
      * @param start the start of the interval as a date, inclusive.
-     * @param end the end of the interval as a date, exclusive
+     * @param end the end of the interval as a date, inclusive.
      * @return a sublist inside the interval
      */
     public List<Double> getInterval(LocalDate start, LocalDate end) {
         final int startIndex = dateToIndex(start);
-        final int endIndex = dateToIndex(end);
+        final int endIndex = dateToIndex(end) + 1;
         return values.subList(startIndex, endIndex);
     }
 

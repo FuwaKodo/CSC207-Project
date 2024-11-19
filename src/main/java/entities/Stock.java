@@ -50,4 +50,24 @@ public class Stock {
     public Double getVolume(LocalDate date) {
         return metrics.volume(date);
     }
+
+    /**
+     * Return the growth percentage over a time interval.
+     * @param start starting date of the interval, inclusive.
+     * @param end end date of the interval, inclusive.
+     * @return growth percentage from 0 to 1.
+     */
+    public Double getGrowthPercentage(LocalDate start, LocalDate end) {
+        return metrics.growthPercentage(start, end);
+    }
+
+    /**
+     * Return the earnings per share over a time interval.
+     * @param start starting date of the interval, inclusive.
+     * @param end ending date of the interval, inclusive.
+     * @return earnings per share
+     */
+    public Double getEarningsPerShare(LocalDate start, LocalDate end) {
+        return metrics.earningsPerShare(start, end);
+    }
 }

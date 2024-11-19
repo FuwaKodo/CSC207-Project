@@ -1,5 +1,7 @@
 package main.java.entities;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,12 @@ public class MetricValues {
     private final ArrayList<Double> values;
     private final ArrayList<Date> dates;
 
+    /**
+     * Constructor.
+     * @param values values
+     * @param dates date associated with each value, sorted from past to present.
+     *              The last element is the latest.
+     */
     public MetricValues(List<Double> values, List<Date> dates) {
         this.values = new ArrayList<>(values);
         this.dates = new ArrayList<>(dates);
@@ -23,8 +31,7 @@ public class MetricValues {
      * @return the value on day
      */
     public Double getValue(int day) {
-        final int index = dayToIndex(day);
-        return values.get(index);
+        return values.get(dayToIndex(day));
     }
 
     /**
@@ -45,7 +52,14 @@ public class MetricValues {
         return values.getLast();
     }
 
-    private int dayToIndex(int day) {
-        return values.size() - day;
+    private int dayToIndex(int days) {
+        final LocalDate daysAsDate = LocalDate.now().minusDays(days);
+        for (int i = 0; i < dates.size(); i++) {
+            LocalDate comparisonDate = LocalDate.ofInstant(dates.get(i).toInstant(), ZoneId.systemDefault());
+            if (!comparisonDate.isBefore(daysAsDate)) {
+                return i;
+            }
+        }
+        return dates.size() - 1;
     }
 }

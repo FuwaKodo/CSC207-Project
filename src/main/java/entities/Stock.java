@@ -19,7 +19,8 @@ public class Stock {
         this.metrics = new Metrics(
                 loader.getSharePrices(),
                 loader.getEarnings(),
-                loader.getVolumes()
+                loader.getVolumes(),
+                loader.getDividends()
         );
     }
 
@@ -38,7 +39,7 @@ public class Stock {
      * @return share price
      */
     public Double getSharePrice(LocalDate date) {
-        return metrics.sharePrice(date);
+        return metrics.getSharePrice(date);
     }
 
     /**
@@ -48,7 +49,7 @@ public class Stock {
      * @return volume
      */
     public Double getVolume(LocalDate date) {
-        return metrics.volume(date);
+        return metrics.getVolume(date);
     }
 
     /**
@@ -58,7 +59,7 @@ public class Stock {
      * @return growth percentage from 0 to 1.
      */
     public Double getGrowthPercentage(LocalDate start, LocalDate end) {
-        return metrics.growthPercentage(start, end);
+        return metrics.getGrowthPercentage(start, end);
     }
 
     /**
@@ -68,6 +69,15 @@ public class Stock {
      * @return earnings per share
      */
     public Double getEarningsPerShare(LocalDate start, LocalDate end) {
-        return metrics.earningsPerShare(start, end);
+        return metrics.getEarningsPerShare(start, end);
+    }
+
+    /**
+     * Get dividends per share on a date
+     * @param date the date
+     * @return dividends per share
+     */
+    public Double getDividendsPerShare(LocalDate date) {
+        return metrics.getDividendsPerShare(date);
     }
 }

@@ -2,7 +2,7 @@ package main.java.use_cases.compare_stocks;
 
 import main.java.entities.Stock;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Contains the data inputted into the compare stocks use case when
@@ -11,9 +11,8 @@ import java.util.Date;
 public class CompareStocksInputData {
     private final Stock stock1;
     private final Stock stock2;
-    private final Date beginDate; // The date of beginning of the period of comparison.
-    private final Date endDate;   // The date of the end of the period of comparison.
-    private final MetricToCompare metricToCompare;
+    private final LocalDate beginDate; // The date of beginning of the period of comparison.
+    private final LocalDate endDate;   // The date of the end of the period of comparison.
 
     /**
      * Initialize the compare stock use case input data.
@@ -25,14 +24,12 @@ public class CompareStocksInputData {
     public CompareStocksInputData(
             Stock stock1,
             Stock stock2,
-            Date beginDate,
-            Date endDate,
-            MetricToCompare metricToCompare) {
+            LocalDate beginDate,
+            LocalDate endDate) {
         this.stock1 = stock1;
         this.stock2 = stock2;
         this.beginDate = beginDate;
         this.endDate = endDate;
-        this.metricToCompare = metricToCompare;
     }
 
     public Stock getFirstStock() {
@@ -43,21 +40,11 @@ public class CompareStocksInputData {
         return stock2;
     }
 
-    public Date getBeginDate() {
+    public LocalDate getStartDate() {
         return beginDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
-    }
-
-    public MetricToCompare getMetricToCompare() {
-        return metricToCompare;
-    }
-
-    public enum MetricToCompare {
-        EARNINGS_PER_SHARE,
-        DIVIDENDS,
-        GROWTH_PERCENTAGE
     }
 }

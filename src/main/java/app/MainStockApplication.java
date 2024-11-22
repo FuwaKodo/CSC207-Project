@@ -7,7 +7,7 @@ import entities.Stock;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
-import ui.CompareStocksViewFactory;
+import ui.CompareStocksViewDisplayer;
 import ui.ViewStockView;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
@@ -57,7 +57,7 @@ public class MainStockApplication {
 
             // Initialize ViewStockView and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(viewStockViewModel, viewStockController);
-            viewStockView.setCompareButtonListener(_ -> CompareStocksViewFactory.showCompareStocksModalDialog(frame));
+            viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showCompareStocksModalDialog(frame));
             frame.add(viewStockView.getMainPanel());
 
             // Display the GUI

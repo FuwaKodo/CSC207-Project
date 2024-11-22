@@ -1,7 +1,7 @@
-package main.java.ui;
+package ui;
 
-import main.java.interface_adapters.view_stock.ViewStockController;
-import main.java.interface_adapters.view_stock.ViewStockViewModel;
+import interface_adapters.view_stock.ViewStockController;
+import interface_adapters.view_stock.ViewStockViewModel;
 
 import javax.swing.*;
 import java.awt.*;

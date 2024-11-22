@@ -1,7 +1,7 @@
-package main.java.interface_adapters.gateways;
+package interface_adapters.gateways;
 
-import main.java.entities.MetricValues;
-import main.java.entities.SharePrices;
+import entities.MetricValues;
+import entities.SharePrices;
 
 /**
  * Stores relevant data for creating a stock entity.

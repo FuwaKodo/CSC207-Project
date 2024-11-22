@@ -1,4 +1,4 @@
-package main.java.use_cases.view_stock;
+package use_cases.view_stock;
 
 /**
  * Input boundary for the view stock use case.

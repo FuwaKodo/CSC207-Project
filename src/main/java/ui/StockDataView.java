@@ -1,4 +1,4 @@
-package main.java.ui;
+package ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,7 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import main.java.Constants;
+import app.Constants;
 
 /**
  * The view the user sees when checking the information of a stock (view_stock use case).
@@ -92,7 +92,8 @@ public class StockDataView {
      */
     public void setSharePrices(List<Double> sharePrices) {
         this.sharePrices = sharePrices;
-        graphPanel.repaint(); // Refresh the graph when new data is set
+        // Refresh the graph when new data is set
+        graphPanel.repaint();
     }
 
     /**
@@ -144,7 +145,8 @@ public class StockDataView {
 
             // Draw time labels
             for (int i = 0; i < sharePrices.size(); i++) {
-                if (i % 2 == 0) { // Draw every other label to avoid crowding
+                if (i % 2 == 0) {
+                    // Draw every other label to avoid crowding
                     final int x = PADDING + (i * width / (sharePrices.size() - 1));
                     g2d.drawString("t" + i, x - 5, height + PADDING + 20);
                 }

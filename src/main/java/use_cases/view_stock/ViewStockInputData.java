@@ -1,4 +1,4 @@
-package main.java.use_cases.view_stock;
+package use_cases.view_stock;
 
 /**
  * Input data for viewing a stock.

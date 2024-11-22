@@ -1,6 +1,6 @@
-package main.java.use_cases.compare_stocks;
+package use_cases.compare_stocks;
 
-import main.java.entities.Stock;
+import entities.Stock;
 
 /**
  * An implementation of StockComparator that compares the share price of two stocks.

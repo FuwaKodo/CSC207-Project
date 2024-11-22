@@ -8,6 +8,7 @@ import main.java.entities.Stock;
 import main.java.interface_adapters.ViewManagerModel;
 import main.java.interface_adapters.view_stock.ViewStockController;
 import main.java.interface_adapters.view_stock.ViewStockViewModel;
+import main.java.ui.CompareStocksViewFactory;
 import main.java.ui.ViewStockView;
 import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
 import main.java.use_cases.view_stock.ViewStockUseCaseFactory;
@@ -57,6 +58,7 @@ public class MainStockApplication {
 
             // Initialize ViewStockView and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(viewStockViewModel, viewStockController);
+            viewStockView.setCompareButtonListener(_ -> CompareStocksViewFactory.showCompareStocksModalDialog(frame));
             frame.add(viewStockView.getMainPanel());
 
             // Display the GUI

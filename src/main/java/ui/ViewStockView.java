@@ -10,11 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import main.java.Constants;
 import main.java.interface_adapters.ViewManagerModel;
@@ -149,6 +145,10 @@ public class ViewStockView {
 
     public JButton getBuyButton() {
         return buyButton;
+    }
+
+    public void setCompareButtonListener(ActionListener actionListener) {
+        compareButton.addActionListener(actionListener);
     }
 
     /**

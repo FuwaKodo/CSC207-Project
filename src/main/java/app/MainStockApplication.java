@@ -3,11 +3,11 @@ package app;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import app.Constants;
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
+import ui.CompareStocksViewFactory;
 import ui.ViewStockView;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;

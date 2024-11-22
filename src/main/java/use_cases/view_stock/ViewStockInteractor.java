@@ -1,11 +1,11 @@
-package main.java.use_cases.view_stock;
+package use_cases.view_stock;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.Constants;
-import main.java.entities.Stock;
+import app.Constants;
+import entities.Stock;
 
 /**
  * Interactor of the use case.

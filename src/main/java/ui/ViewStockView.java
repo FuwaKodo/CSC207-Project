@@ -1,4 +1,4 @@
-package main.java.ui;
+package ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -12,10 +12,10 @@ import java.util.Objects;
 
 import javax.swing.*;
 
-import main.java.Constants;
-import main.java.interface_adapters.ViewManagerModel;
-import main.java.interface_adapters.view_stock.ViewStockController;
-import main.java.interface_adapters.view_stock.ViewStockViewModel;
+import app.Constants;
+import interface_adapters.ViewManagerModel;
+import interface_adapters.view_stock.ViewStockController;
+import interface_adapters.view_stock.ViewStockViewModel;
 
 /**
  * View for the application.

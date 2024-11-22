@@ -1,4 +1,4 @@
-package main.java.ui;
+package ui;
 
 import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;
@@ -6,7 +6,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
-import main.java.interface_adapters.ViewManagerModel;
+import interface_adapters.ViewManagerModel;
 
 /**
  * Changes what is displayed based on the current state.

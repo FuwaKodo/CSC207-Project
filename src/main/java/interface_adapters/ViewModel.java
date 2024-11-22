@@ -1,4 +1,4 @@
-package main.java.interface_adapters;
+package interface_adapters;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -61,4 +61,3 @@ public class ViewModel<T> {
         this.support.addPropertyChangeListener(listener);
     }
 }
-

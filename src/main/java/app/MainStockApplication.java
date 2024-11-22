@@ -1,17 +1,16 @@
-package main.java.app;
+package app;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import main.java.Constants;
-import main.java.entities.Stock;
-import main.java.interface_adapters.ViewManagerModel;
-import main.java.interface_adapters.view_stock.ViewStockController;
-import main.java.interface_adapters.view_stock.ViewStockViewModel;
-import main.java.ui.CompareStocksViewFactory;
-import main.java.ui.ViewStockView;
-import main.java.use_cases.view_stock.ViewStockDataAccessInterface;
-import main.java.use_cases.view_stock.ViewStockUseCaseFactory;
+import app.Constants;
+import entities.Stock;
+import interface_adapters.ViewManagerModel;
+import interface_adapters.view_stock.ViewStockController;
+import interface_adapters.view_stock.ViewStockViewModel;
+import ui.ViewStockView;
+import use_cases.view_stock.ViewStockDataAccessInterface;
+import use_cases.view_stock.ViewStockUseCaseFactory;
 
 /**
  * Main application for stock analysis and comparison.

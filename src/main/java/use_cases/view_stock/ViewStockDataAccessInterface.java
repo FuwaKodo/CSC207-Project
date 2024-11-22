@@ -1,6 +1,6 @@
-package main.java.use_cases.view_stock;
+package use_cases.view_stock;
 
-import main.java.entities.Stock;
+import entities.Stock;
 
 /**
  * Data access interface for the use case.
@@ -14,5 +14,4 @@ public interface ViewStockDataAccessInterface {
      * @return the stock corresponding to the symbol
      */
     Stock getStock(String symbol);
-
 }

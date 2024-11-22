@@ -2,22 +2,28 @@ package entities;
 
 import java.util.List;
 
+import app.Constants;
+
 /**
  * Metrics: the metrics of a stock.
  */
 public class Metrics {
-    private final MetricValues sharePrices;
+    private final SharePrices sharePrices;
     private final MetricValues earnings;
+    private final MetricValues volumes;
 
-    public Metrics(List<Double> sharePrices, List<Double> earnings) {
-        this.sharePrices = new MetricValues(sharePrices);
-        this.earnings = new MetricValues(earnings);
+    public Metrics(SharePrices sharePrices,
+                   MetricValues earnings,
+                   MetricValues volumes) {
+        this.sharePrices = sharePrices;
+        this.earnings = earnings;
+        this.volumes = volumes;
     }
 
     /**
      * Get share price at day. Day parameter represents the number of days before
-     * today.
-     * @param day number of days before today
+     * the latest data point.
+     * @param day number of days
      * @return share price
      */
     public Double sharePrice(int day) {
@@ -25,23 +31,32 @@ public class Metrics {
     }
 
     /**
+     * Get volume at number of day before latest data point.
+     * @param day number of days to backtrack
+     * @return volume at given days back
+     */
+    public Double volume(int day) {
+        return volumes.getValue(day);
+    }
+
+    /**
      * Calculate growth percentage between the stock at startDay and
      * stock at endDay.
-     * @param startDay the start of the interval in terms of number of days before today
-     * @param endDay the end of the interval exclusive in terms of number of days before today
+     * @param startDay the start of the interval in terms of number of days before the latest data point
+     * @param endDay the end of the interval exclusive in terms of number of days before the latest data point
      * @return the growth percentage
      */
     public Double growthPercentage(int startDay, int endDay) {
-        Double startPrice = sharePrices.getValue(startDay);
-        Double endPrice = sharePrices.getValue(endDay);
-        return startPrice * 100 / endPrice;
+        final Double startPrice = sharePrices.getValue(startDay);
+        final Double endPrice = sharePrices.getValue(endDay);
+        return startPrice * Constants.PERCENTAGE / endPrice;
     }
 
     /**
      * Calculate earnings per share by aggregating earnings between the interval
-     * specified by startTime and endTime.
-     * @param startDay the start of the interval in terms of number of days before today
-     * @param endDay the end of the interval exclusive in terms of number of days before today
+     * specified by startDay and endDay.
+     * @param startDay the start of the interval in terms of number of days before the latest data point
+     * @param endDay the end of the interval exclusive in terms of number of days before the latest data point
      * @return earnings per share
      */
     public Double earningsPerShare(int startDay, int endDay) {
@@ -49,7 +64,7 @@ public class Metrics {
     }
 
     private Double getTotalEarnings(int startDay, int endDay) {
-        List<Double> earningsInInterval = earnings.getInterval(startDay, endDay);
+        final List<Double> earningsInInterval = earnings.getInterval(startDay, endDay);
         double total = 0;
         for (Double earning : earningsInInterval) {
             total += earning;

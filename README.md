@@ -8,6 +8,6 @@ Victor Gao -- Phacometer
 
 Mohan Li -- mlcompsci
 
-Nikolas Edric Santoso -- FuwKodo
+Nikolas Edric Santoso -- FuwaKodo
 
 Sam Xu -- Namaeno

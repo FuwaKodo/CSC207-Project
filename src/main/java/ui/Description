@@ -1,0 +1,7 @@
+ViewManager:
+ - manages which view in JPanel views with CardLayout cardLayout based on
+        ViewManagerModel viewManagerModel.get
+
+StockDataView:
+ - displays the data of a stock (with JPanel instance variable)
+ - updates information via set###(parameters) methods

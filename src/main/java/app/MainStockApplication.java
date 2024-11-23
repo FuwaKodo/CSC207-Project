@@ -7,7 +7,7 @@ import entities.Stock;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
-import ui.CompareStocksViewDisplayer;
+import ui.compare_stocks.CompareStocksViewDisplayer;
 import ui.ViewStockView;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;

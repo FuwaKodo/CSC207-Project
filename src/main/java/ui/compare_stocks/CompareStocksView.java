@@ -9,6 +9,7 @@ import interface_adapters.compare_stocks.CompareStocksState;
 public class CompareStocksView {
     private ViewModel<CompareStocksState> viewModel;
 
+    private JPanel mainPanel;
     private JComboBox<String> firstStockDropdown;
     private JComboBox<String> secondStockDropdown;
     private DatePicker startDatePicker;
@@ -19,18 +20,22 @@ public class CompareStocksView {
     public CompareStocksView(ViewModel<CompareStocksState> viewModel) {
         this.viewModel = viewModel;
 
-        final JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        addChooseStocksComponents(mainPanel);
-        addPickTimeIntervalComponents(mainPanel);
-        addCompareButton(mainPanel);
-        addComparisonSummaryComponent(mainPanel);
+        addChooseStocksComponents();
+        addPickTimeIntervalComponents();
+        addCompareButton();
+        addComparisonSummaryComponent();
 
-        compareButton.addActionListener(_ -> updateComparisonSummary());
+        compareButton.addActionListener(_ -> getNewComparisonSummary());
     }
 
-    private void addChooseStocksComponents(JPanel mainPanel) {
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    private void addChooseStocksComponents() {
         final JLabel chooseStocksInstruction = new JLabel("Choose two stocks:");
         mainPanel.add(chooseStocksInstruction);
 
@@ -40,7 +45,7 @@ public class CompareStocksView {
         mainPanel.add(secondStockDropdown);
     }
 
-    private void addPickTimeIntervalComponents(JPanel mainPanel) {
+    private void addPickTimeIntervalComponents() {
         final JLabel pickDateInstruction = new JLabel("Choose time interval to compare metrics:");
         mainPanel.add(pickDateInstruction);
 
@@ -49,13 +54,13 @@ public class CompareStocksView {
         mainPanel.add(makeDatePickerLayout(mainPanel));
     }
 
-    private void addComparisonSummaryComponent(JPanel mainPanel) {
+    private void addComparisonSummaryComponent() {
         comparisonSummaryDisplay = new JTextArea();
         comparisonSummaryDisplay.setEditable(false);
         mainPanel.add(comparisonSummaryDisplay);
     }
 
-    private void addCompareButton(JPanel mainPanel) {
+    private void addCompareButton() {
         compareButton = new JButton("Compare");
         mainPanel.add(compareButton);
     }
@@ -82,8 +87,14 @@ public class CompareStocksView {
         return layout;
     }
 
-    private void updateComparisonSummary() {
+    private void getNewComparisonSummary() {
+        final CompareStocksState state = viewModel.getState();
+        state.setFirstStockName(firstStockDropdown.getSelectedItem().toString());
+        state.setSecondStockName(secondStockDropdown.getSelectedItem().toString());
+        state.setStartDate(startDatePicker.getDate());
+        state.setEndDate(endDatePicker.getDate());
 
+        viewModel.firePropertyChanged();
     }
 
 }

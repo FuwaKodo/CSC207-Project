@@ -57,7 +57,7 @@ public class MainStockApplication {
 
             // Initialize ViewStockView and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(viewStockViewModel, viewStockController);
-            viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showCompareStocksModalDialog(frame));
+            viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
             frame.add(viewStockView.getMainPanel());
 
             // Display the GUI

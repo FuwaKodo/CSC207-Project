@@ -1,14 +1,12 @@
 package interface_adapters.compare_stocks;
 
-import entities.Stock;
-
 import java.time.LocalDate;
 
 public class CompareStocksState {
     private LocalDate startDate;
     private LocalDate endDate;
-    private Stock firstStock;
-    private Stock secondStock;
+    private String firstStockName;
+    private String secondStockName;
 
     public LocalDate getStartDate() {
         return startDate;
@@ -26,19 +24,19 @@ public class CompareStocksState {
         this.endDate = endDate;
     }
 
-    public Stock getFirstStock() {
-        return firstStock;
+    public String getFirstStockName() {
+        return firstStockName;
     }
 
-    public void setFirstStock(Stock firstStock) {
-        this.firstStock = firstStock;
+    public void setFirstStockName(String firstStockName) {
+        this.firstStockName = firstStockName;
     }
 
-    public Stock getSecondStock() {
-        return secondStock;
+    public String getSecondStockName() {
+        return secondStockName;
     }
 
-    public void setSecondStock(Stock secondStock) {
-        this.secondStock = secondStock;
+    public void setSecondStockName(String secondStockName) {
+        this.secondStockName = secondStockName;
     }
 }

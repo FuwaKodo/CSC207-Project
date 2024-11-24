@@ -1,4 +1,4 @@
-package main.java.interface_adapters.view_stock;
+package interface_adapters.view_stock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,5 +70,4 @@ public class ViewStockState {
     public void setViewStockError(String newSymbolError) {
         this.viewStockError = newSymbolError;
     }
-
 }

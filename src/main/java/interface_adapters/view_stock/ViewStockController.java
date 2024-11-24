@@ -1,7 +1,7 @@
-package main.java.interface_adapters.view_stock;
+package interface_adapters.view_stock;
 
-import main.java.use_cases.view_stock.ViewStockInputBoundary;
-import main.java.use_cases.view_stock.ViewStockInputData;
+import use_cases.view_stock.ViewStockInputBoundary;
+import use_cases.view_stock.ViewStockInputData;
 
 /**
  * Controller for the view stock use case.

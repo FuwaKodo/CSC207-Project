@@ -1,8 +1,8 @@
-package main.java.entities;
+package entities;
 
 import java.util.List;
 
-import main.java.Constants;
+import app.Constants;
 
 /**
  * Metrics: the metrics of a stock.

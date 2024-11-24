@@ -1,4 +1,4 @@
-package main.java.use_cases.view_stock;
+package use_cases.view_stock;
 
 /**
  * Output boundary for viewing stock use case.

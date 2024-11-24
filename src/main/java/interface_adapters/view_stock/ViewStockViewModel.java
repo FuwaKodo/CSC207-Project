@@ -1,7 +1,7 @@
-package main.java.interface_adapters.view_stock;
+package interface_adapters.view_stock;
 
-import main.java.Constants;
-import main.java.interface_adapters.ViewModel;
+import app.Constants;
+import interface_adapters.ViewModel;
 
 /**
  * View model for view stock use case.

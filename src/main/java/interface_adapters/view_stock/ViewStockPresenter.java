@@ -1,8 +1,8 @@
-package main.java.interface_adapters.view_stock;
+package interface_adapters.view_stock;
 
-import main.java.interface_adapters.ViewManagerModel;
-import main.java.use_cases.view_stock.ViewStockOutputBoundary;
-import main.java.use_cases.view_stock.ViewStockOutputData;
+import interface_adapters.ViewManagerModel;
+import use_cases.view_stock.ViewStockOutputBoundary;
+import use_cases.view_stock.ViewStockOutputData;
 
 /**
  * Presenter for the view stock use case.

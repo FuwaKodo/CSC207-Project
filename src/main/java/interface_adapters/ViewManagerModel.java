@@ -1,4 +1,4 @@
-package main.java.interface_adapters;
+package interface_adapters;
 
 /**
  * A class for displaying the name of the current view in String. It is "" by default.

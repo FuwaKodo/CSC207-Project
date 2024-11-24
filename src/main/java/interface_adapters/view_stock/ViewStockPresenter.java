@@ -5,7 +5,7 @@ import main.java.use_cases.view_stock.ViewStockOutputBoundary;
 import main.java.use_cases.view_stock.ViewStockOutputData;
 
 /**
- * Presenter for the view_stock use case.
+ * Presenter for the view stock use case.
  */
 public class ViewStockPresenter implements ViewStockOutputBoundary {
     private final ViewStockViewModel stockViewModel;
@@ -21,7 +21,7 @@ public class ViewStockPresenter implements ViewStockOutputBoundary {
      * @param response the output data
      */
     public void displayStock(ViewStockOutputData response) {
-        // On success, switch to the logged in view.
+        // On success, display data for the stock selected
 
         final ViewStockState viewStockState = stockViewModel.getState();
         viewStockState.setSymbol(response.getSymbol());

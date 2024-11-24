@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The state for the Login View Model.
+ * The state for the View Stock View Model.
  */
 public class ViewStockState {
     private String symbol = "";
@@ -51,24 +51,24 @@ public class ViewStockState {
         return viewStockError;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setSymbol(String newSymbol) {
+        this.symbol = newSymbol;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCompany(String newCompany) {
+        this.company = newCompany;
     }
 
-    public void setSharePrices(List<Double> sharePrices) {
-        this.sharePrices = sharePrices;
+    public void setSharePrices(List<Double> newSharePrices) {
+        this.sharePrices = newSharePrices;
     }
 
-    public void setEarnings(List<Double> earnings) {
-        this.earnings = earnings;
+    public void setEarnings(List<Double> newEarnings) {
+        this.earnings = newEarnings;
     }
 
-    public void setViewStockError(String symbolError) {
-        this.viewStockError = symbolError;
+    public void setViewStockError(String newSymbolError) {
+        this.viewStockError = newSymbolError;
     }
 
 }

@@ -4,7 +4,7 @@ import main.java.Constants;
 import main.java.interface_adapters.ViewModel;
 
 /**
- * View model for view_stock use case.
+ * View model for view stock use case.
  */
 public class ViewStockViewModel extends ViewModel<ViewStockState> {
 

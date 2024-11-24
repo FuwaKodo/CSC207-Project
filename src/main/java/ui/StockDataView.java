@@ -92,7 +92,8 @@ public class StockDataView {
      */
     public void setSharePrices(List<Double> sharePrices) {
         this.sharePrices = sharePrices;
-        graphPanel.repaint(); // Refresh the graph when new data is set
+        // Refresh the graph when new data is set
+        graphPanel.repaint();
     }
 
     /**

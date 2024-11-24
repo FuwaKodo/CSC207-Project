@@ -34,4 +34,7 @@ public class Constants {
     public static final String STOCK_VIEW = "key for stock view";
     public static final String NO_STOCKS_SELECTED = "Select stock";
 
+    // other view names
+    public static final String SEARCH_VIEW = "search view state name";
+
 }

@@ -65,7 +65,8 @@ public class PolygonApiLoader implements StockDataLoader {
                 // Adding delay because API can't handle the amount of calls
                 try {
                     final Date currentDate = calendar.getTime();
-                    // Thread.sleep(10000); // Sleep delay
+                    // Sleep amount
+                    Thread.sleep(10000);
                     volumeValues.add(getVolume(stockSymbol, currentDate));
                     volumeDates.add(currentDate);
                     addDay(calendar, 1);

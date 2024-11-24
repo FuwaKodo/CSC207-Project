@@ -3,6 +3,7 @@ package entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Stores the values of a metric. For example, the share price of a stock is a metric and its value
@@ -47,5 +48,25 @@ public class MetricValues {
 
     private int dayToIndex(int day) {
         return values.size() - day;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        final MetricValues other = (MetricValues) obj;
+        boolean state = Objects.equals(values, other.values) && Objects.equals(dates, other.dates);
+        if (this == obj) {
+            state = true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            state = false;
+        }
+
+        return state;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(values, dates);
     }
 }

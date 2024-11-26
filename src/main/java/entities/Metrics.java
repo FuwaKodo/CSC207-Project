@@ -54,7 +54,7 @@ public class Metrics {
     public Double getGrowthPercentage(LocalDate start, LocalDate end) {
         final Double startPrice = sharePrices.getValue(start);
         final Double endPrice = sharePrices.getValue(end);
-        return startPrice * Constants.PERCENTAGE / endPrice;
+        return (endPrice - startPrice) / startPrice * Constants.PERCENTAGE ;
     }
 
     /**

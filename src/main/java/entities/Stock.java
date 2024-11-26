@@ -9,6 +9,7 @@ public class Stock {
     private final String company;
     private final String symbol;
     private final Metrics metrics;
+    private boolean isFavorite;
 
     public Stock(StockDataLoader loader) {
         this.company = loader.getCompany();
@@ -19,6 +20,7 @@ public class Stock {
                 loader.getEarnings(),
                 loader.getVolumes()
         );
+        this.isFavorite = false; // Initialize isFavorite to false
     }
 
     public String getCompany() {
@@ -45,5 +47,12 @@ public class Stock {
      */
     public Double getVolume(int day) {
         return metrics.volume(day);
+    }
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

@@ -2,6 +2,7 @@ package gateways;
 
 import entities.MetricValues;
 import interface_adapters.gateways.PolygonApiLoader;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
@@ -231,5 +232,45 @@ public class PolygonApiLoaderTest {
         System.out.println(expectedDates.toString());
         System.out.println(expectedValues.toString());
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void loadOneEntry(){
+        Calendar calendar = Calendar.getInstance();
+        Date startDay = polygonApiLoaderExample.setDay(calendar, 2024, 10, 6);
+        JSONObject resultJson = polygonApiLoaderExample.loadOneEntry("INTC", startDay);
+        JSONObject expectedJson = new JSONObject();
+        expectedJson.put("status", "OK");
+        expectedJson.put("from", "2024-11-06");
+        expectedJson.put("symbol", "INTC");
+        expectedJson.put("open", 24.3);
+        expectedJson.put("high", 25.12);
+        expectedJson.put("low", 24.05);
+        expectedJson.put("close", 25.05);
+        expectedJson.put("volume", 1.14559359e+08);
+        expectedJson.put("afterHours", 25.03);
+        expectedJson.put("preMarket", 24.08);
+        System.out.println(expectedJson.getDouble("volume"));
+        System.out.println(resultJson.getDouble("volume"));
+        // TODO: Make a good assertEquals
+    }
+
+    @Test
+    public void loadOneEntryHoldApiLimit(){
+        Calendar calendar = Calendar.getInstance();
+        Date day = polygonApiLoaderExample.setDay(calendar, 2024, 10, 3);
+        JSONObject[] jsonObjects = new JSONObject[10];
+        for (int i = 0; i < 10; i++) {
+            JSONObject testJson = polygonApiLoaderExample.loadOneEntry("INTC", day);
+            jsonObjects[i] = testJson;
+            day = polygonApiLoaderExample.addDay(calendar, 1);
+        }
+
+        System.out.println("=============================================================");
+        for (int i = 0; i < 10; i++) {
+            System.out.println(jsonObjects[i].getString("status"));
+        }
+
+        // TODO: Make appropriate AssertEquals but functions works!
     }
 }

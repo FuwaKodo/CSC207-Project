@@ -14,9 +14,9 @@ import entities.MetricValues;
 import entities.SharePrices;
 
 /**
- * DAO (Data Access Object) for Stock Api: Polygon.
+ * DAO (Data Access Object) for Stock API: Polygon.
  */
-public class PolygonApiLoader implements StockDataLoader {
+public class PolygonApiLoader implements ApiDataLoader {
     // Cache idea maybe not applicable
     // private static ArrayList<Double> cacheVolume = new ArrayList<>();
     // private static ArrayList<Double> cachePreMarket = new ArrayList<>();
@@ -24,6 +24,7 @@ public class PolygonApiLoader implements StockDataLoader {
 
     private static String apiKey = "NbKXkuoH3mdV4H6DN493zVQg0M2d0LlG";
     private static String baseUrl = "https://api.polygon.io/v1/";
+    private static String apiCallLimitErrorMsg = "You've exceeded the maximum requests per minute, please wait or upgrade your subscription to continue. https://polygon.io/pricing";
 
     @Override
     public String getCompany() {
@@ -63,6 +64,7 @@ public class PolygonApiLoader implements StockDataLoader {
             clearTimeFields(calendar);
             while (!calendar.getTime().after(endDate)) {
                 // Adding delay because API can't handle the amount of calls
+                /* Previous sleep method
                 try {
                     final Date currentDate = calendar.getTime();
                     // Sleep amount
@@ -76,6 +78,11 @@ public class PolygonApiLoader implements StockDataLoader {
                     volumeData = null;
                     System.out.println("Sleep is interrupted");
                 }
+                 */
+                final Date currentDate = calendar.getTime();
+                volumeValues.add(getVolume(stockSymbol, currentDate));
+                volumeDates.add(currentDate);
+                addDay(calendar, 1);
             }
 
             System.out.println(volumeValues);
@@ -137,6 +144,7 @@ public class PolygonApiLoader implements StockDataLoader {
 
     @Override
     public Double getVolume(String stockSymbol, Date date) {
+        // Implemented force take data
         final ArrayList<String> endpoint = new ArrayList<>();
         endpoint.add("open-close");
         endpoint.add(stockSymbol);
@@ -148,28 +156,38 @@ public class PolygonApiLoader implements StockDataLoader {
         queryParameters.put("adjusted", "true");
         queryParameters.put("apiKey", apiKey);
 
+        boolean apiIsDone = false;
+
         Double volumeValue = Double.NaN;
         JSONObject jsonData;
 
-        try {
-            final String apiUrl = buildApiUrl(baseUrl, endpoint, queryParameters);
-            final HttpClient client = HttpClient.newHttpClient();
-            final HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl))
-                    .build();
-            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            jsonData = new JSONObject(response.body());
-        }
+        while (!apiIsDone) {
+            apiIsDone = true;
+            try {
+                final String apiUrl = buildApiUrl(baseUrl, endpoint, queryParameters);
+                final HttpClient client = HttpClient.newHttpClient();
+                final HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(apiUrl))
+                        .build();
+                final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                jsonData = new JSONObject(response.body());
+            }
 
-        catch (IOException | InterruptedException exception) {
-            jsonData = null;
-            System.out.println("Server Issue");
-        }
+            catch (IOException | InterruptedException exception) {
+                jsonData = null;
+                System.out.println("Server Issue");
+            }
 
-        System.out.println(jsonData.toString());
+            System.out.println(jsonData.toString());
 
-        if (jsonData != null && jsonData.has("volume")) {
-            volumeValue = jsonData.getDouble("volume");
+            if (jsonData != null && jsonData.has("volume")) {
+                volumeValue = jsonData.getDouble("volume");
+            }
+
+            if (jsonData != null && jsonData.has("error") && jsonData.get("error")
+                    .equals(apiCallLimitErrorMsg)) {
+                apiIsDone = false;
+            }
         }
 
         return volumeValue;
@@ -250,4 +268,57 @@ public class PolygonApiLoader implements StockDataLoader {
         return calendar.getTime();
     }
      */
+
+    @Override
+    public JSONObject loadOneEntry(String stockSymbol, Date date) {
+        // Implemented force take data
+        final ArrayList<String> endpoint = new ArrayList<>();
+        endpoint.add("open-close");
+        endpoint.add(stockSymbol);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final String formattedDate = dateFormat.format(date);
+        endpoint.add(formattedDate);
+
+        final SortedMap<String, String> queryParameters = new TreeMap<>();
+        queryParameters.put("adjusted", "true");
+        queryParameters.put("apiKey", apiKey);
+
+        boolean apiIsDone = false;
+
+        JSONObject jsonData = new JSONObject();
+
+        while (!apiIsDone) {
+            apiIsDone = true;
+            try {
+                final String apiUrl = buildApiUrl(baseUrl, endpoint, queryParameters);
+                final HttpClient client = HttpClient.newHttpClient();
+                final HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create(apiUrl))
+                        .build();
+                final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                jsonData = new JSONObject(response.body());
+            }
+
+            catch (IOException | InterruptedException exception) {
+                System.out.println("LoadOneEntry Server Issue");
+            }
+
+            System.out.println(jsonData.toString());
+
+            if (jsonData != null && jsonData.has("error") && jsonData.get("error")
+                    .equals(apiCallLimitErrorMsg)) {
+                apiIsDone = false;
+            }
+
+            if (jsonData != null && jsonData.has("status") && jsonData.get("status").equals("NOT_FOUND")) {
+                System.out.println("activated");
+                // Convert Date to String
+                jsonData.put("symbol", stockSymbol);
+                jsonData.put("from", formattedDate);
+                jsonData.put("status", "NOT_FOUND");
+            }
+        }
+
+        return jsonData;
+    }
 }

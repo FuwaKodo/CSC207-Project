@@ -23,4 +23,20 @@ public class SharePrices extends MetricValues {
         this.highPrices = highPrices;
         this.lowPrices = lowPrices;
     }
+
+    public List<Double> getOpenPrices() {
+        return openPrices;
+    }
+
+    public List<Double> getClosePrices() {
+        return closePrices;
+    }
+
+    public List<Double> getHighPrices() {
+        return highPrices;
+    }
+
+    public List<Double> getLowPrices() {
+        return lowPrices;
+    }
 }

@@ -1,6 +1,6 @@
 package entities;
 
-import interface_adapters.gateways.StockDataLoader;
+import interface_adapters.gateways.ApiDataLoader;
 
 /**
  * Stock: the stocks of a single company.
@@ -10,7 +10,7 @@ public class Stock {
     private final String symbol;
     private final Metrics metrics;
 
-    public Stock(StockDataLoader loader) {
+    public Stock(ApiDataLoader loader) {
         this.company = loader.getCompany();
         this.symbol = loader.getSymbol();
 

@@ -4,11 +4,12 @@ import java.util.*;
 
 import entities.MetricValues;
 import entities.SharePrices;
+import org.json.JSONObject;
 
 /**
  * Stores relevant data for creating a stock entity.
  */
-public interface StockDataLoader {
+public interface ApiDataLoader {
 
     /**
      * Get company name.
@@ -128,4 +129,15 @@ public interface StockDataLoader {
      * @return volume of stock
      */
     Double getVolume(String stockSymbol, Date date);
+
+    /**
+     * Request to a given API to return a JSONObject corresponding to the StockSymbol and Date. Note the value
+     * is already formatted in a way where if the object is succesful:
+     * Example
+     * and if it fails it should say msg = MISSING_INFORMATION
+     * @param stockSymbol yea
+     * @param date yea
+     * @return jsonObject
+     */
+    JSONObject loadOneEntry(String stockSymbol, Date date);
 }

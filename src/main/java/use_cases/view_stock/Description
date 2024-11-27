@@ -1,10 +1,10 @@
 Processes the use case of viewing information relating to a stock.
 
 Input:
-    String symbol: the symbol of a stock
+    String symbol: the symbol of a stock, automatically stripped and converted to upper case
 
 Output: Relevant data to be displayed
-    ViewStockOutputData viewStockOutputData
+    ViewStockOutputData searchOutputData
     // Contains the following
     // String company: name of company
     // String symbol: stock symbol

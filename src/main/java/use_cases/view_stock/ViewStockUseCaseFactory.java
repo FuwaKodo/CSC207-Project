@@ -16,15 +16,14 @@ public class ViewStockUseCaseFactory {
      * This method wires up all the dependencies following clean architecture principles.
      *
      * @param viewManagerModel The view manager model that handles view switching
+     * @param viewStockViewModel The view model for the view stock use case
      * @param dataAccessObject The concrete implementation of ViewStockDataAccessInterface to use
      * @return A configured ViewStockController ready for use
      */
     public static ViewStockController create(
             ViewManagerModel viewManagerModel,
+            ViewStockViewModel viewStockViewModel,
             ViewStockDataAccessInterface dataAccessObject) {
-
-        // Create the view model and state
-        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
 
         // Create the presenter with its required dependencies
         final ViewStockPresenter viewStockPresenter = new ViewStockPresenter(viewManagerModel, viewStockViewModel);

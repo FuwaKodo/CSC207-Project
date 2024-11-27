@@ -23,7 +23,8 @@ public class Stock {
                 loader.getVolumes(),
                 loader.getDividends()
         );
-        this.isFavorite = false; // Initialize isFavorite to false
+        // Initialize isFavorite to false
+        this.isFavorite = false;
     }
 
     public String getCompany() {
@@ -82,6 +83,7 @@ public class Stock {
     public Double getDividendsPerShare(LocalDate date) {
         return metrics.getDividendsPerShare(date);
     }
+
     public boolean isFavorite() {
         return isFavorite;
     }

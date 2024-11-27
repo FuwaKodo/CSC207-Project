@@ -8,7 +8,7 @@ import app.Constants;
 /**
  * Metrics: the metrics of a stock.
  */
-public class    Metrics {
+public class Metrics {
     private final SharePrices sharePrices;
     private final MetricValues earnings;
     private final MetricValues volumes;

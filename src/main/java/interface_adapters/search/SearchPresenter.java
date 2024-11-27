@@ -1,8 +1,8 @@
-package main.java.interface_adapters.search;
+package interface_adapters.search;
 
-import main.java.interface_adapters.ViewManagerModel;
-import main.java.use_cases.search.SearchOutputBoundary;
-import main.java.use_cases.search.SearchOutputData;
+import interface_adapters.ViewManagerModel;
+import use_cases.search.SearchOutputBoundary;
+import use_cases.search.SearchOutputData;
 
 /**
  * Presenter for the search use case.
@@ -25,7 +25,9 @@ public class SearchPresenter implements SearchOutputBoundary {
 
         final SearchState searchState = searchViewModel.getState();
         searchState.setInput(response.getInput());
+        response.getSymbols().add("Sample 1"); // to be removed
         searchState.setSymbols(response.getSymbols());
+        System.out.println(searchState.getSymbols());
         this.searchViewModel.setState(searchState);
         this.searchViewModel.firePropertyChanged();
 

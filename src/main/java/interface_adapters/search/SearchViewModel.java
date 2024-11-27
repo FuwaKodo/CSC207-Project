@@ -1,7 +1,7 @@
-package main.java.interface_adapters.search;
+package interface_adapters.search;
 
-import main.java.Constants;
-import main.java.interface_adapters.ViewModel;
+import app.Constants;
+import interface_adapters.ViewModel;
 
 /**
  * View model for search use case.

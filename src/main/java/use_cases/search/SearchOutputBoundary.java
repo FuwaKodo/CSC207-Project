@@ -1,4 +1,4 @@
-package main.java.use_cases.search;
+package use_cases.search;
 
 /**
  * Output boundary for search use case.

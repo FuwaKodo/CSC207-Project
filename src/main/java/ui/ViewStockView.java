@@ -14,12 +14,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import app.Constants;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.search.SearchController;
+import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
+import use_cases.search.SearchUseCaseFactory;
 
 /**
  * View for the application.
@@ -30,14 +34,20 @@ public class ViewStockView {
     private final JComboBox<String> stockDropdown;
     private final JButton buyButton;
     private final StockDataView stockViewObject;
+    private SearchView searchView;
+    private final CardLayout cardLayout;
+    private final JPanel views;
 
     private final ViewStockViewModel viewStockViewModel;
     private final ViewStockController viewStockController;
+    private final SearchController searchController;
 
     public ViewStockView(ViewStockViewModel viewStockViewModel,
-                         ViewStockController viewStockController) {
+                         ViewStockController viewStockController,
+                         SearchController searchController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
+        this.searchController = searchController;
 
         // Initialize the main panel
         mainPanel = new JPanel();
@@ -60,20 +70,16 @@ public class ViewStockView {
         }
         stockViewObject.setSharePrices(samplePrices);
 
-        // CardLayout panel for displaying panels according to stocks selected
-        final CardLayout cardLayout = new CardLayout();
-        final JPanel stockViews = new JPanel(cardLayout);
-        stockViews.add(defaultBox, Constants.NO_STOCKS_SELECTED);
-        stockViews.add(stockViewObject.getStockView(), Constants.STOCK_VIEW);
+        // Initializes views
+        cardLayout = new CardLayout();
+        views = new JPanel(cardLayout);
+
+        // Manages which panel in views is displayed
+        final ViewManagerModel viewManagerModel = new ViewManagerModel();
+        new ViewManager(views, cardLayout, viewManagerModel);
 
         // Make sure the stock view panel has a preferred size
         stockViewObject.getStockView().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
-
-        mainPanel.add(stockViews, BorderLayout.CENTER);
-
-        // Manages which panel in stockViews is displayed
-        final ViewManagerModel viewManagerModel = new ViewManagerModel();
-        new ViewManager(stockViews, cardLayout, viewManagerModel);
 
         // Bottom panel to hold buttons and dropdown
         final JPanel bottomPanel = new JPanel();
@@ -106,7 +112,7 @@ public class ViewStockView {
                     }
                     stockViewObject.setSharePrices(prices);
                     // Show the stock view, only for when controller is unusable
-                    cardLayout.show(stockViews, Constants.STOCK_VIEW);
+                    cardLayout.show(views, Constants.STOCK_VIEW);
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
@@ -116,8 +122,35 @@ public class ViewStockView {
                 }
                 else {
                     // No stock is selected
-                    cardLayout.show(stockViews, Constants.NO_STOCKS_SELECTED);
+                    cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
                 }
+            }
+        });
+
+        // adding views to views and all of them to mainPanel
+        views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
+        views.add(stockViewObject.getStockView(), Constants.STOCK_VIEW);
+        mainPanel.add(views, BorderLayout.CENTER);
+
+        // Input box and button for searching stocks
+        final JTextField searchField = new JTextField(8);
+        bottomPanel.add(searchField);
+        final JButton searchButton = new JButton("Search");
+        bottomPanel.add(searchButton);
+
+        // Response to clicking searchButton
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final String input = searchField.getText();
+                searchController.execute(input);
+                searchView.updateSearchResult();
+
+                cardLayout.show(views, Constants.SEARCH_VIEW);
+                viewManagerModel.setState(Constants.SEARCH_VIEW);
+                viewManagerModel.firePropertyChanged();
+                searchView.getMainPanel().revalidate();
+                searchView.getMainPanel().repaint();
             }
         });
 
@@ -149,6 +182,15 @@ public class ViewStockView {
 
     public JButton getBuyButton() {
         return buyButton;
+    }
+
+    /**
+     * Initializes searchView and add it to mainPanel.
+     * @param searchViewModel SearchViewModel object
+     */
+    public void setSearchView(SearchViewModel searchViewModel) {
+        this.searchView = new SearchView(searchViewModel, viewStockController);
+        views.add(searchView.getMainPanel(), searchView.getViewName());
     }
 
     /**

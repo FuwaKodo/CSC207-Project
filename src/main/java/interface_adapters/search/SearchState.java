@@ -1,4 +1,4 @@
-package main.java.interface_adapters.search;
+package interface_adapters.search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.List;
 public class SearchState {
     private String input = "";
     private List<String> symbols = new ArrayList<>();
+    private int pageNumber;
     private String searchStockError;
 
     public String getInput() {
@@ -17,6 +18,14 @@ public class SearchState {
 
     public List<String> getSymbols() {
         return symbols;
+    }
+
+    public String getStringPageNumber() {
+        return String.valueOf(pageNumber);
+    }
+
+    public int getIntPageNumber() {
+        return pageNumber;
     }
 
     public String getSearchStockError() {
@@ -29,6 +38,20 @@ public class SearchState {
 
     public void setSymbols(List<String> newSymbols) {
         this.symbols = newSymbols;
+    }
+
+    /**
+     * Decreases page number by 1.
+     */
+    public void minusPageNumber() {
+        this.pageNumber -= 1;
+    }
+
+    /**
+     * Increases page number by 1.
+     */
+    public void addPageNumber() {
+        this.pageNumber += 1;
     }
 
     public void setSearchError(String newSearchError) {

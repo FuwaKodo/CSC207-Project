@@ -1,7 +1,7 @@
-package main.java.interface_adapters.search;
+package interface_adapters.search;
 
-import main.java.use_cases.search.SearchInputBoundary;
-import main.java.use_cases.search.SearchInputData;
+import use_cases.search.SearchInputBoundary;
+import use_cases.search.SearchInputData;
 
 /**
  * Controller for the search use case.

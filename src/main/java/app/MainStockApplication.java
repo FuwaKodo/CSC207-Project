@@ -1,13 +1,22 @@
 package app;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import java.awt.CardLayout;
+import java.util.List;
 
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.search.SearchController;
+import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
+import ui.ViewManager;
 import ui.ViewStockView;
+import use_cases.search.SearchDataAccessInterface;
+import use_cases.search.SearchUseCaseFactory;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 
@@ -30,15 +39,27 @@ public class MainStockApplication {
     public static void main(String[] args) {
 
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
+        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
+        final SearchViewModel searchViewModel = new SearchViewModel();
+
+        // sample interfaces, will be implemented later
         final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
             @Override
             public Stock getStock(String symbol) {
                 return null;
             }
         };
+        final SearchDataAccessInterface searchDataAccessInterface = new SearchDataAccessInterface() {
+            @Override
+            public List<String> getSymbols() {
+                return List.of();
+            }
+        };
+
         final ViewStockController viewStockController =
-                ViewStockUseCaseFactory.create(viewManagerModel, viewStockDataAccessInterface);
-        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
+                ViewStockUseCaseFactory.create(viewManagerModel, viewStockViewModel, viewStockDataAccessInterface);
+        final SearchController searchController =
+                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessInterface);
 
         // Set up the main application frame
         SwingUtilities.invokeLater(() -> {
@@ -54,9 +75,13 @@ public class MainStockApplication {
             // Center the window on the screen
             frame.setLocationRelativeTo(null);
 
-            // Initialize ViewStockView and add it to the frame
-            final ViewStockView viewStockView = new ViewStockView(viewStockViewModel, viewStockController);
+            // Initialize ViewStockView and add it to views
+            final ViewStockView viewStockView = new ViewStockView(
+                    viewStockViewModel, viewStockController, searchController);
             frame.add(viewStockView.getMainPanel());
+
+            // Initialize searchView
+            viewStockView.setSearchView(searchViewModel);
 
             // Display the GUI
             frame.setVisible(true);

@@ -4,12 +4,20 @@ import javax.swing.*;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import interface_adapters.ViewModel;
+import interface_adapters.compare_stocks.CompareStocksController;
 import interface_adapters.compare_stocks.CompareStocksState;
+import use_cases.compare_stocks.CompareStocksInputData;
 
-public class CompareStocksView {
-    private ViewModel<CompareStocksState> viewModel;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.time.LocalDate;
 
-    private JPanel mainPanel;
+public class CompareStocksView extends JPanel implements PropertyChangeListener {
+    private final ViewModel<CompareStocksState> viewModel;
+    private final CompareStocksController controller;
+
+    private GroupLayout layout;
     private JComboBox<String> firstStockDropdown;
     private JComboBox<String> secondStockDropdown;
     private DatePicker startDatePicker;
@@ -17,84 +25,93 @@ public class CompareStocksView {
     private JTextArea comparisonSummaryDisplay;
     private JButton compareButton;
 
-    public CompareStocksView(ViewModel<CompareStocksState> viewModel) {
+    public CompareStocksView(CompareStocksController controller, ViewModel<CompareStocksState> viewModel) {
+        this.controller = controller;
         this.viewModel = viewModel;
+        viewModel.addPropertyChangeListener(this);
 
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        layout = new GroupLayout(this);
+        this.setLayout(layout);
 
-        addChooseStocksComponents();
-        addPickTimeIntervalComponents();
-        addCompareButton();
-        addComparisonSummaryComponent();
+        compareButton = new JButton("Compare");
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(chooseStocksPanel())
+                        .addComponent(pickTimeIntervalPanel())
+                        .addComponent(comparisonSummaryComponent())
+                        .addComponent(compareButton)
+        );
 
         compareButton.addActionListener(_ -> getNewComparisonSummary());
     }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
-    }
-
-    private void addChooseStocksComponents() {
+    private JPanel chooseStocksPanel() {
         final JLabel chooseStocksInstruction = new JLabel("Choose two stocks:");
-        mainPanel.add(chooseStocksInstruction);
+        firstStockDropdown = new JComboBox<>(controller.getStockNames().toArray(new String[0]));
+        secondStockDropdown = new JComboBox<>(controller.getStockNames().toArray(new String[0]));
 
-        firstStockDropdown = new JComboBox<>(getStockDropdownOptions());
-        secondStockDropdown = new JComboBox<>(getStockDropdownOptions());
-        mainPanel.add(firstStockDropdown);
-        mainPanel.add(secondStockDropdown);
+        final JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(chooseStocksInstruction);
+        panel.add(firstStockDropdown);
+        panel.add(secondStockDropdown);
+
+        return panel;
     }
 
-    private void addPickTimeIntervalComponents() {
+    private JPanel pickTimeIntervalPanel() {
+        final JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
         final JLabel pickDateInstruction = new JLabel("Choose time interval to compare metrics:");
-        mainPanel.add(pickDateInstruction);
+        panel.add(pickDateInstruction);
+        panel.add(datePickerPanel());
 
-        startDatePicker = new DatePicker();
-        endDatePicker = new DatePicker();
-        mainPanel.add(makeDatePickerLayout(mainPanel));
+        return panel;
     }
 
-    private void addComparisonSummaryComponent() {
+    private JTextArea comparisonSummaryComponent() {
         comparisonSummaryDisplay = new JTextArea();
         comparisonSummaryDisplay.setEditable(false);
-        mainPanel.add(comparisonSummaryDisplay);
+        return comparisonSummaryDisplay;
     }
 
-    private void addCompareButton() {
-        compareButton = new JButton("Compare");
-        mainPanel.add(compareButton);
-    }
-
-    private String[] getStockDropdownOptions() {
-        return new String[] {"Stock A", "Stock B", "Stock C"};
-    }
-
-    private JPanel makeDatePickerLayout(JPanel container) {
-        final JPanel startDatePanel = new JPanel(new BoxLayout(container, BoxLayout.Y_AXIS));
+    private JPanel datePickerPanel() {
+        final JPanel startDatePanel = new JPanel();
         final JLabel startDateLabel = new JLabel("Start date:");
+
+        startDatePicker = new DatePicker();
+        startDatePanel.setLayout(new BoxLayout(startDatePanel, BoxLayout.Y_AXIS));
         startDatePanel.add(startDateLabel);
         startDatePanel.add(startDatePicker);
 
-        final JPanel endDatePanel = new JPanel(new BoxLayout(container, BoxLayout.Y_AXIS));
+        final JPanel endDatePanel = new JPanel();
+        endDatePanel.setLayout(new BoxLayout(endDatePanel, BoxLayout.Y_AXIS));
+
         final JLabel endDateLabel = new JLabel("End date:");
+        endDatePicker = new DatePicker();
         endDatePanel.add(endDateLabel);
         endDatePanel.add(endDatePicker);
 
-        final JPanel layout = new JPanel(new BoxLayout(container, BoxLayout.X_AXIS));
-        layout.add(startDatePanel);
-        layout.add(endDatePanel);
-
-        return layout;
+        final JPanel parentPanel = new JPanel();
+        parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.X_AXIS));
+        return parentPanel;
     }
 
     private void getNewComparisonSummary() {
-        final CompareStocksState state = viewModel.getState();
-        state.setFirstStockName(firstStockDropdown.getSelectedItem().toString());
-        state.setSecondStockName(secondStockDropdown.getSelectedItem().toString());
-        state.setStartDate(startDatePicker.getDate());
-        state.setEndDate(endDatePicker.getDate());
+        final String stock1Name = firstStockDropdown.getSelectedItem().toString();
+        final String stock2Name = secondStockDropdown.getSelectedItem().toString();
+        final LocalDate start = startDatePicker.getDate();
+        final LocalDate end = endDatePicker.getDate();
 
-        viewModel.firePropertyChanged();
+        final CompareStocksInputData inputData = new CompareStocksInputData(
+                stock1Name, stock2Name, start, end
+        );
+        controller.execute(inputData);
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        comparisonSummaryDisplay.setText(viewModel.getState().getSummary());
+    }
 }

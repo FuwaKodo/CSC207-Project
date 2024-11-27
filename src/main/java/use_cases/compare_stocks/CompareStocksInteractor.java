@@ -1,9 +1,11 @@
 package use_cases.compare_stocks;
 
 import entities.Stock;
+import use_cases.StockDataAccessInterface;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * The use case to compare stocks using earnings per share, dividends, and
@@ -11,20 +13,29 @@ import java.time.format.DateTimeFormatter;
  */
 public class CompareStocksInteractor implements CompareStocksInputBoundary {
     private final CompareStocksOutputBoundary presenter;
+    private final StockDataAccessInterface dataAccess;
 
-    public CompareStocksInteractor(CompareStocksOutputBoundary presenter) {
+    public CompareStocksInteractor(CompareStocksOutputBoundary presenter, StockDataAccessInterface dataAccess) {
         this.presenter = presenter;
+        this.dataAccess = dataAccess;
     }
 
     @Override
     public void execute(CompareStocksInputData inputData) {
+        final Stock stock1 = dataAccess.getStockByCompany(inputData.getFirstStockName());
+        final Stock stock2 = dataAccess.getStockByCompany(inputData.getSecondStockName());
+
         final String summary = getComparisonSummary(
-                inputData.getFirstStock(),
-                inputData.getSecondStock(),
+                stock1,
+                stock2,
                 inputData.getStartDate(),
                 inputData.getEndDate()
                 );
         presenter.displayComparisonSummary(summary);
+    }
+
+    public List<String> getStockNames() {
+        return dataAccess.getAllCompanyNames();
     }
 
     private String getComparisonSummary(Stock stock1, Stock stock2, LocalDate start, LocalDate end) {

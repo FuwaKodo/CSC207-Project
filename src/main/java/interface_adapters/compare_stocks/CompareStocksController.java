@@ -1,20 +1,24 @@
 package interface_adapters.compare_stocks;
 
-import entities.Stock;
 import use_cases.compare_stocks.CompareStocksInputBoundary;
 import use_cases.compare_stocks.CompareStocksInputData;
+import use_cases.compare_stocks.CompareStocksInteractor;
 
-import java.time.LocalDate;
+import java.util.List;
+
 
 public class CompareStocksController {
-    private final CompareStocksInputBoundary useCaseInteractor;
+    private final CompareStocksInteractor interactor;
 
-    public CompareStocksController(CompareStocksInputBoundary useCaseInteractor) {
-        this.useCaseInteractor = useCaseInteractor;
+    public CompareStocksController(CompareStocksInteractor interactor) {
+        this.interactor = interactor;
     }
 
-    public void execute(Stock stock1, Stock stock2, LocalDate start, LocalDate end) {
-        final CompareStocksInputData inputData = new CompareStocksInputData(stock1, stock2, start, end);
-        useCaseInteractor.execute(inputData);
+    public void execute(CompareStocksInputData inputData) {
+        interactor.execute(inputData);
+    }
+
+    public List<String> getStockNames() {
+        return interactor.getStockNames();
     }
 }

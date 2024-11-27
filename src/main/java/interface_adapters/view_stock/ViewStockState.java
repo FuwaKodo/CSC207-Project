@@ -1,7 +1,6 @@
 package interface_adapters.view_stock;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * The state for the Login View Model.
@@ -12,6 +11,7 @@ public class ViewStockState {
     private List<Double> sharePrices = new ArrayList<>();
     private List<Double> earnings = new ArrayList<>();
     private String viewStockError;
+    private Set<String> favorites = new HashSet<>();
 
     public String getSymbol() {
         return symbol;
@@ -69,5 +69,38 @@ public class ViewStockState {
 
     public void setViewStockError(String symbolError) {
         this.viewStockError = symbolError;
+    }
+
+    /**
+     * Add a stock symbol to favorites.
+     * @param symbol the stock symbol to add
+     */
+    public void addFavorite(String symbol) {
+        favorites.add(symbol);
+    }
+
+    /**
+     * Remove a stock symbol from favorites.
+     * @param symbol the stock symbol to remove
+     */
+    public void removeFavorite(String symbol) {
+        favorites.remove(symbol);
+    }
+
+    /**
+     * Check if a stock symbol is favorited.
+     * @param symbol the stock symbol to check
+     * @return true if the stock is favorited, false otherwise
+     */
+    public boolean isFavorite(String symbol) {
+        return favorites.contains(symbol);
+    }
+
+    /**
+     * Get all favorite stock symbols.
+     * @return an unmodifiable set of favorite stock symbols
+     */
+    public Set<String> getFavorites() {
+        return Collections.unmodifiableSet(favorites);
     }
 }

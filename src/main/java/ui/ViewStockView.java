@@ -1,9 +1,6 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,12 +9,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import app.Constants;
 import interface_adapters.ViewManagerModel;
@@ -34,6 +27,9 @@ public class ViewStockView {
     private final JButton buyButton;
     private final JButton favoriteButton;
     private final StockDataView stockViewObject;
+    private final JPanel favoritesPanel;
+    private final DefaultListModel<String> favoritesListModel;
+    private final JList<String> favoritesList;
 
     private final ViewStockViewModel viewStockViewModel;
     private final ViewStockController viewStockController;
@@ -68,14 +64,29 @@ public class ViewStockView {
         }
         stockViewObject.setSharePrices(samplePrices);
 
+        // Create favorites panel with adjusted size
+        favoritesPanel = new JPanel(new BorderLayout());
+        favoritesPanel.setBorder(BorderFactory.createTitledBorder("Favorites"));
+        favoritesListModel = new DefaultListModel<>();
+        favoritesList = new JList<>(favoritesListModel);
+        // Set height to about 70% of the stock view height
+        favoritesList.setPreferredSize(new Dimension(100, (int)(Constants.STOCK_VIEW_DIMENSION.height * 0.7)));
+        JScrollPane favoritesScrollPane = new JScrollPane(favoritesList);
+        favoritesScrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        favoritesPanel.add(favoritesScrollPane, BorderLayout.CENTER);
+
+        // Create a panel to hold both the stock view and favorites panel
+        JPanel stockWithFavorites = new JPanel(new BorderLayout());
+        stockWithFavorites.add(stockViewObject.getStockView(), BorderLayout.CENTER);
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        rightPanel.add(favoritesPanel);
+        stockWithFavorites.add(rightPanel, BorderLayout.EAST);
+
         // CardLayout panel for displaying panels according to stocks selected
         final CardLayout cardLayout = new CardLayout();
         final JPanel stockViews = new JPanel(cardLayout);
         stockViews.add(defaultBox, Constants.NO_STOCKS_SELECTED);
-        stockViews.add(stockViewObject.getStockView(), Constants.STOCK_VIEW);
-
-        // Make sure the stock view panel has a preferred size
-        stockViewObject.getStockView().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
+        stockViews.add(stockWithFavorites, Constants.STOCK_VIEW);
 
         mainPanel.add(stockViews, BorderLayout.CENTER);
 
@@ -101,16 +112,12 @@ public class ViewStockView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
-                // Check if a stock is selected
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    // Update the stock view with new data, only for when controller is unusable
                     stockViewObject.setSymbol(symbol);
                     stockViewObject.setCompany("Company " + symbol);
 
-                    // Update favorite button state
                     updateFavoriteButtonState(symbol);
 
-                    // Generate new random data for the selected stock, only for when controller is unusable
                     final List<Double> prices = new ArrayList<>();
                     final double basePrice = switch (symbol) {
                         case "Stock A" -> 100.0;
@@ -123,17 +130,13 @@ public class ViewStockView {
                     }
                     stockViewObject.setSharePrices(prices);
 
-                    // Show the stock view, only for when controller is unusable
                     cardLayout.show(stockViews, Constants.STOCK_VIEW);
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
-                    // Ensure the panel is revalidated and repainted
                     stockViewObject.getStockView().revalidate();
                     stockViewObject.getStockView().repaint();
-                }
-                else {
-                    // No stock is selected
+                } else {
                     cardLayout.show(stockViews, Constants.NO_STOCKS_SELECTED);
                     favoriteButton.setEnabled(false);
                 }
@@ -148,17 +151,20 @@ public class ViewStockView {
 
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
                     if (favoritedStocks.contains(symbol)) {
-                        // Remove from favorites
                         favoritedStocks.remove(symbol);
+                        favoritesListModel.removeElement(symbol);
                         favoriteButton.setText("☆ Favorite");
                     } else {
-                        // Add to favorites
                         favoritedStocks.add(symbol);
+                        favoritesListModel.addElement(symbol);
                         favoriteButton.setText("★ Favorited");
                     }
+                    updateFavoritesPanel(); // Update panel size
                 }
             }
         });
+        updateFavoritesPanel();
+
 
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");
@@ -171,11 +177,16 @@ public class ViewStockView {
         // Add bottom panel to the main panel
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
+    private void updateFavoritesPanel() {
+        if (favoritedStocks.isEmpty()) {
+            favoritesPanel.setPreferredSize(new Dimension(100, 50)); // Small size
+        } else {
+            favoritesPanel.setPreferredSize(new Dimension(100, (int)(Constants.STOCK_VIEW_DIMENSION.height * 0.7))); // Original size
+        }
+        favoritesPanel.revalidate();
+        favoritesPanel.repaint();
+    }
 
-    /**
-     * Updates the favorite button state based on the current selected stock.
-     * @param symbol the stock symbol
-     */
     private void updateFavoriteButtonState(String symbol) {
         favoriteButton.setEnabled(true);
         if (favoritedStocks.contains(symbol)) {
@@ -185,12 +196,10 @@ public class ViewStockView {
         }
     }
 
-    // Getter for the main panel
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
-    // Additional getters if needed for event handling
     public JButton getCompareButton() {
         return compareButton;
     }
@@ -203,18 +212,10 @@ public class ViewStockView {
         return buyButton;
     }
 
-    /**
-     * Get the set of favorited stocks.
-     * @return Set of favorited stock symbols
-     */
     public Set<String> getFavoritedStocks() {
         return new HashSet<>(favoritedStocks);
     }
 
-    /**
-     * Action performed.
-     * @param evt event
-     */
     public void actionPerformed(ActionEvent evt) {
         System.out.println("Click " + evt.getActionCommand());
     }

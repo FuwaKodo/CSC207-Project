@@ -21,18 +21,31 @@ public class ViewStockPresenter implements ViewStockOutputBoundary {
      * @param response the output data
      */
     public void displayStock(ViewStockOutputData response) {
-        // On success, switch to the logged in view.
-
         final ViewStockState viewStockState = stockViewModel.getState();
         viewStockState.setSymbol(response.getSymbol());
         viewStockState.setCompany(response.getCompany());
         viewStockState.setSharePrices(response.getSharePrices());
-        // viewStockState.setEarnings(response.getEarnings());
         this.stockViewModel.setState(viewStockState);
         this.stockViewModel.firePropertyChanged();
 
         this.viewManagerModel.setState(stockViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
+    }
+
+    /**
+     * Updates the favorite status of a stock.
+     * @param symbol the stock symbol
+     * @param isFavorited whether the stock is favorited
+     */
+    public void presentFavoriteToggled(String symbol, boolean isFavorited) {
+        final ViewStockState state = stockViewModel.getState();
+        if (isFavorited) {
+            state.addFavorite(symbol);
+        } else {
+            state.removeFavorite(symbol);
+        }
+        stockViewModel.setState(state);
+        stockViewModel.firePropertyChanged();
     }
 
     /**
@@ -43,6 +56,7 @@ public class ViewStockPresenter implements ViewStockOutputBoundary {
     public void error(String error) {
         final ViewStockState viewStockState = stockViewModel.getState();
         viewStockState.setViewStockError(error);
+        stockViewModel.setState(viewStockState);
         stockViewModel.firePropertyChanged();
     }
 }

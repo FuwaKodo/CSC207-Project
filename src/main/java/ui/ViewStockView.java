@@ -165,7 +165,6 @@ public class ViewStockView {
         });
         updateFavoritesPanel();
 
-
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");
         bottomPanel.add(compareButton);

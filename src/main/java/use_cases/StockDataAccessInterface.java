@@ -5,6 +5,6 @@ import entities.Stock;
 import java.util.List;
 
 public interface StockDataAccessInterface {
-    List<String> getAllStockNames();
-    Stock getStockByName(String name);
+    List<String> getAllCompanyNames();
+    Stock getStockByCompany(String name);
 }

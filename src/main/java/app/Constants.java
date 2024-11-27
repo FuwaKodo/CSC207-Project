@@ -30,9 +30,14 @@ public class Constants {
     public static final Font METRICS_FONT = new Font("Arial", Font.PLAIN, 16);
 
     // search view constants
+    public static final int MAX_STOCK_PER_PAGE = 5;
+    public static final int BUTTON_SPACING = 10;
     public static final Dimension SEARCH_RESULT_FRAME_DIMENSION = new Dimension(400, 600);
-    public static final int MAX_STOCK_PER_PAGE = 10;
-    public static final Color SEARCH_PANEL_COLOUR = new Color(150, 50, 200);
+    public static final Dimension BUTTON_DIMENSION = new Dimension(150, 30);
+    public static final Dimension BUTTON_PANEL_DIMENSION = new Dimension(350, BUTTON_DIMENSION.height);
+    public static final Dimension PAGE_DIMENSION = new Dimension(BUTTON_DIMENSION.width,
+                    MAX_STOCK_PER_PAGE * (BUTTON_DIMENSION.height + BUTTON_SPACING));
+    public static final Color BUTTON_COLOUR = new Color(220, 220, 245);
 
     // view names in dropdown menu for viewing stock data
     public static final String STOCK_VIEW = "key for stock view";
@@ -40,5 +45,4 @@ public class Constants {
 
     // other view names
     public static final String SEARCH_VIEW = "search view state name";
-
 }

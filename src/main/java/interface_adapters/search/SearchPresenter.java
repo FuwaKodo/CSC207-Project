@@ -34,7 +34,6 @@ public class SearchPresenter implements SearchOutputBoundary {
         response.getSymbols().add("Sample 7"); // to be removed
         response.getSymbols().add("Sample 8"); // to be removed
         searchState.setSymbols(response.getSymbols());
-        System.out.println(searchState.getSymbols());
         this.searchViewModel.setState(searchState);
         this.searchViewModel.firePropertyChanged();
 

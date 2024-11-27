@@ -156,7 +156,6 @@ public class SearchView {
                 }
             });
             searchResultButtons.add(stockButton);
-            System.out.println("Button added: " + stockButton.getText());
         }
 
         for (int pageNumber = 0; pageNumber < getNumberOfPages(); pageNumber++) {
@@ -176,7 +175,6 @@ public class SearchView {
             final JPanel centeringPanel = new JPanel(new GridBagLayout());
             centeringPanel.add(page);
             pagesPanel.add(centeringPanel, String.valueOf(pageNumber));
-            System.out.println("Page added: " + pageNumber);
         }
         updatePageInfoLabel();
     }

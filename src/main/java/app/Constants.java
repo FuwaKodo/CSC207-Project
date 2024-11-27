@@ -16,6 +16,9 @@ public class Constants {
     public static final int THREE_YEARS = 3 * 365;
     public static final int ONE_YEAR = 365;
 
+    // Display font
+    public static final String FONT = "Arial";
+
     // view_stock view related constants
     public static final Dimension MAIN_FRAME_DIMENSION = new Dimension(800, 600);
     public static final Dimension MAIN_FRAME_MIN_DIMENSION = new Dimension(600, 400);
@@ -24,10 +27,13 @@ public class Constants {
     public static final Dimension GRAPH_DIMENSION = new Dimension(600, 400);
     // Nice blue color
     public static final Color GRAPH_COLOR = new Color(0, 123, 255);
-    public static final Font GRAPH_VALUE_FONT = new Font("Arial", Font.PLAIN, 12);
+    public static final Font GRAPH_VALUE_FONT = new Font(FONT, Font.PLAIN, 12);
     public static final String PLACEHOLDER_TEXT = "Stock Statistics Viewer";
-    public static final int PLACEHOLDER_FONT_SIZE = 24;
-    public static final Font METRICS_FONT = new Font("Arial", Font.PLAIN, 16);
+    public static final Font PLACEHOLDER_FONT = new Font(FONT, Font.BOLD, 24);
+    public static final Font METRICS_FONT = new Font(FONT, Font.PLAIN, 16);
+    // view names in dropdown menu for viewing stock data
+    public static final String STOCK_VIEW = "key for stock view";
+    public static final String NO_STOCKS_SELECTED = "Select stock";
 
     // search view constants
     public static final int MAX_STOCK_PER_PAGE = 5;
@@ -39,9 +45,9 @@ public class Constants {
                     MAX_STOCK_PER_PAGE * (BUTTON_DIMENSION.height + BUTTON_SPACING));
     public static final Color BUTTON_COLOUR = new Color(220, 220, 245);
 
-    // view names in dropdown menu for viewing stock data
-    public static final String STOCK_VIEW = "key for stock view";
-    public static final String NO_STOCKS_SELECTED = "Select stock";
+    // constants for favourite stock use case
+    public static final String NOT_FAVORITED = "☆ Favorite";
+    public static final String FAVORITED = "★ Favorited";
 
     // other view names
     public static final String SEARCH_VIEW = "search view state name";

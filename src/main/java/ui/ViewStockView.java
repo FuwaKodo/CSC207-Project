@@ -3,12 +3,13 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,16 +24,16 @@ import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
-import use_cases.search.SearchUseCaseFactory;
 
 /**
- * View for the application.
+ * View for the application with added stock favoriting functionality.
  */
 public class ViewStockView {
     private final JPanel mainPanel;
     private final JButton compareButton;
     private final JComboBox<String> stockDropdown;
     private final JButton buyButton;
+    private final JButton favoriteButton;
     private final StockDataView stockViewObject;
     private SearchView searchView;
     private final CardLayout cardLayout;
@@ -42,12 +43,16 @@ public class ViewStockView {
     private final ViewStockController viewStockController;
     private final SearchController searchController;
 
+    // Set to store favorited stocks
+    private final Set<String> favoritedStocks;
+
     public ViewStockView(ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,
                          SearchController searchController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
         this.searchController = searchController;
+        this.favoritedStocks = new HashSet<>();
 
         // Initialize the main panel
         mainPanel = new JPanel();
@@ -56,7 +61,7 @@ public class ViewStockView {
         // Placeholder panel for when no stock is selected
         final JPanel defaultBox = new JPanel(new BorderLayout());
         final JLabel placeholderLabel = new JLabel(Constants.PLACEHOLDER_TEXT, SwingConstants.CENTER);
-        placeholderLabel.setFont(new Font("Arial", Font.BOLD, Constants.PLACEHOLDER_FONT_SIZE));
+        placeholderLabel.setFont(Constants.PLACEHOLDER_FONT);
         defaultBox.add(placeholderLabel, BorderLayout.CENTER);
 
         // Initialize StockDataView with sample data
@@ -89,6 +94,11 @@ public class ViewStockView {
         stockDropdown = new JComboBox<>(new String[]{Constants.NO_STOCKS_SELECTED, "Stock A", "Stock B", "Stock C"});
         bottomPanel.add(stockDropdown);
 
+        // Favorite button
+        favoriteButton = new JButton(Constants.NOT_FAVORITED);
+        favoriteButton.setEnabled(false);
+        bottomPanel.add(favoriteButton);
+
         // Response to selecting a stock in dropdown menu
         stockDropdown.addActionListener(new ActionListener() {
             @Override
@@ -99,6 +109,10 @@ public class ViewStockView {
                     // Update the stock view with new data, only for when controller is unusable
                     stockViewObject.setSymbol(symbol);
                     stockViewObject.setCompany("Company " + symbol);
+
+                    // Update favorite button state
+                    updateFavoriteButtonState(symbol);
+
                     // Generate new random data for the selected stock, only for when controller is unusable
                     final List<Double> prices = new ArrayList<>();
                     final double basePrice = switch (symbol) {
@@ -111,6 +125,7 @@ public class ViewStockView {
                         prices.add(basePrice + Math.random() * 20);
                     }
                     stockViewObject.setSharePrices(prices);
+
                     // Show the stock view, only for when controller is unusable
                     cardLayout.show(views, Constants.STOCK_VIEW);
                     viewManagerModel.setState(Constants.STOCK_VIEW);
@@ -123,6 +138,28 @@ public class ViewStockView {
                 else {
                     // No stock is selected
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
+                    favoriteButton.setEnabled(false);
+                }
+            }
+        });
+
+        // Favorite button action listener
+        favoriteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
+
+                if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
+                    if (favoritedStocks.contains(symbol)) {
+                        // Remove from favorites
+                        favoritedStocks.remove(symbol);
+                        favoriteButton.setText(Constants.NOT_FAVORITED);
+                    }
+                    else {
+                        // Add to favorites
+                        favoritedStocks.add(symbol);
+                        favoriteButton.setText(Constants.FAVORITED);
+                    }
                 }
             }
         });
@@ -166,6 +203,20 @@ public class ViewStockView {
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Updates the favorite button state based on the current selected stock.
+     * @param symbol the stock symbol
+     */
+    private void updateFavoriteButtonState(String symbol) {
+        favoriteButton.setEnabled(true);
+        if (favoritedStocks.contains(symbol)) {
+            favoriteButton.setText(Constants.FAVORITED);
+        }
+        else {
+            favoriteButton.setText(Constants.NOT_FAVORITED);
+        }
+    }
+
     // Getter for the main panel
     public JPanel getMainPanel() {
         return mainPanel;
@@ -191,6 +242,14 @@ public class ViewStockView {
     public void setSearchView(SearchViewModel searchViewModel) {
         this.searchView = new SearchView(searchViewModel, viewStockController);
         views.add(searchView.getMainPanel(), searchView.getViewName());
+    }
+
+    /**
+     * Get the set of favorited stocks.
+     * @return Set of favorited stock symbols
+     */
+    public Set<String> getFavoritedStocks() {
+        return new HashSet<>(favoritedStocks);
     }
 
     /**

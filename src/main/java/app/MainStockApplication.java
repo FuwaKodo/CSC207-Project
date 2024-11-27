@@ -1,11 +1,9 @@
 package app;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import java.awt.CardLayout;
 import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
@@ -13,7 +11,6 @@ import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
-import ui.ViewManager;
 import ui.ViewStockView;
 import use_cases.search.SearchDataAccessInterface;
 import use_cases.search.SearchUseCaseFactory;

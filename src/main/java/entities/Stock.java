@@ -1,6 +1,6 @@
 package entities;
 
-import interface_adapters.gateways.ApiDataLoader;
+import interface_adapters.gateways.StockDataLoader;
 
 /**
  * Stock: the stocks of a single company.
@@ -10,15 +10,12 @@ public class Stock {
     private final String symbol;
     private final Metrics metrics;
 
-    public Stock(ApiDataLoader loader) {
-        this.company = loader.getCompany();
-        this.symbol = loader.getSymbol();
-
-        this.metrics = new Metrics(
-                loader.getSharePrices(),
-                loader.getEarnings(),
-                loader.getVolumes()
-        );
+    public Stock(StockDataLoader loader, String company, String symbol) {
+        // TODO: Issue here because getCompany no longer possible!
+        // Getting symbol and company must be obtained from different instantiation
+        this.symbol = symbol;
+        this.company = company;
+        metrics = null;
     }
 
     public String getCompany() {

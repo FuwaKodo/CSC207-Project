@@ -1,5 +1,6 @@
-package frameworks;
+package gateways;
 
+import interface_adapters.gateways.StockDataLoader;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -53,7 +54,7 @@ public class StockDataLoaderTest {
     @Test
     public void updateStockData(){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, 10,7);
+        calendar.set(2024, 10,15);
         Date date = calendar.getTime();
         stockDataLoaderExample.updateStockData("INTC", date);
     }

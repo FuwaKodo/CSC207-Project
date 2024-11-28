@@ -6,268 +6,27 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.json.JSONObject;
-
-import entities.MetricValues;
-import entities.SharePrices;
 
 /**
  * DAO (Data Access Object) for Stock API: Polygon.
  */
 public class PolygonApiLoader implements ApiDataLoader {
-    // Cache idea maybe not applicable
-    // private static ArrayList<Double> cacheVolume = new ArrayList<>();
-    // private static ArrayList<Double> cachePreMarket = new ArrayList<>();
-    // private static ArrayList<Date> cacheDate = new ArrayList<>();
-
     private static String apiKey = "NbKXkuoH3mdV4H6DN493zVQg0M2d0LlG";
     private static String baseUrl = "https://api.polygon.io/v1/";
-    private static String apiCallLimitErrorMsg = "You've exceeded the maximum requests per minute, please wait or upgrade your subscription to continue. https://polygon.io/pricing";
-
-    @Override
-    public String getCompany() {
-        return "";
-    }
-
-    @Override
-    public String getSymbol() {
-        return "";
-    }
-
-    @Override
-    public SharePrices getSharePrices() {
-        return null;
-    }
-
-    @Override
-    public MetricValues getEarnings() {
-        return null;
-    }
-
-    @Override
-    public MetricValues getVolumes() {
-        // TODO: Remove the getVolumes with no parameters
-        return null;
-    }
-
-    @Override
-    public MetricValues getVolumes(String stockSymbol, Date startDate, Date endDate) {
-        // TODO: stockSymbol is assumed to always exist
-        MetricValues volumeData = null;
-        if (startDate != null && endDate != null && startDate.compareTo(endDate) <= 0) {
-            final ArrayList<Double> volumeValues = new ArrayList<>();
-            final ArrayList<Date> volumeDates = new ArrayList<>();
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(startDate);
-            clearTimeFields(calendar);
-            while (!calendar.getTime().after(endDate)) {
-                // Adding delay because API can't handle the amount of calls
-                /* Previous sleep method
-                try {
-                    final Date currentDate = calendar.getTime();
-                    // Sleep amount
-                    Thread.sleep(10000);
-                    volumeValues.add(getVolume(stockSymbol, currentDate));
-                    volumeDates.add(currentDate);
-                    addDay(calendar, 1);
-                }
-
-                catch (InterruptedException interruptedException) {
-                    volumeData = null;
-                    System.out.println("Sleep is interrupted");
-                }
-                 */
-                final Date currentDate = calendar.getTime();
-                volumeValues.add(getVolume(stockSymbol, currentDate));
-                volumeDates.add(currentDate);
-                addDay(calendar, 1);
-            }
-
-            System.out.println(volumeValues);
-            System.out.println(volumeDates);
-
-            volumeData = new MetricValues(volumeValues, volumeDates);
-        }
-
-        return volumeData;
-    }
-
-    /* Part of cache idea
-    private static void clearTimeFieldsStatic(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-    }
-    */
-
-    /* Part of cache idea
-    public static void updateCaches(String stockSymbol, Date startDate, Date endDate) {
-        // TODO: stockSymbol is assumed to always exist
-        if (startDate != null && endDate != null && startDate.compareTo(endDate) <= 0) {
-            // final ArrayList<Double> volumeValues = new ArrayList<>();
-            // final ArrayList<Date> volumeDates = new ArrayList<>();
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(startDate);
-            clearTimeFieldsStatic(calendar);
-            while (!calendar.getTime().after(endDate)) {
-                // Adding delay because API can't handle the amount of calls
-                try {
-                    final Date currentDate = calendar.getTime();
-                    if (!cacheDate.contains(currentDate)) {
-                        // Update caches
-                        // TODO: Maybe sort this if necessary
-                        cacheVolume.add(getVolumeStatic(stockSymbol, currentDate));
-                        cacheDate.add(currentDate);
-                        addDay(calendar, 1);
-                        Thread.sleep(8000);
-                    }
-                }
-
-                catch (InterruptedException e) {
-                    volumeData = null;
-                    System.out.println("Sleep is interrupted");
-                }
-            }
-
-            System.out.println(volumeValues);
-            System.out.println(volumeDates);
-
-            volumeData = new MetricValues(volumeValues, volumeDates);
-        }
-
-        return volumeData;
-    }
-     */
-
-    @Override
-    public Double getVolume(String stockSymbol, Date date) {
-        // Implemented force take data
-        final ArrayList<String> endpoint = new ArrayList<>();
-        endpoint.add("open-close");
-        endpoint.add(stockSymbol);
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        final String formattedDate = dateFormat.format(date);
-        endpoint.add(formattedDate);
-
-        final SortedMap<String, String> queryParameters = new TreeMap<>();
-        queryParameters.put("adjusted", "true");
-        queryParameters.put("apiKey", apiKey);
-
-        boolean apiIsDone = false;
-
-        Double volumeValue = Double.NaN;
-        JSONObject jsonData;
-
-        while (!apiIsDone) {
-            apiIsDone = true;
-            try {
-                final String apiUrl = buildApiUrl(baseUrl, endpoint, queryParameters);
-                final HttpClient client = HttpClient.newHttpClient();
-                final HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(apiUrl))
-                        .build();
-                final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                jsonData = new JSONObject(response.body());
-            }
-
-            catch (IOException | InterruptedException exception) {
-                jsonData = null;
-                System.out.println("Server Issue");
-            }
-
-            System.out.println(jsonData.toString());
-
-            if (jsonData != null && jsonData.has("volume")) {
-                volumeValue = jsonData.getDouble("volume");
-            }
-
-            if (jsonData != null && jsonData.has("error") && jsonData.get("error")
-                    .equals(apiCallLimitErrorMsg)) {
-                apiIsDone = false;
-            }
-        }
-
-        return volumeValue;
-    }
-
-    /* Part of cache idea
-    public static Double getVolumeStatic(String stockSymbol, Date date) {
-        final ArrayList<String> endpoint = new ArrayList<>();
-        endpoint.add("open-close");
-        endpoint.add(stockSymbol);
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        final String formattedDate = dateFormat.format(date);
-        endpoint.add(formattedDate);
-
-        final SortedMap<String, String> queryParameters = new TreeMap<>();
-        queryParameters.put("adjusted", "true");
-        queryParameters.put("apiKey", apiKey);
-
-        Double volumeValue = Double.NaN;
-        JSONObject jsonData;
-
-        try {
-            final String apiUrl = buildApiUrlStatic(endpoint, queryParameters);
-            final HttpClient client = HttpClient.newHttpClient();
-            final HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl))
-                    .build();
-            final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            jsonData = new JSONObject(response.body());
-        }
-
-        catch (IOException | InterruptedException exception) {
-            jsonData = null;
-            System.out.println("Server Issue");
-        }
-
-        System.out.println(jsonData.toString());
-
-        if (jsonData != null && jsonData.has("volume")) {
-            volumeValue = jsonData.getDouble("volume");
-        }
-
-        return volumeValue;
-    }
-     */
-
-    /* Part of cache idea
-    private static String buildApiUrlStatic(ArrayList<String> endpoint, SortedMap<String, String> queryParameters) {
-        // Generalized function
-        final StringBuilder apiUrl = new StringBuilder(baseUrl);
-        for (String endpointData : endpoint) {
-            apiUrl.append(endpointData);
-            apiUrl.append("/");
-        }
-
-        if (!endpoint.isEmpty()) {
-            apiUrl.setLength(apiUrl.length() - 1);
-        }
-
-        apiUrl.append("?");
-
-        for (Map.Entry<String, String> queryData : queryParameters.entrySet()) {
-            final String queryKey = queryData.getKey();
-            final String queryValue = queryData.getValue();
-            apiUrl.append(queryKey).append("=").append(queryValue).append("&");
-        }
-
-        apiUrl.setLength(apiUrl.length() - 1);
-
-        return apiUrl.toString();
-    }
-     */
-
-    /* Part of cache idea
-    private static Date addDayStatic(Calendar calendar, int days) {
-        calendar.add(Calendar.DATE, days);
-        clearTimeFields(calendar);
-        return calendar.getTime();
-    }
-     */
+    private static String apiCallLimitErrorMsg =
+            "You've exceeded the maximum requests per minute, "
+                    + "please wait or upgrade your subscription to continue. "
+                    + "https://polygon.io/pricing";
+    private static String statusKey = "status";
+    private static String symbolKey = "symbol";
+    private static String dateKey = "from";
+    private static String messageKey = "message";
 
     @Override
     public JSONObject loadOneEntry(String stockSymbol, Date date) {
@@ -303,22 +62,138 @@ public class PolygonApiLoader implements ApiDataLoader {
                 System.out.println("LoadOneEntry Server Issue");
             }
 
-            System.out.println(jsonData.toString());
+            // System.out.println(jsonData.toString());
 
-            if (jsonData != null && jsonData.has("error") && jsonData.get("error")
+            if (jsonData.has("error") && jsonData.get("error")
                     .equals(apiCallLimitErrorMsg)) {
                 apiIsDone = false;
             }
 
-            if (jsonData != null && jsonData.has("status") && jsonData.get("status").equals("NOT_FOUND")) {
-                System.out.println("activated");
-                // Convert Date to String
-                jsonData.put("symbol", stockSymbol);
-                jsonData.put("from", formattedDate);
-                jsonData.put("status", "NOT_FOUND");
+            else if (jsonData.has(statusKey) && jsonData.get(statusKey).equals("NOT_FOUND")) {
+                // System.out.println("activated");
+                jsonData = createNotFoundJsonData(stockSymbol, formattedDate);
+            }
+
+            else if (jsonData.has(statusKey) && jsonData.get(statusKey).equals("OK")) {
+                jsonData = createFoundJsonData(jsonData);
+            }
+
+            else {
+                jsonData = createErrorJsonData(stockSymbol, formattedDate);
             }
         }
 
+        jsonData.put("api", "polygon");
+
         return jsonData;
     }
+
+    /**
+     * Creates a JSON object representing a "Data not found" entry for a given stock symbol and date.
+     *
+     * <p>This method generates a JSON object with details indicating that data for the specified
+     * stock symbol and date is not available. The JSON object includes the stock symbol,
+     * the formatted date, a descriptive message, and a status field set to "NOT_FOUND".
+     * </p>
+     *
+     * @param stockSymbol   the stock symbol for which data is missing (e.g., "AAPL" for Apple Inc.).
+     * @param formattedDate the date in a formatted string (e.g., "2024-11-27") representing
+     *                      when the data was queried or expected.
+     * @return a {@link JSONObject} containing the following fields:
+     *         <ul>
+     *           <li><b>"symbol"</b>: the stock symbol.</li>
+     *           <li><b>"from"</b>: the formatted date.</li>
+     *           <li><b>"message"</b>: a descriptive message, "Data not found."</li>
+     *           <li><b>"status"</b>: the status of the entry, set to "NOT_FOUND".</li>
+     *         </ul>
+     */
+    public JSONObject createNotFoundJsonData(String stockSymbol, String formattedDate) {
+        final JSONObject notFoundJson = new JSONObject();
+        notFoundJson.put(symbolKey, stockSymbol);
+        notFoundJson.put(dateKey, formattedDate);
+        notFoundJson.put(messageKey, "Data not found.");
+        notFoundJson.put(statusKey, "NOT_FOUND");
+        return notFoundJson;
+    }
+
+    /**
+     * Creates a JSON object representing a "Fatal error" entry for a given stock symbol and date.
+     *
+     * <p>This method generates a JSON object with details indicating a critical error occurred
+     * for the specified stock symbol and date. The JSON object includes the stock symbol,
+     * the formatted date, a descriptive message, and a status field set to "FATAL_ERROR".
+     * </p>
+     *
+     * @param stockSymbol   the stock symbol associated with the error (e.g., "AAPL" for Apple Inc.).
+     * @param formattedDate the date in a formatted string (e.g., "2024-11-27") representing
+     *                      when the error occurred or was logged.
+     * @return a {@link JSONObject} containing the following fields:
+     *         <ul>
+     *           <li><b>symbolKey</b>: the stock symbol key, mapped to the provided stock symbol.</li>
+     *           <li><b>dateKey</b>: the date key, mapped to the provided formatted date.</li>
+     *           <li><b>messageKey</b>: a descriptive message, "Fatal error."</li>
+     *           <li><b>statusKey</b>: the status of the entry, set to "FATAL_ERROR".</li>
+     *         </ul>
+     */
+    public JSONObject createErrorJsonData(String stockSymbol, String formattedDate) {
+        final JSONObject errorJson = new JSONObject();
+        errorJson.put(symbolKey, stockSymbol);
+        errorJson.put(dateKey, formattedDate);
+        errorJson.put(messageKey, "Fatal error.");
+        errorJson.put(statusKey, "FATAL_ERROR");
+        return errorJson;
+    }
+
+    /**
+     * Creates a JSON object representing a "Data found" entry based on the provided JSON data.
+     *
+     * <p>This method constructs a new JSON object with fields populated from the input {@code jsonData}.
+     * It indicates that data for a specific stock symbol and date has been successfully found.
+     * The JSON object includes details such as stock symbol, date, status, and other stock-related metrics.
+     * </p>
+     *
+     * @param jsonData a {@link JSONObject} containing the stock data to populate the new JSON object.
+     *                 Expected keys in the input JSON object include:
+     *                 <ul>
+     *                   <li><b>"symbol"</b>: the stock symbol.</li>
+     *                   <li><b>"date"</b>: the date in a formatted string (e.g., "2024-11-27").</li>
+     *                   <li><b>"volume"</b>: the stock trading volume as a {@code double}.</li>
+     *                   <li><b>"high"</b>: the stock's highest trading price as a {@code double}.</li>
+     *                   <li><b>"preMarket"</b>: the pre-market trading price as a {@code double}.</li>
+     *                   <li><b>"low"</b>: the stock's lowest trading price as a {@code double}.</li>
+     *                   <li><b>"afterHours"</b>: the after-hours trading price as a {@code double}.</li>
+     *                   <li><b>"close"</b>: the stock's closing price as a {@code double}.</li>
+     *                   <li><b>"open"</b>: the stock's opening price as a {@code double}.</li>
+     *                 </ul>
+     * @return a {@link JSONObject} containing the following fields:
+     *         <ul>
+     *           <li><b>"symbol"</b>: the stock symbol.</li>
+     *           <li><b>"date"</b>: the formatted date.</li>
+     *           <li><b>"message"</b>: a descriptive message, "Data found."</li>
+     *           <li><b>"status"</b>: the status of the entry, set to "OK".</li>
+     *           <li><b>"volume"</b>: the stock trading volume.</li>
+     *           <li><b>"high"</b>: the highest trading price.</li>
+     *           <li><b>"preMarket"</b>: the pre-market trading price.</li>
+     *           <li><b>"low"</b>: the lowest trading price.</li>
+     *           <li><b>"afterHours"</b>: the after-hours trading price.</li>
+     *           <li><b>"close"</b>: the closing price.</li>
+     *           <li><b>"open"</b>: the opening price.</li>
+     *         </ul>
+     */
+    public JSONObject createFoundJsonData(JSONObject jsonData) {
+        final JSONObject foundJson = new JSONObject();
+        foundJson.put(symbolKey, jsonData.getString("symbol"));
+        foundJson.put(dateKey, jsonData.getString("from"));
+        foundJson.put(messageKey, "Data found.");
+        foundJson.put(statusKey, "OK");
+        foundJson.put("volume", jsonData.getDouble("volume"));
+        foundJson.put("high", jsonData.getDouble("high"));
+        foundJson.put("preMarket", jsonData.getDouble("preMarket"));
+        foundJson.put("low", jsonData.getDouble("low"));
+        foundJson.put("afterHours", jsonData.getDouble("afterHours"));
+        foundJson.put("close", jsonData.getDouble("close"));
+        foundJson.put("open", jsonData.getDouble("open"));
+        return foundJson;
+    }
+
 }

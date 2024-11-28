@@ -34,6 +34,8 @@ public class Constants {
     // view names in dropdown menu for viewing stock data
     public static final String STOCK_VIEW = "key for stock view";
     public static final String NO_STOCKS_SELECTED = "Select stock";
+    // other view names
+    public static final String SEARCH_VIEW = "search view state name";
 
     // search view constants
     public static final int MAX_STOCK_PER_PAGE = 5;
@@ -48,7 +50,4 @@ public class Constants {
     // constants for favourite stock use case
     public static final String NOT_FAVORITED = "☆ Favorite";
     public static final String FAVORITED = "★ Favorited";
-
-    // other view names
-    public static final String SEARCH_VIEW = "search view state name";
 }

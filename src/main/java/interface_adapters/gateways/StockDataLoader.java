@@ -37,4 +37,10 @@ public interface StockDataLoader {
      * @return volume of stock
      */
     MetricValues getVolumes();
+
+    /**
+     * Get dividends.
+     * @return dividends
+     */
+    MetricValues getDividends();
 }

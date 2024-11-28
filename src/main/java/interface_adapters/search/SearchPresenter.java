@@ -41,14 +41,4 @@ public class SearchPresenter implements SearchOutputBoundary {
         this.viewManagerModel.firePropertyChanged();
     }
 
-    /**
-     * Displays error.
-     * @param error the error name
-     */
-    @Override
-    public void error(String error) {
-        final SearchState searchState = searchViewModel.getState();
-        searchState.setSearchError(error);
-        searchViewModel.firePropertyChanged();
-    }
 }

@@ -9,10 +9,4 @@ public interface SearchOutputBoundary {
      * @param searchOutputData the output data
      */
     void displayResult(SearchOutputData searchOutputData);
-
-    /**
-     * Display error.
-     * @param error the error name
-     */
-    void error(String error);
 }

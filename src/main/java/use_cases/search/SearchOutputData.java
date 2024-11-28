@@ -1,6 +1,5 @@
 package use_cases.search;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,7 +12,6 @@ public class SearchOutputData {
     public SearchOutputData(String input, List<String> symbols) {
         this.input = input;
         this.symbols = symbols;
-        Collections.sort(this.symbols);
     }
 
     public String getInput() {

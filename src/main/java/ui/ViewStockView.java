@@ -252,6 +252,10 @@ public class ViewStockView {
         return new HashSet<>(favoritedStocks);
     }
 
+    public void setCompareButtonListener(ActionListener actionListener) {
+        compareButton.addActionListener(actionListener);
+    }
+
     /**
      * Action performed.
      * @param evt event

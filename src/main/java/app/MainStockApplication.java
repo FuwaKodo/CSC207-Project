@@ -11,6 +11,7 @@ import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
+import ui.compare_stocks.CompareStocksViewDisplayer;
 import ui.ViewStockView;
 import use_cases.search.SearchDataAccessInterface;
 import use_cases.search.SearchUseCaseFactory;
@@ -75,6 +76,8 @@ public class MainStockApplication {
             // Initialize ViewStockView and add it to views
             final ViewStockView viewStockView = new ViewStockView(
                     viewStockViewModel, viewStockController, searchController);
+            // Initialize ViewStockView and add it to the frame
+            viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
             frame.add(viewStockView.getMainPanel());
 
             // Initialize searchView

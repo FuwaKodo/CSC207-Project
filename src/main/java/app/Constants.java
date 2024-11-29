@@ -46,6 +46,7 @@ public class Constants {
     public static final Dimension PAGE_DIMENSION = new Dimension(BUTTON_DIMENSION.width,
                     MAX_STOCK_PER_PAGE * (BUTTON_DIMENSION.height + BUTTON_SPACING));
     public static final Color BUTTON_COLOUR = new Color(220, 220, 245);
+    public static final Font NO_RESULTS_FONT = new Font(FONT, Font.PLAIN, 16);
 
     // constants for favourite stock use case
     public static final String NOT_FAVORITED = "☆ Favorite";

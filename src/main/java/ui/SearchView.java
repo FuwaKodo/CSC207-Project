@@ -141,6 +141,7 @@ public class SearchView {
     public void updateSearchResult() {
         // empties previous search result
         searchResultButtons.clear();
+        pagesPanel.removeAll();
         // fills searchResult
         for (int i = 0; i < searchViewModel.getState().getSymbols().size(); i++) {
             // creates new button for a stock

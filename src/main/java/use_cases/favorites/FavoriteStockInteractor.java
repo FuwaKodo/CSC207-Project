@@ -3,14 +3,39 @@ package use_cases.favorites;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Implements the business logic for favorite stock operations. (Currently unused, for extension only.)
+ * This interactor manages the favorite status of stocks and communicates
+ * with the presentation layer through the output boundary.
+ */
 public class FavoriteStockInteractor implements FavoriteStockInputBoundary {
+
+    /** Presenter for handling output operations */
     private final FavoriteStockOutputBoundary favoriteStockPresenter;
+
+    /** In-memory storage of favorited stock symbols */
     private final Set<String> favoritedStocks = new HashSet<>();
 
+    /**
+     * Constructs a new FavoriteStockInteractor.
+     *
+     * @param favoriteStockPresenter The presenter responsible for handling output operations
+     * @throws IllegalArgumentException if favoriteStockPresenter is null
+     */
     public FavoriteStockInteractor(FavoriteStockOutputBoundary favoriteStockPresenter) {
+        if (favoriteStockPresenter == null) {
+            throw new IllegalArgumentException("Favorite stock presenter cannot be null");
+        }
         this.favoriteStockPresenter = favoriteStockPresenter;
     }
 
+    /**
+     * Toggles the favorite status of a stock and notifies the presenter of the change.
+     * If the stock is not in favorites, it will be added.
+     * If the stock is already in favorites, it will be removed.
+     *
+     * @param inputData The input data containing the stock symbol to toggle
+     */
     @Override
     public void toggleFavorite(FavoriteStockInputData inputData) {
         String symbol = inputData.getStockSymbol();
@@ -25,6 +50,10 @@ public class FavoriteStockInteractor implements FavoriteStockInputBoundary {
         favoriteStockPresenter.presentFavoriteToggled(symbol, isFavorited);
     }
 
+    /**
+     * Retrieves all favorited stocks and presents them through the output boundary.
+     * Creates a defensive copy of the favorited stocks set to prevent external modification.
+     */
     @Override
     public void getFavorites() {
         favoriteStockPresenter.presentFavorites(new HashSet<>(favoritedStocks));

@@ -14,7 +14,7 @@ import interface_adapters.view_stock.ViewStockViewModel;
 import ui.compare_stocks.CompareStocksViewDisplayer;
 import ui.ViewStockView;
 import use_cases.search.SearchDataAccessInterface;
-import use_cases.search.SearchUseCaseFactory;
+import interface_adapters.search.SearchUseCaseFactory;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 

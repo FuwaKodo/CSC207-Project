@@ -3,7 +3,7 @@ package use_cases.search;
 import java.util.List;
 
 /**
- * The output data for the search use case.
+ * The output data for the search use case. Input is included in output in case it is needed for display.
  */
 public class SearchOutputData {
     private final String input;

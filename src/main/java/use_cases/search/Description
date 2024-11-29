@@ -1,7 +1,7 @@
 Processes the use case of searching stocks with ticker symbol
 
 Input:
-    String symbol: a string entered in the search bar, automatically stripped and converted to upper case
+    String symbol: a string entered in the search bar
 
 Output: a list of stocks with symbols similar to the input symbol
     ViewStockOutputData searchOutputData

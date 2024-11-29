@@ -1,9 +1,10 @@
-package use_cases.search;
+package interface_adapters.search;
 
 import interface_adapters.ViewManagerModel;
-import interface_adapters.search.SearchController;
-import interface_adapters.search.SearchPresenter;
-import interface_adapters.search.SearchViewModel;
+import use_cases.search.SearchDataAccessInterface;
+import use_cases.search.SearchInputBoundary;
+import use_cases.search.SearchInteractor;
+import use_cases.search.SearchOutputBoundary;
 
 /**
  * Factory class responsible for creating and assembling all components needed for the search stock use case.
@@ -26,7 +27,7 @@ public class SearchUseCaseFactory {
             SearchDataAccessInterface dataAccessObject) {
 
         // Create the presenter with its required dependencies
-        final SearchPresenter searchPresenter =
+        final SearchOutputBoundary searchPresenter =
                 new SearchPresenter(viewManagerModel, searchViewModel);
 
         // Create the interactor with its dependencies

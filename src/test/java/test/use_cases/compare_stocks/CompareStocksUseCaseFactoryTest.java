@@ -1,8 +1,6 @@
-package test;
+package test.use_cases.compare_stocks;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CompareStocksUseCaseFactoryTest {
     @Test

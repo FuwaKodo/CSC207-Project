@@ -1,10 +1,11 @@
-package test;
+package test.entities;
 
 import entities.MetricValues;
 import entities.Metrics;
 import entities.SharePrices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import test.MockMetrics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

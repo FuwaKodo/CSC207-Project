@@ -139,6 +139,8 @@ public class SearchView {
      * Updates display with search result in searchViewModel.getState().
      */
     public void updateSearchResult() {
+        // empties previous search result
+        searchResultButtons.clear();
         // fills searchResult
         for (int i = 0; i < searchViewModel.getState().getSymbols().size(); i++) {
             // creates new button for a stock

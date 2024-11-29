@@ -41,6 +41,7 @@ public class MainStockApplication {
         final SearchViewModel searchViewModel = new SearchViewModel();
 
         // sample interfaces, will be implemented later
+        // TODO replace with data access object when possible
         final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
             @Override
             public Stock getStock(String symbol) {
@@ -50,7 +51,7 @@ public class MainStockApplication {
         final SearchDataAccessInterface searchDataAccessInterface = new SearchDataAccessInterface() {
             @Override
             public List<String> getSymbols() {
-                return List.of();
+                return List.of("AAPL", "NVDA", "MFC", "L", "INTC");
             }
         };
 

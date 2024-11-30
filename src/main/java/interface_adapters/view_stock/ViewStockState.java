@@ -8,7 +8,6 @@ import java.util.*;
  * errors, and favorite stocks.
  */
 public class ViewStockState {
-
     /** The stock symbol being viewed. */
     private String symbol = "";
 
@@ -61,7 +60,7 @@ public class ViewStockState {
      * @return a list of share prices within the specified time period
      */
     public List<Double> getSharePrices(int daysBack) {
-        return sharePrices.subList(sharePrices.size() - daysBack, sharePrices.size());
+        return sharePrices.subList(Math.max(0, sharePrices.size() - daysBack), sharePrices.size());
     }
 
     /**
@@ -80,7 +79,7 @@ public class ViewStockState {
      * @return a list of earnings within the specified time period
      */
     public List<Double> getEarnings(int daysBack) {
-        return earnings.subList(earnings.size() - daysBack, earnings.size());
+        return earnings.subList(Math.max(0, earnings.size() - daysBack), earnings.size());
     }
 
     /**

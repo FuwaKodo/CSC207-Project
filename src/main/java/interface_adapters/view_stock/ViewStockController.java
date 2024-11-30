@@ -21,7 +21,7 @@ public class ViewStockController {
     }
 
     /**
-     * Executes the view_stock Use Case.
+     * Executes the view stock use case.
      * @param stockSymbol the symbol of the stock
      */
     public void execute(String stockSymbol) {

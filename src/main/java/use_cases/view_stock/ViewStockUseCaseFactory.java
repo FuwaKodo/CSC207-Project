@@ -11,7 +11,6 @@ import use_cases.favorites.FavoriteStockInputBoundary;
  * including the controller, presenter, view model, and interactor.
  */
 public class ViewStockUseCaseFactory {
-
     /**
      * Creates a new instance of ViewStockController with all its dependencies.
      *
@@ -24,7 +23,6 @@ public class ViewStockUseCaseFactory {
             ViewManagerModel viewManagerModel,
             ViewStockDataAccessInterface dataAccessObject,
             FavoriteStockInputBoundary favoriteStockUseCaseInteractor) {
-
         // Create the view model to hold the state and data for the stock view
         final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
 

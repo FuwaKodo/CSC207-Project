@@ -5,7 +5,7 @@ import use_cases.view_stock.ViewStockOutputBoundary;
 import use_cases.view_stock.ViewStockOutputData;
 
 /**
- * Presenter for the view_stock use case.
+ * Presenter for the view stock use case.
  */
 public class ViewStockPresenter implements ViewStockOutputBoundary {
     private final ViewStockViewModel stockViewModel;
@@ -25,6 +25,9 @@ public class ViewStockPresenter implements ViewStockOutputBoundary {
         viewStockState.setSymbol(response.getSymbol());
         viewStockState.setCompany(response.getCompany());
         viewStockState.setSharePrices(response.getSharePrices());
+        // Optionally uncomment if needed
+        // viewStockState.setEarnings(response.getEarnings());
+
         this.stockViewModel.setState(viewStockState);
         this.stockViewModel.firePropertyChanged();
 

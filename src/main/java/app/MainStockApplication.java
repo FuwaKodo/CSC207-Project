@@ -1,15 +1,22 @@
 package app;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import java.util.Set;
 
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.search.SearchController;
+import interface_adapters.search.SearchUseCaseFactory;
+import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
+import ui.compare_stocks.CompareStocksViewDisplayer;
 import use_cases.favorites.*;
+import use_cases.search.SearchDataAccessInterface;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 
@@ -27,11 +34,23 @@ public class MainStockApplication {
         // Create the ViewManagerModel to manage the view state
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
 
+        // Create the ViewStockViewModel and SearchViewModel
+        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
+        final SearchViewModel searchViewModel = new SearchViewModel();
+
         // Create a temporary implementation of the ViewStockDataAccessInterface
         final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
             @Override
             public Stock getStock(String symbol) {
                 return null; // Placeholder implementation
+            }
+        };
+
+        // Create a temporary implementation of the SearchDataAccessInterface
+        final SearchDataAccessInterface searchDataAccessInterface = new SearchDataAccessInterface() {
+            @Override
+            public List<String> getSymbols() {
+                return List.of("AAPL", "NVDA", "MFC", "L", "INTC");
             }
         };
 
@@ -66,8 +85,9 @@ public class MainStockApplication {
                         favoriteStockInputBoundary
                 );
 
-        // Initialize the ViewStockViewModel
-        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
+        // Create the SearchController
+        final SearchController searchController =
+                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessInterface);
 
         // Use SwingUtilities to ensure the GUI is created on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
@@ -78,7 +98,15 @@ public class MainStockApplication {
             frame.setLocationRelativeTo(null); // Center the window
 
             // Create the view and add it to the frame
-            final ViewStockView viewStockView = new ViewStockView(viewStockViewModel, viewStockController);
+            final ViewStockView viewStockView = new ViewStockView(
+                    viewStockViewModel, viewStockController, searchController);
+            
+            // Set up compare stocks button listener
+            viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
+            
+            // Initialize search view
+            viewStockView.setSearchView(searchViewModel);
+            
             frame.add(viewStockView.getMainPanel());
 
             // Make the frame visible

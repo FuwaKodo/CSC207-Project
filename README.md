@@ -17,7 +17,7 @@ Andy Chen -- perplop
 
 Victor Gao -- Phacometer
 
-Mohan Li -- mlcompsci
+Mohan Li -- mlcompsci/unknown
 
 Nikolas Edric Santoso -- FuwaKodo
 

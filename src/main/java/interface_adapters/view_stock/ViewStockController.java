@@ -29,19 +29,4 @@ public class ViewStockController {
         viewStockUseCaseInteractor.execute(viewStockInputData);
     }
 
-    /**
-     * Toggles the favorite status of a stock.
-     * @param stockSymbol the symbol of the stock to toggle
-     */
-    public void toggleFavorite(String stockSymbol) {
-        final FavoriteStockInputData favoriteStockInputData = new FavoriteStockInputData(stockSymbol);
-        favoriteStockUseCaseInteractor.toggleFavorite(favoriteStockInputData);
-    }
-
-    /**
-     * Retrieves the list of favorite stocks.
-     */
-    public void getFavorites() {
-        favoriteStockUseCaseInteractor.getFavorites();
-    }
 }

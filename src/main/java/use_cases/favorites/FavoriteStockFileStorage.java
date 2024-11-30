@@ -1,57 +1,55 @@
 package use_cases.favorites;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FavoriteStockFileStorage {
-    private static final String FILE_PATH = "favorite_stocks.txt";
+    private static final String FAVORITE_STOCKS_FILE = "src/main/java/use_cases/favorites/favorites_stocks.txt";
 
-    public void saveFavoriteStocks(List<String> stockSymbols) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (String symbol : stockSymbols) {
-                writer.write(symbol);
+    public Set<String> loadFavoriteStocks() {
+        Set<String> favoriteStocks = new HashSet<>();
+        File file = new File(FAVORITE_STOCKS_FILE);
+
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    favoriteStocks.add(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return favoriteStocks;
+    }
+
+    public void addFavoriteStock(String symbol) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FAVORITE_STOCKS_FILE, true))) {
+            writer.write(symbol);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeFavoriteStock(String symbol) {
+        Set<String> favoriteStocks = loadFavoriteStocks();
+        favoriteStocks.remove(symbol);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FAVORITE_STOCKS_FILE))) {
+            for (String stock : favoriteStocks) {
+                writer.write(stock);
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.err.println("Error saving favorite stocks: " + e.getMessage());
+            e.printStackTrace();
         }
-    }
-
-    public List<String> loadFavoriteStocks() {
-        List<String> stockSymbols = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stockSymbols.add(line.trim());
-            }
-        } catch (FileNotFoundException e) {
-            // File doesn't exist yet, return empty list
-            return stockSymbols;
-        } catch (IOException e) {
-            System.err.println("Error loading favorite stocks: " + e.getMessage());
-        }
-
-        return stockSymbols;
-    }
-
-    public boolean addFavoriteStock(String stockSymbol) {
-        List<String> stocks = loadFavoriteStocks();
-        if (!stocks.contains(stockSymbol)) {
-            stocks.add(stockSymbol);
-            saveFavoriteStocks(stocks);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean removeFavoriteStock(String stockSymbol) {
-        List<String> stocks = loadFavoriteStocks();
-        if (stocks.remove(stockSymbol)) {
-            saveFavoriteStocks(stocks);
-            return true;
-        }
-        return false;
     }
 }

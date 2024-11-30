@@ -1,5 +1,6 @@
 package entities;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import app.Constants;
@@ -11,60 +12,72 @@ public class Metrics {
     private final SharePrices sharePrices;
     private final MetricValues earnings;
     private final MetricValues volumes;
+    private final MetricValues dividends;
 
     public Metrics(SharePrices sharePrices,
                    MetricValues earnings,
-                   MetricValues volumes) {
+                   MetricValues volumes,
+                   MetricValues dividendsPerShare) {
         this.sharePrices = sharePrices;
         this.earnings = earnings;
         this.volumes = volumes;
+        this.dividends = dividendsPerShare;
     }
 
     /**
-     * Get share price at day. Day parameter represents the number of days before
-     * the latest data point.
-     * @param day number of days
+     * Get share price on date.
+     * @param date the date. If there is no value for the date, return the value on
+     *             the date immediately after it.
      * @return share price
      */
-    public Double sharePrice(int day) {
-        return sharePrices.getValue(day);
+    public Double getSharePrice(LocalDate date) {
+        return sharePrices.getValue(date);
     }
 
     /**
-     * Get volume at number of day before latest data point.
-     * @param day number of days to backtrack
+     * Get volume on date.
+     * @param date the date. If there is no value for the date, return the value
+     *             on the date immedidately after it.
      * @return volume at given days back
      */
-    public Double volume(int day) {
-        return volumes.getValue(day);
+    public Double getVolume(LocalDate date) {
+        return volumes.getValue(date);
     }
 
     /**
-     * Calculate growth percentage between the stock at startDay and
-     * stock at endDay.
-     * @param startDay the start of the interval in terms of number of days before the latest data point
-     * @param endDay the end of the interval exclusive in terms of number of days before the latest data point
+     * Calculate growth percentage between the stock at the start and
+     * end of an interval.
+     * @param start the starting date of the interval, inclusive.
+     * @param end the end date of the interval, inclusive.
      * @return the growth percentage
      */
-    public Double growthPercentage(int startDay, int endDay) {
-        final Double startPrice = sharePrices.getValue(startDay);
-        final Double endPrice = sharePrices.getValue(endDay);
-        return startPrice * Constants.PERCENTAGE / endPrice;
+    public Double getGrowthPercentage(LocalDate start, LocalDate end) {
+        final Double startPrice = sharePrices.getValue(start);
+        final Double endPrice = sharePrices.getValue(end);
+        return (endPrice - startPrice) / startPrice * Constants.PERCENTAGE;
     }
 
     /**
-     * Calculate earnings per share by aggregating earnings between the interval
-     * specified by startDay and endDay.
-     * @param startDay the start of the interval in terms of number of days before the latest data point
-     * @param endDay the end of the interval exclusive in terms of number of days before the latest data point
+     * Calculate earnings per share by aggregating earnings between an interval.
+     * @param start the starting date of the interval, inclusive.
+     * @param end the end date of the interval, inclusive.
      * @return earnings per share
      */
-    public Double earningsPerShare(int startDay, int endDay) {
-        return getTotalEarnings(startDay, endDay) / sharePrices.getLatest();
+    public Double getEarningsPerShare(LocalDate start, LocalDate end) {
+        return getTotalEarnings(start, end) / sharePrices.getLatest();
     }
 
-    private Double getTotalEarnings(int startDay, int endDay) {
-        final List<Double> earningsInInterval = earnings.getInterval(startDay, endDay);
+    /**
+     * Get the dividends per share on a date.
+     * @param date the date.
+     * @return dividends per share
+     */
+    public Double getDividendsPerShare(LocalDate date) {
+        return dividends.getValue(date);
+    }
+
+    private Double getTotalEarnings(LocalDate start, LocalDate end) {
+        final List<Double> earningsInInterval = earnings.getInterval(start, end);
         double total = 0;
         for (Double earning : earningsInInterval) {
             total += earning;

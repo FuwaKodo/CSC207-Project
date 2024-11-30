@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import app.Constants;
+
 /**
  * Interactor of the use case.
  */
@@ -25,14 +27,14 @@ public class SearchInteractor implements SearchInputBoundary {
      */
     @Override
     public void execute(SearchInputData searchInputData) {
-        final String input = searchInputData.getInput();
+        final String input = searchInputData.getInput().strip().toUpperCase();
         final List<String> allSymbols = searchDataAccessObject.getSymbols();
 
         // different lists for how similar a symbol is to the input
         final List<String> exactMatches = new ArrayList<>();
         final List<String> substringMatches = new ArrayList<>();
         final List<String> characterMatches = new ArrayList<>();
-        final Hashtable<Integer, List<String>> listTable = new Hashtable<Integer, List<String>>();
+        final Hashtable<Integer, List<String>> listTable = new Hashtable<>();
         listTable.put(Constants.SIMILAR_BY_SOME_CHAR, characterMatches);
         listTable.put(Constants.SIMILAR_AS_SUBSTRING, substringMatches);
         listTable.put(Constants.EXACTLY_SAME, exactMatches);
@@ -53,7 +55,7 @@ public class SearchInteractor implements SearchInputBoundary {
         symbols.addAll(listTable.get(Constants.SIMILAR_BY_SOME_CHAR));
 
         // output data
-        final SearchOutputData searchOutputData = new SearchOutputData(input, symbols);
+        final SearchOutputData searchOutputData = new SearchOutputData(searchInputData.getInput(), symbols);
 
         searchPresenter.displayResult(searchOutputData);
     }

@@ -7,7 +7,7 @@ public class SearchInputData {
     private final String input;
 
     public SearchInputData(String typed_string) {
-        this.input = typed_string.strip().toUpperCase();
+        this.input = typed_string;
     }
 
     String getInput() {

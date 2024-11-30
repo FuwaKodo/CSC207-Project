@@ -25,7 +25,7 @@ public class Metrics {
     }
 
     /**
-     * Get share price on date
+     * Get share price on date.
      * @param date the date. If there is no value for the date, return the value on
      *             the date immediately after it.
      * @return share price
@@ -54,7 +54,7 @@ public class Metrics {
     public Double getGrowthPercentage(LocalDate start, LocalDate end) {
         final Double startPrice = sharePrices.getValue(start);
         final Double endPrice = sharePrices.getValue(end);
-        return (endPrice - startPrice) / startPrice * Constants.PERCENTAGE ;
+        return (endPrice - startPrice) / startPrice * Constants.PERCENTAGE;
     }
 
     /**

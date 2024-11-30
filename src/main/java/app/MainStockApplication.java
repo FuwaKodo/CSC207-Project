@@ -8,13 +8,13 @@ import javax.swing.SwingUtilities;
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.search.SearchController;
+import interface_adapters.search.SearchUseCaseFactory;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
-import ui.compare_stocks.CompareStocksViewDisplayer;
 import ui.ViewStockView;
+import ui.compare_stocks.CompareStocksViewDisplayer;
 import use_cases.search.SearchDataAccessInterface;
-import use_cases.search.SearchUseCaseFactory;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 
@@ -41,6 +41,7 @@ public class MainStockApplication {
         final SearchViewModel searchViewModel = new SearchViewModel();
 
         // sample interfaces, will be implemented later
+        // TODO replace with data access object when possible
         final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
             @Override
             public Stock getStock(String symbol) {
@@ -50,7 +51,7 @@ public class MainStockApplication {
         final SearchDataAccessInterface searchDataAccessInterface = new SearchDataAccessInterface() {
             @Override
             public List<String> getSymbols() {
-                return List.of();
+                return List.of("AAPL", "NVDA", "MFC", "L", "INTC");
             }
         };
 

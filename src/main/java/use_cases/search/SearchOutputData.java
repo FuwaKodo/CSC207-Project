@@ -1,10 +1,9 @@
 package use_cases.search;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
- * The output data for the search use case.
+ * The output data for the search use case. Input is included in output in case it is needed for display.
  */
 public class SearchOutputData {
     private final String input;
@@ -13,7 +12,6 @@ public class SearchOutputData {
     public SearchOutputData(String input, List<String> symbols) {
         this.input = input;
         this.symbols = symbols;
-        Collections.sort(this.symbols);
     }
 
     public String getInput() {

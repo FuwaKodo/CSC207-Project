@@ -76,7 +76,7 @@ public class Stock {
     }
 
     /**
-     * Get dividends per share on a date
+     * Get dividends per share on a date.
      * @param date the date
      * @return dividends per share
      */

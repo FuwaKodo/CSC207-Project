@@ -1,11 +1,16 @@
 package ui;
 
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 
-import javax.swing.*;
-import java.awt.*;
-
+/**
+ * Builder class for ViewStockView.
+ */
 public class ViewStockViewBuilder {
     private JPanel mainPanel;
 
@@ -15,6 +20,10 @@ public class ViewStockViewBuilder {
         mainPanel.setLayout(new BorderLayout());
     }
 
+    /**
+     * Returns the button for comparing stocks.
+     * @return a compare button
+     */
     public JButton makeCompareButton() {
         JButton button = new JButton("Compare Stocks");
         return button;

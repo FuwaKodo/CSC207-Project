@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class MockMetrics {
-    static List<LocalDate> makeDates() {
+    public static List<LocalDate> makeDates() {
         return List.of(
                 LocalDate.of(2024, 11, 24),
                 LocalDate.of(2024, 11, 25),
@@ -15,11 +15,11 @@ public class MockMetrics {
         );
     }
 
-    static List<Double> makeRawValues() {
+    public static List<Double> makeRawValues() {
         return List.of(1.0, 2.0, 3.0);
     }
 
-    static SharePrices makeSharePrices() {
+    public static SharePrices makeSharePrices() {
         final List<Double> rawValues = makeRawValues();
         return new SharePrices(
                 makeDates(),
@@ -30,7 +30,7 @@ public class MockMetrics {
         );
     }
 
-    static MetricValues makeMetricValues() {
+    public static MetricValues makeMetricValues() {
         return new MetricValues(
                 makeRawValues(),
                 makeDates()

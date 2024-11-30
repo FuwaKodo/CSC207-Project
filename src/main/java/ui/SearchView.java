@@ -122,7 +122,15 @@ public class SearchView {
      * @return text to display
      */
     private String getCurrentPage() {
-        return "Page " + String.valueOf(searchViewModel.getState().getIntPageNumber() + 1)
+        final int currentPageNumber;
+        // set current page number to 0 if there are no pages
+        if (getNumberOfPages() > 0) {
+            currentPageNumber = searchViewModel.getState().getIntPageNumber() + 1;
+        }
+        else {
+            currentPageNumber = 0;
+        }
+        return "Page " + String.valueOf(currentPageNumber)
                 + " / " + String.valueOf(getNumberOfPages());
     }
 
@@ -139,6 +147,9 @@ public class SearchView {
      * Updates display with search result in searchViewModel.getState().
      */
     public void updateSearchResult() {
+        // empties previous search result
+        searchResultButtons.clear();
+        pagesPanel.removeAll();
         // fills searchResult
         for (int i = 0; i < searchViewModel.getState().getSymbols().size(); i++) {
             // creates new button for a stock
@@ -175,6 +186,13 @@ public class SearchView {
             final JPanel centeringPanel = new JPanel(new GridBagLayout());
             centeringPanel.add(page);
             pagesPanel.add(centeringPanel, String.valueOf(pageNumber));
+        }
+        if (getNumberOfPages() <= 0) {
+            final JPanel centeringPanel = new JPanel(new GridBagLayout());
+            final JLabel noResultsLabel = new JLabel("No results found");
+            noResultsLabel.setFont(Constants.NO_RESULTS_FONT);
+            centeringPanel.add(noResultsLabel);
+            pagesPanel.add(centeringPanel, "0");
         }
         updatePageInfoLabel();
     }

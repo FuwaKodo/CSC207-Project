@@ -1,8 +1,8 @@
 package use_cases;
 
-import entities.Stock;
-
 import java.util.List;
+
+import entities.Stock;
 
 public interface StockDataAccessInterface {
     List<String> getAllCompanyNames();

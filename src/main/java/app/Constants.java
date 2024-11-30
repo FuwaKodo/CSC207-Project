@@ -55,5 +55,7 @@ public final class Constants {
     public static final String FAVORITED = "★ Favorited";
 
     // prevents instantiation
-    private Constants() { }
+    private Constants() {
+
+    }
 }

@@ -8,13 +8,13 @@ import javax.swing.SwingUtilities;
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.search.SearchController;
+import interface_adapters.search.SearchUseCaseFactory;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
-import ui.compare_stocks.CompareStocksViewDisplayer;
 import ui.ViewStockView;
+import ui.compare_stocks.CompareStocksViewDisplayer;
 import use_cases.search.SearchDataAccessInterface;
-import interface_adapters.search.SearchUseCaseFactory;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import use_cases.search.SearchDataAccessInterface;
+import use_cases.search.SearchInputBoundary;
+import use_cases.search.SearchInputData;
+import use_cases.search.SearchInteractor;
+import use_cases.search.SearchOutputBoundary;
+import use_cases.search.SearchOutputData;
 
 public class SearchTest {
     // mock data access object to be used in all tests which also check that the data isn't mutated

@@ -34,7 +34,7 @@ public class SearchInteractor implements SearchInputBoundary {
         final List<String> exactMatches = new ArrayList<>();
         final List<String> substringMatches = new ArrayList<>();
         final List<String> characterMatches = new ArrayList<>();
-        final Hashtable<Integer, List<String>> listTable = new Hashtable<Integer, List<String>>();
+        final Hashtable<Integer, List<String>> listTable = new Hashtable<>();
         listTable.put(Constants.SIMILAR_BY_SOME_CHAR, characterMatches);
         listTable.put(Constants.SIMILAR_AS_SUBSTRING, substringMatches);
         listTable.put(Constants.EXACTLY_SAME, exactMatches);

@@ -2,16 +2,16 @@ package app;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import java.util.Set;
 
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
-import use_cases.favorites.FavoriteStockInputData;
+import use_cases.favorites.*;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
-import use_cases.favorites.FavoriteStockInputBoundary;
 
 /**
  * Main class for launching the Stock Analysis Application.
@@ -35,18 +35,28 @@ public class MainStockApplication {
             }
         };
 
-        // Create a temporary implementation of FavoriteStockInputBoundary
-        final FavoriteStockInputBoundary favoriteStockInputBoundary = new FavoriteStockInputBoundary() {
+        // Initialize FavoriteStockFileStorage and create FavoriteStockInteractor
+        FavoriteStockFileStorage favoriteStockFileStorage = new FavoriteStockFileStorage();
+
+        // Create FavoriteStockOutputBoundary implementation (presenter)
+        FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {
             @Override
-            public void toggleFavorite(FavoriteStockInputData inputData) {
-                // Temporary behavior: implement or leave empty
+            public void presentFavoriteToggled(String symbol, boolean isFavorited) {
+                // Implement presentation logic for favorite toggle
             }
 
             @Override
-            public void getFavorites() {
-                // Temporary behavior: implement or leave empty
+            public void presentFavorites(Set<String> favorites) {
+                // Implement presentation logic for favorites list
             }
         };
+
+        // Create FavoriteStockInteractor with the file storage
+        final FavoriteStockInputBoundary favoriteStockInputBoundary =
+                new FavoriteStockInteractor(favoriteStockPresenter);
+
+        // Load favorite stocks on startup
+        favoriteStockInputBoundary.getFavorites();
 
         // Create the ViewStockController using the factory
         final ViewStockController viewStockController =

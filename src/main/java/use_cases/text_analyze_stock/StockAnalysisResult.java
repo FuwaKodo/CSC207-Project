@@ -1,6 +1,9 @@
 package use_cases.text_analyze_stock;
 
-class StockAnalysisResult {
+/**
+ * This is the getters and setters of the Stock Analysis.
+ */
+public class StockAnalysisResult {
 
     private final String stockName;
     private final double currentPrice;
@@ -9,7 +12,8 @@ class StockAnalysisResult {
     private final double projectedPrice3;
     private final String action;
 
-    public StockAnalysisResult(String stockName, double currentPrice, double projectedPrice1, double projectedPrice2, double projectedPrice3, String action) {
+    public StockAnalysisResult(String stockName, double currentPrice, double projectedPrice1,
+                               double projectedPrice2, double projectedPrice3, String action) {
         this.stockName = stockName;
         this.currentPrice = currentPrice;
         this.projectedPrice1 = projectedPrice1;

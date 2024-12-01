@@ -1,11 +1,12 @@
-/*
 package test;
+
+import java.util.Date;
 
 import entities.MetricValues;
 import entities.SharePrices;
-import interface_adapters.gateways.StockDataLoader;
+import use_cases.StockDataInterface;
 
-public class MockStockDataLoader implements StockDataLoader {
+public class MockStockDataLoader implements StockDataInterface {
     public final String company;
     public final String symbol;
 
@@ -20,33 +21,47 @@ public class MockStockDataLoader implements StockDataLoader {
     }
 
     @Override
-    public String getCompany() {
-        return company;
-    }
-
-    @Override
-    public String getSymbol() {
-        return symbol;
-    }
-
-    @Override
-    public SharePrices getSharePrices() {
+    public SharePrices getSharePrices(String stockSymbol, Date startDate, Date endDate) {
         return MockMetrics.makeSharePrices();
     }
 
-    @Override
+    /*@Override
     public MetricValues getEarnings() {
         return MockMetrics.makeMetricValues();
-    }
+    }*/
 
     @Override
-    public MetricValues getVolumes() {
+    public MetricValues getVolumes(String stockSymbol, Date startDate, Date endDate) {
         return MockMetrics.makeMetricValues();
     }
 
     @Override
-    public MetricValues getDividends() {
-        return MockMetrics.makeMetricValues();
+    public Double getVolume(String stockSymbol, Date date) {
+        return 0.0;
+    }
+
+    @Override
+    public Double getAfterHour(String stockSymbol, Date date) {
+        return 0.0;
+    }
+
+    @Override
+    public MetricValues getAfterHours(String stockSymbol, Date startDate, Date endDate) {
+        return null;
+    }
+
+    @Override
+    public Double getPremarket(String stockSymbol, Date date) {
+        return 0.0;
+    }
+
+    @Override
+    public MetricValues getPremarkets(String stockSymbol, Date startDate, Date endDate) {
+        return null;
+    }
+
+    @Override
+    public SharePrices getSharePrice(String stockSymbol, Date date) {
+        return null;
     }
 }
-*/

@@ -4,7 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import entities.SharePrices;
 import entities.Stock;
+import interface_adapters.gateways.StockSymbolsLoader;
 import use_cases.StockDataInterface;
 
 /**
@@ -14,10 +16,12 @@ import use_cases.StockDataInterface;
 public class CompareStocksInteractor implements CompareStocksInputBoundary {
     private final CompareStocksOutputBoundary presenter;
     private final StockDataInterface dataAccess;
+    private final StockSymbolsLoader symbolsLoader;
 
     public CompareStocksInteractor(CompareStocksOutputBoundary presenter, StockDataInterface dataAccess) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
+        symbolsLoader = new StockSymbolsLoader();
     }
 
     @Override
@@ -32,19 +36,16 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
     }
 
     public List<String> getStockNames() {
-        return dataAccess.getAllCompanyNames();
+        return symbolsLoader.getSymbols();
     }
 
     private String getComparisonSummary(String symbol1, String symbol2, Date start, Date end) {
-        // Compare earnings per share
-        final Double stock1EPS = stock1.getEarningsPerShare(start, end);
-        final Double stock2EPS = stock2.getEarningsPerShare(start, end);
-        // Compare growth percentage
-        final Double stock1Growth = stock1.getGrowthPercentage(start, end);
-        final Double stock2Growth = stock2.getGrowthPercentage(start, end);
-        //Compare dividends
-        final Double stock1Dividends = stock1.getDividendsPerShare(end);
-        final Double stock2Dividends = stock2.getDividendsPerShare(end);
+        // Compare stock volumes
+        final Double stock1Volumes = dataAccess.getVolume(symbol1, end);
+        final Double stock2Volumes = dataAccess.getVolume(symbol2, end);
+        // Compare growth percentages
+        final SharePrices stock1SharePrices = dataAccess.getSharePrices(symbol1, start, end);
+        final SharePrices stock2SharePrices = dataAccess.getSharePrices(symbol2, start, end);
 
         final String epsSummary = formatSummary(
                 "From %s to %s, %s earned $%.1f earnings per share while %s earned $%.1f earnings per share.",

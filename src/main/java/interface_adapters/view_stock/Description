@@ -1,7 +1,0 @@
-All information relating to a stock can be obtained from ViewStockState
-(Presenter sets the values)
-
-ViewStockController executes the use case
-
-ViewStockPresenter provides the output information to (ViewStockState) ViewStockViewModel.getState()
-    and changes view via ViewStockViewModel

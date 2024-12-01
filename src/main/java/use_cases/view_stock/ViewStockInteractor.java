@@ -2,12 +2,10 @@ package use_cases.view_stock;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import app.Constants;
-import entities.Stock;
+import entities.SharePrices;
 import use_cases.StockDataInterface;
 import use_cases.SymbolNameDataAccessInterface;
 
@@ -37,17 +35,23 @@ public class ViewStockInteractor implements ViewStockInputBoundary {
     public void execute(ViewStockInputData inputData) {
         final String symbol = inputData.getSymbol();
         final String company = symbolNameDataAccessObject.getCompany(symbol);
+        final SharePrices sharePrices = viewStockDataAccessObject.getSharePrices(symbol,
+                toDate(LocalDate.now().minusDays(Constants.FIVE_YEARS)), toDate(LocalDate.now()));
+        /*
         final Stock stock = new Stock(viewStockDataAccessObject, symbol, company);
-
-        final List<Double> sharePrices = new ArrayList<>();
+        final List<Double> sharePrices1 = new ArrayList<>();
 
         final LocalDate fiveYearsBefore = LocalDate.now().minusDays(Constants.FIVE_YEARS);
         for (LocalDate date = fiveYearsBefore; !date.isAfter(LocalDate.now()); date = date.plusDays(1)) {
-            sharePrices.add(stock.getSharePrice(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+            sharePrices1.add(stock.getSharePrice(toDate(date)));
         }
-
+        */
         final ViewStockOutputData viewStockOutputData = new ViewStockOutputData(company, symbol, sharePrices);
 
         viewStockPresenter.displayStock(viewStockOutputData);
+    }
+
+    private static Date toDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

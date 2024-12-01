@@ -5,6 +5,7 @@ import use_cases.StockDataAccessInterface;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
         return dataAccess.getAllCompanyNames();
     }
 
-    private String getComparisonSummary(Stock stock1, Stock stock2, LocalDate start, LocalDate end) {
+    private String getComparisonSummary(Stock stock1, Stock stock2, LocalDate start, Date end) {
         // Compare earnings per share
         final Double stock1EPS = stock1.getEarningsPerShare(start, end);
         final Double stock2EPS = stock2.getEarningsPerShare(start, end);
@@ -71,7 +72,7 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
         return epsSummary + "\n" + growthSummary + "\n" + dividendsSummary;
     }
 
-    private String formattedDateString(LocalDate date) {
+    private String formattedDateString(Date date) {
         final String pattern = "dd/MM/yyyy";
         return date.format(DateTimeFormatter.ofPattern(pattern));
     }
@@ -79,7 +80,7 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
     private String formatSummary(
             String format,
             LocalDate start,
-            LocalDate end,
+            Date end,
             Stock stock1,
             Stock stock2,
             Double firstStockVal,

@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import entities.Stock;
+import frameworks.FavoriteStockData;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchUseCaseFactory;
@@ -55,7 +56,7 @@ public class MainStockApplication {
         };
 
         // Initialize FavoriteStockFileStorage and create FavoriteStockInteractor
-        FavoriteStockFileStorage favoriteStockFileStorage = new FavoriteStockFileStorage();
+        FavoriteStockData favoriteStockData = new FavoriteStockData();
 
         // Create FavoriteStockOutputBoundary implementation (presenter)
         FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {

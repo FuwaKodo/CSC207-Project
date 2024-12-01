@@ -1,5 +1,7 @@
 package use_cases.favorites;
 
+import frameworks.FavoriteStockData;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +16,7 @@ public class FavoriteStockInteractor implements FavoriteStockInputBoundary {
     private final FavoriteStockOutputBoundary favoriteStockPresenter;
 
     /** File storage for persisting favorite stocks */
-    private final FavoriteStockFileStorage fileStorage;
+    private final FavoriteStockData fileStorage;
 
     /** In-memory storage of favorited stock symbols */
     private final Set<String> favoritedStocks;
@@ -30,7 +32,7 @@ public class FavoriteStockInteractor implements FavoriteStockInputBoundary {
             throw new IllegalArgumentException("Favorite stock presenter cannot be null");
         }
         this.favoriteStockPresenter = favoriteStockPresenter;
-        this.fileStorage = new FavoriteStockFileStorage();
+        this.fileStorage = new FavoriteStockData();
         this.favoritedStocks = new HashSet<>(fileStorage.loadFavoriteStocks());
     }
 

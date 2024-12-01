@@ -1,5 +1,8 @@
 package ui;
 
+import interface_adapters.favoritesIA.FavoriteStockPresenter;
+import interface_adapters.favoritesIA.FavoriteStockState;
+import interface_adapters.favoritesIA.FavoriteStockViewModel;
 import use_cases.favorites.*;
 import javax.swing.*;
 import java.awt.*;

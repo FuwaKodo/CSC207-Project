@@ -1,4 +1,4 @@
-package use_cases.favorites;
+package interface_adapters.favoritesIA;
 
 import java.util.HashSet;
 import java.util.Set;

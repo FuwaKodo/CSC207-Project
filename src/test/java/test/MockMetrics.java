@@ -1,3 +1,4 @@
+/*
 package test;
 
 import entities.MetricValues;
@@ -37,3 +38,4 @@ public class MockMetrics {
         );
     }
 }
+*/

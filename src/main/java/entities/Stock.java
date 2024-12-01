@@ -1,6 +1,7 @@
 package entities;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import interface_adapters.gateways.StockDataLoader;
 
@@ -35,7 +36,7 @@ public class Stock {
      *             value on the date immediately after it.
      * @return share price
      */
-    public Double getSharePrice(LocalDate date) {
+    public Double getSharePrice(Date date) {
         return metrics.getSharePrice(date);
     }
 
@@ -45,7 +46,7 @@ public class Stock {
      *             the value on the date immediately after it.
      * @return volume
      */
-    public Double getVolume(LocalDate date) {
+    public Double getVolume(Date date) {
         return metrics.getVolume(date);
     }
 
@@ -55,7 +56,7 @@ public class Stock {
      * @param end end date of the interval, inclusive.
      * @return growth percentage from 0 to 1.
      */
-    public Double getGrowthPercentage(LocalDate start, LocalDate end) {
+    public Double getGrowthPercentage(Date start, Date end) {
         return metrics.getGrowthPercentage(start, end);
     }
 
@@ -65,7 +66,7 @@ public class Stock {
      * @param end ending date of the interval, inclusive.
      * @return earnings per share
      */
-    public Double getEarningsPerShare(LocalDate start, LocalDate end) {
+    public Double getEarningsPerShare(Date start, Date end) {
         return metrics.getEarningsPerShare(start, end);
     }
 
@@ -74,7 +75,7 @@ public class Stock {
      * @param date the date
      * @return dividends per share
      */
-    public Double getDividendsPerShare(LocalDate date) {
+    public Double getDividendsPerShare(Date date) {
         return metrics.getDividendsPerShare(date);
     }
 

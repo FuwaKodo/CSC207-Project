@@ -1,17 +1,23 @@
 package ui.compare_stocks;
 
-import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.time.ZoneId;
+import java.util.Date;
+
+import javax.swing.BoxLayout;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import interface_adapters.ViewModel;
 import interface_adapters.compare_stocks.CompareStocksController;
 import interface_adapters.compare_stocks.CompareStocksState;
 import use_cases.compare_stocks.CompareStocksInputData;
-
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.time.LocalDate;
 
 public class CompareStocksView extends JPanel implements PropertyChangeListener {
     private final ViewModel<CompareStocksState> viewModel;
@@ -101,8 +107,8 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
     private void getNewComparisonSummary() {
         final String stock1Name = firstStockDropdown.getSelectedItem().toString();
         final String stock2Name = secondStockDropdown.getSelectedItem().toString();
-        final LocalDate start = startDatePicker.getDate();
-        final LocalDate end = endDatePicker.getDate();
+        final Date start = Date.from(startDatePicker.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        final Date end = Date.from(endDatePicker.getDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         final CompareStocksInputData inputData = new CompareStocksInputData(
                 stock1Name, stock2Name, start, end

@@ -1,12 +1,16 @@
 package interface_adapters.text_analyze_stock;
 
 import java.awt.Font;
+import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import app.Constants;
+import entities.SharePrices;
+import interface_adapters.gateways.StockDataLoader;
+import use_cases.StockDataInterface;
 import use_cases.text_analyze_stock.AnalyzeStock;
 import use_cases.text_analyze_stock.StockAnalysisResult;
 
@@ -32,9 +36,15 @@ public class StockPresenter {
      * @param args command line arguments passed to the application.
      */
     public static void main(String[] args) {
+        final String stockSymbol = "AAPL";
+        final Calendar myCalendar = new GregorianCalendar(2014, 2, 11);
+        final Date myDate = myCalendar.getTime();
+        // Call the method to retrieve share prices
+        final StockDataInterface stockData = new StockDataLoader();
+        final SharePrices sharePrices = stockData.getSharePrice(stockSymbol, myDate);
         // Perform stock analysis
-        final StockAnalysisResult result = AnalyzeStock.calculateProjectedPrice("MFC",
-                45.7, 27);
+        final StockAnalysisResult result = AnalyzeStock.calculateProjectedPrice(stockSymbol,
+                sharePrices.getHighPrices().get(0), 27);
 
         // Create a new frame to display the result
         final JFrame frame = new JFrame("Stock Analysis Result");

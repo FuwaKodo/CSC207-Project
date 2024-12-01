@@ -1,2 +1,3 @@
-Stock C
+Select stock
 Stock B
+Stock C

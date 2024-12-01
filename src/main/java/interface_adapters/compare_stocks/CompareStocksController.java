@@ -1,10 +1,9 @@
 package interface_adapters.compare_stocks;
 
-import use_cases.compare_stocks.CompareStocksInputData;
-import use_cases.compare_stocks.CompareStocksInteractor;
-
 import java.util.List;
 
+import use_cases.compare_stocks.CompareStocksInputData;
+import use_cases.compare_stocks.CompareStocksInteractor;
 
 public class CompareStocksController {
     private final CompareStocksInteractor interactor;

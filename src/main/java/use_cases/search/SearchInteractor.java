@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import app.Constants;
+import use_cases.SymbolNameDataAccessInterface;
 
 /**
  * Interactor of the use case.
@@ -12,10 +13,10 @@ import app.Constants;
 public class SearchInteractor implements SearchInputBoundary {
 
     private final SearchOutputBoundary searchPresenter;
-    private final SearchDataAccessInterface dataAccessObject;
+    private final SymbolNameDataAccessInterface dataAccessObject;
 
     public SearchInteractor(SearchOutputBoundary searchPresenter,
-                            SearchDataAccessInterface dataAccessObject) {
+                            SymbolNameDataAccessInterface dataAccessObject) {
         this.searchPresenter = searchPresenter;
         this.dataAccessObject = dataAccessObject;
     }

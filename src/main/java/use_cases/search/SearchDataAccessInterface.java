@@ -8,7 +8,7 @@ import java.util.List;
 public interface SearchDataAccessInterface {
 
     /**
-     * Retrieves a NEW list of symbols .
+     * Retrieves a list of symbols .
      *
      * @return a list of symbols
      */

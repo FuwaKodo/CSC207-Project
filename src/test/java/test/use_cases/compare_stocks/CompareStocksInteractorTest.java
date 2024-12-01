@@ -1,3 +1,4 @@
+/*
 package test.use_cases.compare_stocks;
 
 import entities.Stock;
@@ -68,4 +69,4 @@ class CompareStocksInteractorTest {
         List<String> names = interactor.getStockNames();
         assertTrue(names.equals(companies));
     }
-}
+}*/

@@ -97,7 +97,7 @@ public class MainStockApplication {
 
             // Create the view and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(
-                    viewStockViewModel, viewStockController, searchController, loadingHubController);
+                    viewManagerModel, viewStockViewModel, viewStockController, searchController, loadingHubController);
             // Initialize ViewStockView and add it to the frame
             viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
             

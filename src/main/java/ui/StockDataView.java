@@ -64,7 +64,7 @@ public class StockDataView {
         stockView.add(graphPanel);
     }
 
-    public JPanel getStockView() {
+    public JPanel getMainPanel() {
         return stockView;
     }
 

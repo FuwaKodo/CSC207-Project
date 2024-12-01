@@ -15,19 +15,19 @@ public class ViewStockUseCaseFactory {
      * Creates a new instance of ViewStockController with all its dependencies.
      *
      * @param viewManagerModel the model responsible for managing the view
+     * @param viewStockViewModel the view model for view stock
      * @param dataAccessObject the data access interface for fetching stock data
      * @param favoriteStockUseCaseInteractor the interactor for managing favorite stocks
      * @return a configured ViewStockController instance
      */
     public static ViewStockController create(
             ViewManagerModel viewManagerModel,
+            ViewStockViewModel viewStockViewModel,
             ViewStockDataAccessInterface dataAccessObject,
             FavoriteStockInputBoundary favoriteStockUseCaseInteractor) {
-        // Create the view model to hold the state and data for the stock view
-        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
 
         // Create the presenter that will handle presentation logic, using the view model
-        final ViewStockPresenter viewStockPresenter = new ViewStockPresenter(
+        final ViewStockOutputBoundary viewStockPresenter = new ViewStockPresenter(
                 viewManagerModel,
                 viewStockViewModel
         );

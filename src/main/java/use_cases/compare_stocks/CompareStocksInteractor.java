@@ -1,12 +1,11 @@
 package use_cases.compare_stocks;
 
-import entities.Stock;
-import use_cases.StockDataAccessInterface;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import entities.Stock;
+import use_cases.StockDataAccessInterface;
 
 /**
  * The use case to compare stocks using earnings per share, dividends, and
@@ -39,7 +38,7 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
         return dataAccess.getAllCompanyNames();
     }
 
-    private String getComparisonSummary(Stock stock1, Stock stock2, LocalDate start, Date end) {
+    private String getComparisonSummary(Stock stock1, Stock stock2, Date start, Date end) {
         // Compare earnings per share
         final Double stock1EPS = stock1.getEarningsPerShare(start, end);
         final Double stock2EPS = stock2.getEarningsPerShare(start, end);
@@ -74,12 +73,13 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
 
     private String formattedDateString(Date date) {
         final String pattern = "dd/MM/yyyy";
-        return date.format(DateTimeFormatter.ofPattern(pattern));
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        return dateFormat.format(date);
     }
 
     private String formatSummary(
             String format,
-            LocalDate start,
+            Date start,
             Date end,
             Stock stock1,
             Stock stock2,

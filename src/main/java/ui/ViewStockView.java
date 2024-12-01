@@ -77,7 +77,7 @@ public class ViewStockView {
         this.viewStockController = viewStockController;
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
-        this.favoritedStocks = new HashSet<>();
+        this.favoritesManager = new FavoritesManager();
 
         // Initialize the main panel
         mainPanel = new JPanel();

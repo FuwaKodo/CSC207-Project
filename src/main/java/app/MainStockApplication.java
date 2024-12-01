@@ -15,7 +15,10 @@ import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
-import use_cases.favorites.*;
+import use_cases.favorites.FavoriteStockFileStorage;
+import use_cases.favorites.FavoriteStockInputBoundary;
+import use_cases.favorites.FavoriteStockInteractor;
+import use_cases.favorites.FavoriteStockOutputBoundary;
 import use_cases.search.SearchDataAccessInterface;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
@@ -81,6 +84,7 @@ public class MainStockApplication {
         final ViewStockController viewStockController =
                 ViewStockUseCaseFactory.create(
                         viewManagerModel,
+                        viewStockViewModel,
                         viewStockDataAccessInterface,
                         favoriteStockInputBoundary
                 );

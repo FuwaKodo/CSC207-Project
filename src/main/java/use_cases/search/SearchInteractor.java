@@ -12,12 +12,12 @@ import app.Constants;
 public class SearchInteractor implements SearchInputBoundary {
 
     private final SearchOutputBoundary searchPresenter;
-    private final SearchDataAccessInterface searchDataAccessObject;
+    private final SearchDataAccessInterface dataAccessObject;
 
     public SearchInteractor(SearchOutputBoundary searchPresenter,
-                            SearchDataAccessInterface searchDataAccessInterface) {
+                            SearchDataAccessInterface dataAccessObject) {
         this.searchPresenter = searchPresenter;
-        this.searchDataAccessObject = searchDataAccessInterface;
+        this.dataAccessObject = dataAccessObject;
     }
 
     /**
@@ -28,7 +28,7 @@ public class SearchInteractor implements SearchInputBoundary {
     @Override
     public void execute(SearchInputData searchInputData) {
         final String input = searchInputData.getInput().strip().toUpperCase();
-        final List<String> allSymbols = searchDataAccessObject.getSymbols();
+        final List<String> allSymbols = dataAccessObject.getSymbols();
 
         // different lists for how similar a symbol is to the input
         final List<String> exactMatches = new ArrayList<>();

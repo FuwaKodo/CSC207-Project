@@ -1,7 +1,9 @@
 package use_cases.view_stock;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import app.Constants;
@@ -36,7 +38,7 @@ public class ViewStockInteractor implements ViewStockInputBoundary {
 
         final LocalDate fiveYearsBefore = LocalDate.now().minusDays(Constants.FIVE_YEARS);
         for (LocalDate date = fiveYearsBefore; !date.isAfter(LocalDate.now()); date = date.plusDays(1)) {
-            sharePrices.add(stock.getSharePrice(date));
+            sharePrices.add(stock.getSharePrice(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
         }
 
         final ViewStockOutputData viewStockOutputData = new ViewStockOutputData(company, symbol, sharePrices);

@@ -1,8 +1,9 @@
 package entities;
 
-import interface_adapters.gateways.StockDataLoader;
-
 import java.time.LocalDate;
+import java.util.Date;
+
+import interface_adapters.gateways.StockDataLoader;
 
 /**
  * Stock: the stocks of a single company.
@@ -13,18 +14,12 @@ public class Stock {
     private final Metrics metrics;
     private boolean isFavorite;
 
-    public Stock(StockDataLoader loader) {
-        this.company = loader.getCompany();
-        this.symbol = loader.getSymbol();
-
-        this.metrics = new Metrics(
-                loader.getSharePrices(),
-                loader.getEarnings(),
-                loader.getVolumes(),
-                loader.getDividends()
-        );
-        // Initialize isFavorite to false
-        this.isFavorite = false;
+    public Stock(StockDataLoader loader, String company, String symbol) {
+        // TODO: Issue here because getCompany no longer possible!
+        // Getting symbol and company must be obtained from different instantiation
+        this.symbol = symbol;
+        this.company = company;
+        metrics = null;
     }
 
     public String getCompany() {
@@ -41,7 +36,7 @@ public class Stock {
      *             value on the date immediately after it.
      * @return share price
      */
-    public Double getSharePrice(LocalDate date) {
+    public Double getSharePrice(Date date) {
         return metrics.getSharePrice(date);
     }
 
@@ -51,7 +46,7 @@ public class Stock {
      *             the value on the date immediately after it.
      * @return volume
      */
-    public Double getVolume(LocalDate date) {
+    public Double getVolume(Date date) {
         return metrics.getVolume(date);
     }
 
@@ -61,7 +56,7 @@ public class Stock {
      * @param end end date of the interval, inclusive.
      * @return growth percentage from 0 to 1.
      */
-    public Double getGrowthPercentage(LocalDate start, LocalDate end) {
+    public Double getGrowthPercentage(Date start, Date end) {
         return metrics.getGrowthPercentage(start, end);
     }
 
@@ -71,7 +66,7 @@ public class Stock {
      * @param end ending date of the interval, inclusive.
      * @return earnings per share
      */
-    public Double getEarningsPerShare(LocalDate start, LocalDate end) {
+    public Double getEarningsPerShare(Date start, Date end) {
         return metrics.getEarningsPerShare(start, end);
     }
 
@@ -80,7 +75,7 @@ public class Stock {
      * @param date the date
      * @return dividends per share
      */
-    public Double getDividendsPerShare(LocalDate date) {
+    public Double getDividendsPerShare(Date date) {
         return metrics.getDividendsPerShare(date);
     }
 

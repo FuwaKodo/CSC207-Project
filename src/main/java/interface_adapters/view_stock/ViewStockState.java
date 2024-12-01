@@ -7,15 +7,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The state for the View Stock View Model.
+ * Represents the state of the View Model for viewing stock information,
+ * including stock symbols, company names, share prices, earnings,
+ * errors, and favorite stocks.
  */
 public class ViewStockState {
+    /** The stock symbol being viewed. */
     private String symbol = "";
+
+    /** The company name associated with the stock symbol. */
     private String company = "";
     private SharePrices sharePrices;
     private MetricValues earnings;
     private String viewStockError;
 
+    /** A set of favorite stock symbols. */
+    private Set<String> favorites = new HashSet<>();
+
+    /**
+     * Returns the current stock symbol.
+     *
+     * @return the stock symbol
+     */
     public String getSymbol() {
         return symbol;
     }
@@ -23,17 +36,27 @@ public class ViewStockState {
     public SharePrices getSharePrices() {
         return sharePrices;
     }
-
+  
     public String getViewStockError() {
         return viewStockError;
     }
 
-    public void setSymbol(String newSymbol) {
-        this.symbol = newSymbol;
+    /**
+     * Sets the stock symbol to be viewed.
+     *
+     * @param symbol the stock symbol to set
+     */
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public void setCompany(String newCompany) {
-        this.company = newCompany;
+    /**
+     * Sets the company name associated with the stock symbol.
+     *
+     * @param company the company name to set
+     */
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public void setSharePrices(SharePrices newSharePrices) {
@@ -44,7 +67,31 @@ public class ViewStockState {
         this.earnings = newEarnings;
     }
 
-    public void setViewStockError(String newSymbolError) {
-        this.viewStockError = newSymbolError;
+    /**
+     * Removes a stock symbol from the favorites list.
+     *
+     * @param symbol the stock symbol to remove from favorites
+     */
+    public void removeFavorite(String symbol) {
+        favorites.remove(symbol);
+    }
+
+    /**
+     * Checks if a stock symbol is in the favorites list.
+     *
+     * @param symbol the stock symbol to check
+     * @return true if the stock is favorited, false otherwise
+     */
+    public boolean isFavorite(String symbol) {
+        return favorites.contains(symbol);
+    }
+
+    /**
+     * Returns an unmodifiable set of all favorite stock symbols.
+     *
+     * @return an unmodifiable set of favorite stock symbols
+     */
+    public Set<String> getFavorites() {
+        return Collections.unmodifiableSet(favorites);
     }
 }

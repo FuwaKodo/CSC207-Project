@@ -1,8 +1,8 @@
 package entities;
 
-import interface_adapters.gateways.StockDataLoader;
-
 import java.time.LocalDate;
+
+import interface_adapters.gateways.StockDataLoader;
 
 /**
  * Stock: the stocks of a single company.

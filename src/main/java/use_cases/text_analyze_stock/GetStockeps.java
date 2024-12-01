@@ -11,6 +11,11 @@ public class GetStockeps {
     private static final String[] STOCK_TICKERS = {"AAPL", "NVDA", "MFC", "L.TO", "INTC"};
     private static final double[] STOCK_EPS_VALUES = {6.59, 2.13, 2.12, 4.59, -0.40};
 
+
+    // Private constructor to prevent instantiation
+    private GetStockeps() {
+        // Private constructor does not allow instantiation
+    }
     // Getter method to return EPS for a given stock ticker
     /**
      * Retrieves the Earnings Per Share (EPS) value for a specific stock ticker.
@@ -18,6 +23,7 @@ public class GetStockeps {
      * @param stock Input a stock ticker as a String.
      * @return The EPS value of the respective stock, or null if the ticker is not found.
      */
+
     public static Double geteps(String stock) {
         Double result = null;
         for (int i = 0; i < STOCK_TICKERS.length; i++) {

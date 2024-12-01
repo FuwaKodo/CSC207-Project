@@ -54,6 +54,14 @@ public final class Constants {
     public static final String NOT_FAVORITED = "☆ Favorite";
     public static final String FAVORITED = "★ Favorited";
 
+    //
+    public static final int WANTED_DIFFERENCE = 3;
+    public static final int WANTED_DIFFERENCE_NEGATIVE = 3;
+    public static final double GRAHAM_NUMBER = 22.5;
+    public static final int ONE_HUNDRED = 100;
+    public static final int THREE_HUNDRED = 300;
+    public static final int FOUR_HUNDRED = 400;
+    public static final int SIZE = 17;
     // prevents instantiation
     private Constants() {
 

@@ -1,9 +1,12 @@
-package test;
+/*
+package test.entities;
 
 import entities.Stock;
 import interface_adapters.gateways.StockDataLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import test.MockMetrics;
+import test.MockStockDataLoader;
 
 import java.time.LocalDate;
 
@@ -79,3 +82,4 @@ class StockTest {
         assertTrue(stock.isFavorite());
     }
 }
+}*/

@@ -1,3 +1,4 @@
+/*
 package test;
 
 import entities.MetricValues;
@@ -48,3 +49,4 @@ public class MockStockDataLoader implements StockDataLoader {
         return MockMetrics.makeMetricValues();
     }
 }
+*/

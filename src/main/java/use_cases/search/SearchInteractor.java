@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import app.Constants;
+
 /**
  * Interactor of the use case.
  */
 public class SearchInteractor implements SearchInputBoundary {
 
     private final SearchOutputBoundary searchPresenter;
-    private final SearchDataAccessInterface searchDataAccessObject;
+    private final SearchDataAccessInterface dataAccessObject;
 
     public SearchInteractor(SearchOutputBoundary searchPresenter,
-                            SearchDataAccessInterface searchDataAccessInterface) {
+                            SearchDataAccessInterface dataAccessObject) {
         this.searchPresenter = searchPresenter;
-        this.searchDataAccessObject = searchDataAccessInterface;
+        this.dataAccessObject = dataAccessObject;
     }
 
     /**
@@ -25,14 +27,14 @@ public class SearchInteractor implements SearchInputBoundary {
      */
     @Override
     public void execute(SearchInputData searchInputData) {
-        final String input = searchInputData.getInput();
-        final List<String> allSymbols = searchDataAccessObject.getSymbols();
+        final String input = searchInputData.getInput().strip().toUpperCase();
+        final List<String> allSymbols = dataAccessObject.getSymbols();
 
         // different lists for how similar a symbol is to the input
         final List<String> exactMatches = new ArrayList<>();
         final List<String> substringMatches = new ArrayList<>();
         final List<String> characterMatches = new ArrayList<>();
-        final Hashtable<Integer, List<String>> listTable = new Hashtable<Integer, List<String>>();
+        final Hashtable<Integer, List<String>> listTable = new Hashtable<>();
         listTable.put(Constants.SIMILAR_BY_SOME_CHAR, characterMatches);
         listTable.put(Constants.SIMILAR_AS_SUBSTRING, substringMatches);
         listTable.put(Constants.EXACTLY_SAME, exactMatches);
@@ -53,7 +55,7 @@ public class SearchInteractor implements SearchInputBoundary {
         symbols.addAll(listTable.get(Constants.SIMILAR_BY_SOME_CHAR));
 
         // output data
-        final SearchOutputData searchOutputData = new SearchOutputData(input, symbols);
+        final SearchOutputData searchOutputData = new SearchOutputData(searchInputData.getInput(), symbols);
 
         searchPresenter.displayResult(searchOutputData);
     }

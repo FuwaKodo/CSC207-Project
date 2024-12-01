@@ -1,6 +1,6 @@
 package use_cases.compare_stocks;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * Contains the data inputted into the compare stocks use case when
@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class CompareStocksInputData {
     private final String stock1Name;
     private final String stock2Name;
-    private final LocalDate beginDate; // The date of beginning of the period of comparison.
-    private final LocalDate endDate;   // The date of the end of the period of comparison.
+    private final Date beginDate; // The date of beginning of the period of comparison.
+    private final Date endDate;   // The date of the end of the period of comparison.
 
     /**
      * Initialize the compare stock use case input data.
@@ -22,8 +22,8 @@ public class CompareStocksInputData {
     public CompareStocksInputData(
             String stock1Name,
             String stock2Name,
-            LocalDate beginDate,
-            LocalDate endDate) {
+            Date beginDate,
+            Date endDate) {
         this.stock1Name = stock1Name;
         this.stock2Name = stock2Name;
         this.beginDate = beginDate;
@@ -38,11 +38,11 @@ public class CompareStocksInputData {
         return stock2Name;
     }
 
-    public LocalDate getStartDate() {
+    public Date getStartDate() {
         return beginDate;
     }
 
-    public LocalDate getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 }

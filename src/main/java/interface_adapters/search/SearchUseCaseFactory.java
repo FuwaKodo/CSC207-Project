@@ -1,7 +1,7 @@
 package interface_adapters.search;
 
 import interface_adapters.ViewManagerModel;
-import use_cases.search.SearchDataAccessInterface;
+import use_cases.SymbolNameDataAccessInterface;
 import use_cases.search.SearchInputBoundary;
 import use_cases.search.SearchInteractor;
 import use_cases.search.SearchOutputBoundary;
@@ -24,7 +24,7 @@ public class SearchUseCaseFactory {
     public static SearchController create(
             ViewManagerModel viewManagerModel,
             SearchViewModel searchViewModel,
-            SearchDataAccessInterface dataAccessObject) {
+            SymbolNameDataAccessInterface dataAccessObject) {
 
         // Create the presenter with its required dependencies
         final SearchOutputBoundary searchPresenter =

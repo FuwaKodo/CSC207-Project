@@ -1,19 +1,24 @@
-/*
 package test;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 
 import entities.MetricValues;
 import entities.SharePrices;
 
-import java.time.LocalDate;
-import java.util.List;
-
 public class MockMetrics {
-    public static List<LocalDate> makeDates() {
+    public static List<Date> makeDates() {
         return List.of(
-                LocalDate.of(2024, 11, 24),
-                LocalDate.of(2024, 11, 25),
-                LocalDate.of(2024, 11, 26)
+                convertToDate(LocalDate.of(2024, 11, 24)),
+                convertToDate(LocalDate.of(2024, 11, 25)),
+                convertToDate(LocalDate.of(2024, 11, 26))
         );
+    }
+
+    private static Date convertToDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     public static List<Double> makeRawValues() {
@@ -38,4 +43,3 @@ public class MockMetrics {
         );
     }
 }
-*/

@@ -1,5 +1,5 @@
-AAPL
-NVDA
-MFC
-L
-INTC
+AAPL-Apple
+NVDA-Nvidia
+MFC-Manulife
+L-Loblaws
+INTC-Intel

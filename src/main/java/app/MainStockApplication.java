@@ -5,10 +5,11 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import entities.Stock;
-import frameworks.FavoriteStockData;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.gateways.StockDataLoader;
 import interface_adapters.gateways.StockSymbolsLoader;
+import interface_adapters.loading_hub.LoadingHubController;
+import interface_adapters.loading_hub.LoadingHubUseCaseFactory;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchUseCaseFactory;
 import interface_adapters.search.SearchViewModel;
@@ -16,11 +17,11 @@ import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
+import use_cases.StockDataInterface;
+import use_cases.SymbolNameDataAccessInterface;
 import use_cases.favorites.FavoriteStockInputBoundary;
 import use_cases.favorites.FavoriteStockInteractor;
 import use_cases.favorites.FavoriteStockOutputBoundary;
-import use_cases.search.SearchDataAccessInterface;
-import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 
 /**
@@ -40,17 +41,11 @@ public class MainStockApplication {
         // Create the ViewStockViewModel and SearchViewModel
         final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
         final SearchViewModel searchViewModel = new SearchViewModel();
+        final ViewStockViewModel loadingHubViewModel = new ViewStockViewModel();
 
-        // data loader for search use case
-        final SearchDataAccessInterface searchDataAccessObject = new StockSymbolsLoader();
-        // Create a temporary implementation of the ViewStockDataAccessInterface
-        final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
-            @Override
-            public Stock getStock(String symbol) {
-                return null; // Placeholder implementation
-            }
-        };
-
+        // data loaders
+        final StockDataInterface stockDataAccessObject = new StockDataLoader();
+        final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Create FavoriteStockOutputBoundary implementation (presenter)
         final FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {
@@ -64,6 +59,7 @@ public class MainStockApplication {
                 // Implement presentation logic for favorites list
             }
         };
+        final StockDataInterface loadingHubAccessInterface = new StockDataLoader();
 
         // Create FavoriteStockInteractor with the file storage
         final FavoriteStockInputBoundary favoriteStockInputBoundary =
@@ -77,13 +73,18 @@ public class MainStockApplication {
                 ViewStockUseCaseFactory.create(
                         viewManagerModel,
                         viewStockViewModel,
-                        viewStockDataAccessInterface,
+                        stockDataAccessObject,
+                        symbolDataAccessObject,
                         favoriteStockInputBoundary
                 );
 
         // Create the SearchController
         final SearchController searchController =
-                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessObject);
+                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, symbolDataAccessObject);
+
+        // Create the LoadingHubController
+        final LoadingHubController loadingHubController =
+                LoadingHubUseCaseFactory.create(viewManagerModel, loadingHubViewModel, loadingHubAccessInterface);
 
         // Use SwingUtilities to ensure the GUI is created on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
@@ -96,9 +97,8 @@ public class MainStockApplication {
 
             // Create the view and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(
-                    viewStockViewModel, viewStockController, searchController);
-            
-            // Set up compare stocks button listener
+                    viewStockViewModel, viewStockController, searchController, loadingHubController);
+            // Initialize ViewStockView and add it to the frame
             viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
             
             // Initialize search view

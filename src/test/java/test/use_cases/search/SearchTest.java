@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import use_cases.search.SearchDataAccessInterface;
+import use_cases.SymbolNameDataAccessInterface;
 import use_cases.search.SearchInputBoundary;
 import use_cases.search.SearchInputData;
 import use_cases.search.SearchInteractor;
@@ -14,10 +14,15 @@ import use_cases.search.SearchOutputData;
 public class SearchTest {
     // mock data access object to be used in all tests which also check that the data isn't mutated
     private final List<String> symbols = List.of("", "a", "A", "AAA", "CBA", "Ij", "ZZZZ");
-    final private SearchDataAccessInterface dataAccessObject = new SearchDataAccessInterface() {
+    final private SymbolNameDataAccessInterface dataAccessObject = new SymbolNameDataAccessInterface() {
         @Override
         public List<String> getSymbols() {
             return new ArrayList<>(symbols);
+        }
+
+        @Override
+        public String getCompany(String symbol) {
+            return "";
         }
     };
 

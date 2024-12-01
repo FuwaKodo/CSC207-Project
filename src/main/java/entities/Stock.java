@@ -1,9 +1,8 @@
 package entities;
 
-import java.time.LocalDate;
 import java.util.Date;
 
-import interface_adapters.gateways.StockDataLoader;
+import use_cases.StockDataInterface;
 
 /**
  * Stock: the stocks of a single company.
@@ -14,7 +13,7 @@ public class Stock {
     private final Metrics metrics;
     private boolean isFavorite;
 
-    public Stock(StockDataLoader loader, String company, String symbol) {
+    public Stock(StockDataInterface loader, String company, String symbol) {
         // TODO: Issue here because getCompany no longer possible!
         // Getting symbol and company must be obtained from different instantiation
         this.symbol = symbol;

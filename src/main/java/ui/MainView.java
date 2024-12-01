@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -33,7 +32,7 @@ import interface_adapters.view_stock.ViewStockViewModel;
 /**
  * View for the application that displays stock information and allows users to favorite stocks.
  */
-public class ViewStockView {
+public class MainView {
     /** Main panel that holds all components of the view. */
     private final JPanel mainPanel;
 
@@ -73,15 +72,15 @@ public class ViewStockView {
      * @param viewStockController the Controller handling business logic for the stock view
      * @param searchController the controller for search use case
      */
-    public ViewStockView(ViewStockViewModel viewStockViewModel,
-                         ViewStockController viewStockController,
-                         SearchController searchController,
-                         LoadingHubController loadingHubController) {
+    public MainView(ViewStockViewModel viewStockViewModel,
+                    ViewStockController viewStockController,
+                    SearchController searchController,
+                    LoadingHubController loadingHubController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
-        this.favoritedStocks = new HashSet<>();
+        // this.favoritedStocks = new HashSet<>();
 
         // Initialize the main panel
         mainPanel = new JPanel();
@@ -111,7 +110,7 @@ public class ViewStockView {
 
         // Create a panel to hold stock view and favorites
         stockWithFavorites = new JPanel(new BorderLayout());
-        stockWithFavorites.add(stockViewObject.getStockView(), BorderLayout.CENTER);
+        stockWithFavorites.add(stockViewObject.getMainPanel(), BorderLayout.CENTER);
 
         // Initially, do not add favorites panel to avoid showing on title screen
         final JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -121,7 +120,7 @@ public class ViewStockView {
         new ViewManager(views, cardLayout, viewManagerModel);
 
         // Make sure the stock view panel has a preferred size
-        stockViewObject.getStockView().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
+        stockViewObject.getMainPanel().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
 
         // Bottom panel to hold buttons and dropdown
         final JPanel bottomPanel = new JPanel();
@@ -144,6 +143,8 @@ public class ViewStockView {
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
+                    viewStockController.execute(symbol);
+
                     stockViewObject.setSymbol(symbol);
                     stockViewObject.setCompany("Company " + symbol);
 
@@ -173,9 +174,10 @@ public class ViewStockView {
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
-                    stockViewObject.getStockView().revalidate();
-                    stockViewObject.getStockView().repaint();
-                } else {
+                    stockViewObject.getMainPanel().revalidate();
+                    stockViewObject.getMainPanel().repaint();
+                }
+                else {
                     // No stock is selected
                     // Remove favorites panel when no stock is selected
                     stockWithFavorites.remove(rightPanel);

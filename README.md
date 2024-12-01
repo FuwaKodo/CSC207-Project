@@ -91,7 +91,7 @@ The project uses the following key dependencies:
 We welcome your input!
 
 ### Feedback Submission
-- Submit feedback via [Google Forms] (https://docs.google.com/forms/d/e/1FAIpQLScaxnspKIdBhzzaKXCpl3khTjEPzPdCVzXsP1QkDo6OFFftKg/viewform?usp=sf_link) 
+- Submit feedback via [Google Forms] (https://docs.google.com/forms/d/e/1FAIpQLScaxnspKIdBhzzaKXCpl3khTjEPzPdCVzXsP1QkDo6OFFftKg/viewform?usp=sf_link)
 
 ### Feedback Guidelines
 - Provide constructive criticism

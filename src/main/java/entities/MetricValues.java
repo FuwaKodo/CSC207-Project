@@ -1,9 +1,7 @@
 package entities;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,7 +52,7 @@ public class MetricValues {
 
     private int dateToIndex(LocalDate date) {
         for (int i = 0; i < dates.size(); i++) {
-            LocalDate comparisonDate = dates.get(i);
+            final LocalDate comparisonDate = dates.get(i);
             if (!comparisonDate.isBefore(date)) {
                 return i;
             }

@@ -47,50 +47,27 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
         final SharePrices stock1SharePrices = dataAccess.getSharePrices(symbol1, start, end);
         final SharePrices stock2SharePrices = dataAccess.getSharePrices(symbol2, start, end);
 
-        final String epsSummary = formatSummary(
-                "From %s to %s, %s earned $%.1f earnings per share while %s earned $%.1f earnings per share.",
-                start, end, stock1, stock2, stock1EPS, stock2EPS
-        );
-
-        final String growthSummary = formatSummary(
-                "From %s to %s, %s grew %.1f%% while %s grew %.1f%%.",
-                start, end, stock1, stock2, stock1Growth, stock2Growth
-        );
-
-        final String dividendsSummary = String.format(
-                "On %s, %s featured %.1f dividends per share while %s featured %.1f per share.",
+        final String volumesSummary = String.format(
+                "At the end of %s, the volume of %s is %.1f shares and the volume of %s is %.1f shares.",
                 formattedDateString(end),
-                stock1.getCompany(),
-                stock1Dividends,
-                stock2.getCompany(),
-                stock2Dividends
+                symbol1, stock1Volumes,
+                symbol2, stock2Volumes
         );
 
-        return epsSummary + "\n" + growthSummary + "\n" + dividendsSummary;
+        final String growthSummary = String.format(
+                "From %s to %s, %s changed from $%.1f per share to $%.1f per share and " +
+                        "%s changed from $%.1f per share to $%.1f per share.",
+                formattedDateString(start), formattedDateString(end),
+                symbol1, stock1SharePrices.getValue(start), stock1SharePrices.getValue(end),
+                symbol2, stock2SharePrices.getValue(start), stock2SharePrices.getValue(end)
+        );
+
+        return volumesSummary + "\n" + growthSummary;
     }
 
     private String formattedDateString(Date date) {
         final String pattern = "dd/MM/yyyy";
         final SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(date);
-    }
-
-    private String formatSummary(
-            String format,
-            Date start,
-            Date end,
-            Stock stock1,
-            Stock stock2,
-            Double firstStockVal,
-            Double secondStockVal) {
-        return String.format(
-                format,
-                formattedDateString(start),
-                formattedDateString(end),
-                stock1.getCompany(),
-                firstStockVal,
-                stock2.getCompany(),
-                secondStockVal
-        );
     }
 }

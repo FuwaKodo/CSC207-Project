@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import entities.Stock;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.gateways.StockDataLoader;
 import interface_adapters.gateways.StockSymbolsLoader;
@@ -19,11 +18,10 @@ import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
 import use_cases.StockDataInterface;
+import use_cases.SymbolNameDataAccessInterface;
 import use_cases.favorites.FavoriteStockInputBoundary;
 import use_cases.favorites.FavoriteStockInteractor;
 import use_cases.favorites.FavoriteStockOutputBoundary;
-import use_cases.search.SearchDataAccessInterface;
-import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 
 /**
@@ -45,16 +43,9 @@ public class MainStockApplication {
         final SearchViewModel searchViewModel = new SearchViewModel();
         final ViewStockViewModel loadingHubViewModel = new ViewStockViewModel();
 
-        // data loader for search use case
-        final SearchDataAccessInterface searchDataAccessObject = new StockSymbolsLoader();
-        // Create a temporary implementation of the ViewStockDataAccessInterface
-        final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
-            @Override
-            public Stock getStock(String symbol) {
-                // Placeholder implementation
-                return null;
-            }
-        };
+        // data loaders
+        final StockDataInterface stockDataAccessObject = new StockDataLoader();
+        final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Create FavoriteStockOutputBoundary implementation (presenter)
         final FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {
@@ -82,13 +73,14 @@ public class MainStockApplication {
                 ViewStockUseCaseFactory.create(
                         viewManagerModel,
                         viewStockViewModel,
-                        viewStockDataAccessInterface,
+                        stockDataAccessObject,
+                        symbolDataAccessObject,
                         favoriteStockInputBoundary
                 );
 
         // Create the SearchController
         final SearchController searchController =
-                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessObject);
+                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, symbolDataAccessObject);
 
         // Create the LoadingHubController
         final LoadingHubController loadingHubController =

@@ -6,20 +6,15 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import use_cases.search.SearchDataAccessInterface;
+import use_cases.SymbolNameDataAccessInterface;
 
 /**
  * Implementation of data access interface of search use case.
  */
-public class StockSymbolsLoader implements SearchDataAccessInterface {
+public class StockSymbolsLoader implements SymbolNameDataAccessInterface {
     private final String workingDir = System.getProperty("user.dir");
     private final String filePath = workingDir + "/src/main/java/frameworks/StockSymbols.txt";
 
-    /**
-     * Retrieves a list of symbols .
-     *
-     * @return a list of symbols
-     */
     @Override
     public List<String> getSymbols() {
         final List<String> result = new ArrayList<>();
@@ -35,4 +30,24 @@ public class StockSymbolsLoader implements SearchDataAccessInterface {
         }
         return result;
     }
+
+    @Override
+    public String getCompany(String symbol) {
+        final List<String> symbolNameList = new ArrayList<>();
+        String result = "";
+        try {
+            symbolNameList.addAll(Files.readAllLines(Path.of(filePath)));
+        }
+        catch (IOException exception) {
+            System.out.println("Error reading file: " + exception.getMessage());
+        }
+        for (String str: symbolNameList) {
+            if (str.contains(symbol)) {
+                result = str.substring(str.indexOf('-') + 1);
+                break;
+            }
+        }
+        return result;
+    }
+
 }

@@ -1,4 +1,6 @@
-package use_cases.favorites;
+package interface_adapters.favoritesIA;
+
+import use_cases.favorites.FavoriteStockOutputBoundary;
 
 import java.util.Set;
 

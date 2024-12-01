@@ -1,9 +1,9 @@
 package use_cases.favorites;
 
-import frameworks.FavoriteStockData;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import frameworks.FavoriteStockData;
 
 /**
  * Implements the business logic for favorite stock operations.
@@ -12,13 +12,13 @@ import java.util.Set;
  */
 public class FavoriteStockInteractor implements FavoriteStockInputBoundary {
 
-    /** Presenter for handling output operations */
+    /** Presenter for handling output operations. */
     private final FavoriteStockOutputBoundary favoriteStockPresenter;
 
-    /** File storage for persisting favorite stocks */
+    /** File storage for persisting favorite stocks. */
     private final FavoriteStockData fileStorage;
 
-    /** In-memory storage of favorited stock symbols */
+    /** In-memory storage of favorited stock symbols. */
     private final Set<String> favoritedStocks;
 
     /**
@@ -46,13 +46,14 @@ public class FavoriteStockInteractor implements FavoriteStockInputBoundary {
      */
     @Override
     public void toggleFavorite(FavoriteStockInputData inputData) {
-        String symbol = inputData.getStockSymbol();
-        boolean isFavorited = !favoritedStocks.contains(symbol);
+        final String symbol = inputData.getStockSymbol();
+        final boolean isFavorited = !favoritedStocks.contains(symbol);
 
         if (isFavorited) {
             favoritedStocks.add(symbol);
             fileStorage.addFavoriteStock(symbol);
-        } else {
+        }
+        else {
             favoritedStocks.remove(symbol);
             fileStorage.removeFavoriteStock(symbol);
         }

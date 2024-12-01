@@ -1,8 +1,8 @@
 package interface_adapters.favoritesIA;
 
-import use_cases.favorites.FavoriteStockOutputBoundary;
-
 import java.util.Set;
+
+import use_cases.favorites.FavoriteStockOutputBoundary;
 
 /**
  * Presenter class that handles the presentation logic for favorite stock operations.
@@ -28,10 +28,11 @@ public class FavoriteStockPresenter implements FavoriteStockOutputBoundary {
      */
     @Override
     public void presentFavoriteToggled(String symbol, boolean isFavorited) {
-        FavoriteStockState state = viewModel.getState();
+        final FavoriteStockState state = viewModel.getState();
         if (isFavorited) {
             state.addFavorite(symbol);
-        } else {
+        }
+        else {
             state.removeFavorite(symbol);
         }
         viewModel.setState(state);
@@ -45,7 +46,7 @@ public class FavoriteStockPresenter implements FavoriteStockOutputBoundary {
      */
     @Override
     public void presentFavorites(Set<String> favorites) {
-        FavoriteStockState state = new FavoriteStockState();
+        final FavoriteStockState state = new FavoriteStockState();
         for (String symbol : favorites) {
             state.addFavorite(symbol);
         }

@@ -1,2 +1,2 @@
-Stock B
 Stock C
+Stock B

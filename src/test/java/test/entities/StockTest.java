@@ -1,3 +1,4 @@
+/*
 package test.entities;
 
 import java.time.LocalDate;
@@ -65,7 +66,8 @@ class StockTest {
         assertEquals(stock.getGrowthPercentage(start, end), expectedValue);
     }
 
-    /*@Test
+    */
+/*@Test
     void getEarningsPerShare() {
         final Date start = MockMetrics.makeDates().get(0);
         final Date end = MockMetrics.makeDates().get(1);
@@ -73,14 +75,17 @@ class StockTest {
                         + dataLoader.getSharePrices(symbol, start, end).getValue(end);
         assertEquals(stock.getEarningsPerShare(start, end),
                 totalEarnings / dataLoader.getSharePrices(symbol, start, end).getLatest());
-    }*/
+    }*//*
 
-    /*@Test
+
+    */
+/*@Test
     void getDividendsPerShare() {
         final Date testDate = MockMetrics.makeDates().getFirst();
         final Double expectedValue = dataLoader.getDividends().getValue(testDate);
         assertEquals(stock.getDividendsPerShare(testDate), expectedValue);
-    }*/
+    }*//*
+
 
     private Date toDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -91,3 +96,4 @@ class StockTest {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 }
+*/

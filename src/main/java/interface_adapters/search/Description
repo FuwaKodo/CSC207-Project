@@ -1,0 +1,7 @@
+All symbols in result can be obtained from SearchStockState
+(Presenter sets the values)
+
+SearchStockController executes the use case
+
+SearchStockPresenter provides the output information to (SearchStockState) SearchStockViewModel.getState()
+    and changes view via SearchStockViewModel

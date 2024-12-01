@@ -1,64 +1,115 @@
 package app;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.search.SearchController;
+import interface_adapters.search.SearchUseCaseFactory;
+import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
+import ui.compare_stocks.CompareStocksViewDisplayer;
+import use_cases.favorites.*;
+import use_cases.search.SearchDataAccessInterface;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
 
 /**
- * Main application for stock analysis and comparison.
- *
- * <p>
- * This application provides functionality to:
- * - View individual stock data and metrics
- * - Compare different stocks using various comparison methods
- * - Analyze stock metrics and share prices
- * </p>
+ * Main class for launching the Stock Analysis Application.
  */
 public class MainStockApplication {
 
     /**
-     * Javadoc to prevent CheckStyle error.
-     * @param args args
+     * The entry point of the application.
+     *
+     * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-
+        // Create the ViewManagerModel to manage the view state
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
+
+        // Create the ViewStockViewModel and SearchViewModel
+        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
+        final SearchViewModel searchViewModel = new SearchViewModel();
+
+        // Create a temporary implementation of the ViewStockDataAccessInterface
         final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
             @Override
             public Stock getStock(String symbol) {
-                return null;
+                return null; // Placeholder implementation
             }
         };
-        final ViewStockController viewStockController =
-                ViewStockUseCaseFactory.create(viewManagerModel, viewStockDataAccessInterface);
-        final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
 
-        // Set up the main application frame
+        // Create a temporary implementation of the SearchDataAccessInterface
+        final SearchDataAccessInterface searchDataAccessInterface = new SearchDataAccessInterface() {
+            @Override
+            public List<String> getSymbols() {
+                return List.of("AAPL", "NVDA", "MFC", "L", "INTC");
+            }
+        };
+
+        // Initialize FavoriteStockFileStorage and create FavoriteStockInteractor
+        FavoriteStockFileStorage favoriteStockFileStorage = new FavoriteStockFileStorage();
+
+        // Create FavoriteStockOutputBoundary implementation (presenter)
+        FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {
+            @Override
+            public void presentFavoriteToggled(String symbol, boolean isFavorited) {
+                // Implement presentation logic for favorite toggle
+            }
+
+            @Override
+            public void presentFavorites(Set<String> favorites) {
+                // Implement presentation logic for favorites list
+            }
+        };
+
+        // Create FavoriteStockInteractor with the file storage
+        final FavoriteStockInputBoundary favoriteStockInputBoundary =
+                new FavoriteStockInteractor(favoriteStockPresenter);
+
+        // Load favorite stocks on startup
+        favoriteStockInputBoundary.getFavorites();
+
+        // Create the ViewStockController using the factory
+        final ViewStockController viewStockController =
+                ViewStockUseCaseFactory.create(
+                        viewManagerModel,
+                        viewStockDataAccessInterface,
+                        favoriteStockInputBoundary
+                );
+
+        // Create the SearchController
+        final SearchController searchController =
+                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessInterface);
+
+        // Use SwingUtilities to ensure the GUI is created on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             final JFrame frame = new JFrame("Stock Analysis Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            // Increased window size to better accommodate the graph
             frame.setSize(Constants.MAIN_FRAME_DIMENSION);
-
-            // Set minimum size to prevent the window from becoming too small
             frame.setMinimumSize(Constants.MAIN_FRAME_MIN_DIMENSION);
+            frame.setLocationRelativeTo(null); // Center the window
 
-            // Center the window on the screen
-            frame.setLocationRelativeTo(null);
-
-            // Initialize ViewStockView and add it to the frame
-            final ViewStockView viewStockView = new ViewStockView(viewStockViewModel, viewStockController);
+            // Create the view and add it to the frame
+            final ViewStockView viewStockView = new ViewStockView(
+                    viewStockViewModel, viewStockController, searchController);
+            
+            // Set up compare stocks button listener
+            viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
+            
+            // Initialize search view
+            viewStockView.setSearchView(searchViewModel);
+            
             frame.add(viewStockView.getMainPanel());
 
-            // Display the GUI
+            // Make the frame visible
             frame.setVisible(true);
         });
     }

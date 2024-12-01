@@ -16,7 +16,6 @@ import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
-import use_cases.favorites.FavoriteStockFileStorage;
 import use_cases.favorites.FavoriteStockInputBoundary;
 import use_cases.favorites.FavoriteStockInteractor;
 import use_cases.favorites.FavoriteStockOutputBoundary;
@@ -52,9 +51,6 @@ public class MainStockApplication {
             }
         };
 
-        // Initialize FavoriteStockFileStorage and create FavoriteStockInteractor
-        final FavoriteStockFileStorage favoriteStockFileStorage = new FavoriteStockFileStorage();
-        FavoriteStockData favoriteStockData = new FavoriteStockData();
 
         // Create FavoriteStockOutputBoundary implementation (presenter)
         final FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {

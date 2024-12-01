@@ -1,6 +1,7 @@
 package entities;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import app.Constants;
@@ -30,7 +31,7 @@ public class Metrics {
      *             the date immediately after it.
      * @return share price
      */
-    public Double getSharePrice(LocalDate date) {
+    public Double getSharePrice(Date date) {
         return sharePrices.getValue(date);
     }
 
@@ -40,7 +41,7 @@ public class Metrics {
      *             on the date immedidately after it.
      * @return volume at given days back
      */
-    public Double getVolume(LocalDate date) {
+    public Double getVolume(Date date) {
         return volumes.getValue(date);
     }
 
@@ -51,7 +52,7 @@ public class Metrics {
      * @param end the end date of the interval, inclusive.
      * @return the growth percentage
      */
-    public Double getGrowthPercentage(LocalDate start, LocalDate end) {
+    public Double getGrowthPercentage(Date start, Date end) {
         final Double startPrice = sharePrices.getValue(start);
         final Double endPrice = sharePrices.getValue(end);
         return (endPrice - startPrice) / startPrice * Constants.PERCENTAGE;
@@ -63,7 +64,7 @@ public class Metrics {
      * @param end the end date of the interval, inclusive.
      * @return earnings per share
      */
-    public Double getEarningsPerShare(LocalDate start, LocalDate end) {
+    public Double getEarningsPerShare(Date start, Date end) {
         return getTotalEarnings(start, end) / sharePrices.getLatest();
     }
 
@@ -72,11 +73,11 @@ public class Metrics {
      * @param date the date.
      * @return dividends per share
      */
-    public Double getDividendsPerShare(LocalDate date) {
+    public Double getDividendsPerShare(Date date) {
         return dividends.getValue(date);
     }
 
-    private Double getTotalEarnings(LocalDate start, LocalDate end) {
+    private Double getTotalEarnings(Date start, Date end) {
         final List<Double> earningsInInterval = earnings.getInterval(start, end);
         double total = 0;
         for (Double earning : earningsInInterval) {

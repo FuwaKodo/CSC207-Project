@@ -6,7 +6,7 @@ package use_cases.favorites;
  */
 public class FavoriteStockInputData {
 
-    /** The stock symbol identifier (e.g., "AAPL" for Apple Inc.) */
+    /** The stock symbol identifier. (e.g., "AAPL" for Apple Inc.) */
     private final String stockSymbol;
 
     /**

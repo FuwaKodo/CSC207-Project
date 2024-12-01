@@ -12,4 +12,5 @@
 {"symbol":"INTC","from":"2024-11-10","message":"Data not found.","request_id":"b5b271b686785120659d4c690d83d8f1","status":"NOT_FOUND"},
 {"volume":66026186,"symbol":"INTC","high":26.2863,"preMarket":26.2,"low":24.83,"from":"2024-11-11","afterHours":24.9009,"close":25.05,"open":25.96,"status":"OK"},
 {"volume":5.2023906E7,"symbol":"INTC","high":24.82,"preMarket":24.9,"low":24.23,"from":"2024-11-15","afterHours":24.45,"api":"polygon","message":"Data found.","close":24.35,"open":24.81,"status":"OK"},
-{"symbol":"INTC","from":"2024-11-09","api":"polygon","message":"Data not found.","status":"NOT_FOUND"}
+{"symbol":"INTC","from":"2024-11-09","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
+{"symbol":"AAPL","from":"2014-03-11","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}

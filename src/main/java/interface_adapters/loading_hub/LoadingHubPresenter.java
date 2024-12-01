@@ -11,32 +11,27 @@ import use_cases.loading_hub.LoadingHubOutputData;
  */
 public class LoadingHubPresenter implements LoadingHubOutputBoundary {
     private final LoadingHubViewModel loadingHubViewModel;
-    private final ViewStockViewModel viewStockViewModel;
     private final ViewManagerModel viewManagerModel;
 
     // Constructor
     public LoadingHubPresenter(ViewManagerModel viewManagerModel,
-                               LoadingHubViewModel loadingHubViewModel,
-                               ViewStockViewModel viewStockViewModel) {
+                               LoadingHubViewModel loadingHubViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loadingHubViewModel = loadingHubViewModel;
-        this.viewStockViewModel = viewStockViewModel;
     }
 
-    @Override
+    /**
+     * Returns back to the ViewManager UI.
+     * @param responseData the output data
+     */
     public void prepareSuccessView(LoadingHubOutputData responseData) {
+        /*
         // On success, switch to the ViewStock view.
         final ViewStockState viewStockState = viewStockViewModel.getState();
         viewStockState.setSymbol(responseData.toString());
         this.viewStockViewModel.setState(viewStockState);
         viewStockViewModel.firePropertyChanged();
-
-        viewManagerModel.setState(viewManagerModel.getViewName());
-        viewManagerModel.firePropertyChanged();
-    }
-
-    @Override
-    public void prepareSuccessView(SignupOutputData outputData) {
-
+         */
+        final LoadingHubState loadingHubState = loadingHubViewModel.getState();
     }
 }

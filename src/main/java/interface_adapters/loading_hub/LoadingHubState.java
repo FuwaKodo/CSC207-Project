@@ -5,5 +5,6 @@ package interface_adapters.loading_hub;
  * Stores every data you will need!
  */
 public class LoadingHubState {
+    private String input = "";
 
 }

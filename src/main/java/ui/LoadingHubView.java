@@ -23,6 +23,9 @@ public class LoadingHubView extends JPanel implements ActionListener, PropertyCh
 
         final JLabel title = new JLabel(LoadingHubViewModel.TITLE_LABEL);
         title.setAlignmentX(CENTER_ALIGNMENT);
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(title);
     }
 
     @Override

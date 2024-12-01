@@ -1,12 +1,17 @@
 package app;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import entities.SharePrices;
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.loading_hub.LoadingHubController;
+import interface_adapters.loading_hub.LoadingHubUseCaseFactory;
+import interface_adapters.loading_hub.LoadingHubViewModel;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchUseCaseFactory;
 import interface_adapters.search.SearchViewModel;
@@ -14,6 +19,8 @@ import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
+import use_cases.loading_hub.LoadingHubAccessInterface;
+import use_cases.loading_hub.LoadingHubInteractor;
 import use_cases.search.SearchDataAccessInterface;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
@@ -39,6 +46,7 @@ public class MainStockApplication {
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
         final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
         final SearchViewModel searchViewModel = new SearchViewModel();
+        final LoadingHubViewModel loadingHubViewModel = new LoadingHubViewModel();
 
         // sample interfaces, will be implemented later
         // TODO replace with data access object when possible
@@ -54,11 +62,20 @@ public class MainStockApplication {
                 return List.of("AAPL", "NVDA", "MFC", "L", "INTC");
             }
         };
+        final LoadingHubAccessInterface loadingHubAccessInterface = new LoadingHubAccessInterface() {
+
+            @Override
+            public SharePrices getSharePrices(Date startDate, Date endDate) {
+                return null;
+            }
+        };
 
         final ViewStockController viewStockController =
                 ViewStockUseCaseFactory.create(viewManagerModel, viewStockViewModel, viewStockDataAccessInterface);
         final SearchController searchController =
                 SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessInterface);
+        final LoadingHubController loadingHubController =
+                LoadingHubUseCaseFactory.create(viewManagerModel, loadingHubViewModel, loadingHubAccessInterface);
 
         // Set up the main application frame
         SwingUtilities.invokeLater(() -> {
@@ -76,7 +93,7 @@ public class MainStockApplication {
 
             // Initialize ViewStockView and add it to views
             final ViewStockView viewStockView = new ViewStockView(
-                    viewStockViewModel, viewStockController, searchController);
+                    viewStockViewModel, viewStockController, searchController, loadingHubController);
             // Initialize ViewStockView and add it to the frame
             viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
             frame.add(viewStockView.getMainPanel());

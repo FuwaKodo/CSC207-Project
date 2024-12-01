@@ -1,11 +1,11 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 
 import app.Constants;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
@@ -42,16 +43,19 @@ public class ViewStockView {
     private final ViewStockViewModel viewStockViewModel;
     private final ViewStockController viewStockController;
     private final SearchController searchController;
+    private final LoadingHubController loadingHubController;
 
     // Set to store favorited stocks
     private final Set<String> favoritedStocks;
 
     public ViewStockView(ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,
-                         SearchController searchController) {
+                         SearchController searchController,
+                         LoadingHubController loadingHubController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
         this.searchController = searchController;
+        this.loadingHubController = loadingHubController;
         this.favoritedStocks = new HashSet<>();
 
         // Initialize the main panel
@@ -98,6 +102,10 @@ public class ViewStockView {
         favoriteButton = new JButton(Constants.NOT_FAVORITED);
         favoriteButton.setEnabled(false);
         bottomPanel.add(favoriteButton);
+
+        // Date panel to hold buttons and dropdown
+        final JPanel datePanel = new JPanel();
+        datePanel.setLayout(new FlowLayout());
 
         // Response to selecting a stock in dropdown menu
         stockDropdown.addActionListener(new ActionListener() {
@@ -191,6 +199,111 @@ public class ViewStockView {
             }
         });
 
+        // Button for startDate and endDate
+        final JLabel date1Label = new JLabel("Start Date: ");
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        // date1Panel
+        JPanel dateSelector1 = new JPanel();
+        dateSelector1.setLayout(new GridLayout(1, 3, 5, 5));
+        JComboBox<Integer> dayBox1 = new JComboBox<>();
+        populateDays(dayBox1, 2020, 1);
+        JComboBox<Integer> monthBox1 = new JComboBox<>();
+        populateMonthBox(monthBox1, currentYear);
+        JComboBox<Integer> yearBox1 = new JComboBox<>();
+        for (int i = 2020; i <= currentYear; i++) {
+            yearBox1.addItem(i);
+        }
+        dateSelector1.add(dayBox1);
+        dateSelector1.add(monthBox1);
+        dateSelector1.add(yearBox1);
+        yearBox1.addActionListener(e -> {
+            int selectedYear = (int) yearBox1.getSelectedItem();
+            populateMonthBox(monthBox1, selectedYear); // Adjust months based on selected year
+            updateDays(dayBox1, selectedYear, (int) monthBox1.getSelectedItem());
+        });
+        monthBox1.addActionListener(e -> {
+            int selectedYear = (int) yearBox1.getSelectedItem();
+            updateDays(dayBox1, selectedYear, (int) monthBox1.getSelectedItem());
+        });
+        dateSelector1.putClientProperty("day", dayBox1);
+        dateSelector1.putClientProperty("month", monthBox1);
+        dateSelector1.putClientProperty("year", yearBox1);
+        datePanel.add(date1Label, BorderLayout.WEST);
+        datePanel.add(dateSelector1, BorderLayout.WEST);
+
+        // Calendar Input 2
+        final JLabel date2Label = new JLabel("  End Date: ");
+        // date1Panel
+        final JPanel dateSelector2 = new JPanel();
+        dateSelector2.setLayout(new GridLayout(1, 3, 5, 5));
+        JComboBox<Integer> dayBox2 = new JComboBox<>();
+        populateDays(dayBox2, 2020, 1);
+        JComboBox<Integer> monthBox2 = new JComboBox<>();
+        populateMonthBox(monthBox2, currentYear);
+        JComboBox<Integer> yearBox2 = new JComboBox<>();
+        for (int i = 2020; i <= currentYear; i++) {
+            yearBox2.addItem(i);
+        }
+        dateSelector2.add(dayBox2);
+        dateSelector2.add(monthBox2);
+        dateSelector2.add(yearBox2);
+        yearBox2.addActionListener(e -> {
+            int selectedYear = (int) yearBox2.getSelectedItem();
+            populateMonthBox(monthBox2, selectedYear); // Adjust months based on selected year
+            updateDays(dayBox2, selectedYear, (int) monthBox2.getSelectedItem());
+        });
+        monthBox2.addActionListener(e -> {
+            int selectedYear = (int) yearBox2.getSelectedItem();
+            updateDays(dayBox2, selectedYear, (int) monthBox2.getSelectedItem());
+        });
+        dateSelector2.putClientProperty("day", dayBox2);
+        dateSelector2.putClientProperty("month", monthBox2);
+        dateSelector2.putClientProperty("year", yearBox2);
+        datePanel.add(date2Label, BorderLayout.WEST);
+        datePanel.add(dateSelector2, BorderLayout.WEST);
+
+        final JButton updateButton = new JButton("Update");
+        datePanel.add(updateButton, BorderLayout.EAST);
+
+        // Response to clicking updateButton
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                final Calendar startDateCalendar = Calendar.getInstance();
+                startDateCalendar.set((int) yearBox1.getSelectedItem(),
+                        (int) monthBox1.getSelectedItem() - 1,
+                        (int) dayBox1.getSelectedItem());
+                clearTimeFields(startDateCalendar);
+
+                final Calendar endDateCalendar = Calendar.getInstance();
+                endDateCalendar.set((int) yearBox2.getSelectedItem(),
+                        (int) monthBox2.getSelectedItem() - 1,
+                        (int) dayBox2.getSelectedItem());
+                clearTimeFields(endDateCalendar);
+
+                final Date startDate = startDateCalendar.getTime();
+                final Date endDate = endDateCalendar.getTime();
+                // TODO: stocksYMBOL
+                final String stockSymbol = "";
+
+                loadingHubController.execute(stockSymbol, startDate, endDate);
+
+                // TODO: NOT DONE
+                /*
+                final String input = searchField.getText();
+                searchController.execute(input);
+                searchView.updateSearchResult();
+
+                cardLayout.show(views, Constants.SEARCH_VIEW);
+                viewManagerModel.setState(Constants.SEARCH_VIEW);
+                viewManagerModel.firePropertyChanged();
+                searchView.getMainPanel().revalidate();
+                searchView.getMainPanel().repaint();
+                 */
+            }
+        });
+
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");
         bottomPanel.add(compareButton);
@@ -201,6 +314,65 @@ public class ViewStockView {
 
         // Add bottom panel to the main panel
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+        mainPanel.add(views, BorderLayout.CENTER);
+        mainPanel.add(datePanel, BorderLayout.NORTH);
+    }
+
+    /**
+     * Clears the time fields of the given Calendar object, setting the time to midnight (00:00:00.000).
+     * @param calendar the Calendar object to modify. Must not be null.
+     */
+    public void clearTimeFields(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+    }
+
+    private void populateMonthBox(JComboBox<Integer> monthBox, int selectedYear) {
+        // TODO: Fix this!
+        // monthBox.removeAllItems();
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int lastMonth = Calendar.getInstance().get(Calendar.MONTH) + 1; // Months are 0-based
+
+        // If the selected year is the current year, limit months to the current month
+        // Otherwise, populate all 12 months
+        int maxMonths = (selectedYear == currentYear) ? lastMonth : 12;
+        for (int i = 1; i <= maxMonths; i++) {
+            monthBox.addItem(i);
+        }
+    }
+
+    private void populateDays(JComboBox<Integer> dayBox, int year, int month) {
+        dayBox.removeAllItems();
+        int daysInMonth = getDaysInMonth(year, month);
+        Calendar today = Calendar.getInstance();
+
+        for (int i = 1; i <= daysInMonth; i++) {
+            // Restrict days to today if the year and month are the current ones
+            if (year == today.get(Calendar.YEAR) && month == (today.get(Calendar.MONTH) + 1) && i > today.get(Calendar.DAY_OF_MONTH)) {
+                break;
+            }
+            dayBox.addItem(i);
+        }
+    }
+
+    private void updateDays(JComboBox<Integer> dayBox, int year, int month) {
+        populateDays(dayBox, year, month);
+    }
+
+    private int getDaysInMonth(int year, int month) {
+        if (month == 2) { // February
+            return isLeapYear(year) ? 29 : 28;
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) { // April, June, September, November
+            return 30;
+        } else {
+            return 31; // Other months
+        }
+    }
+
+    private boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 
     /**

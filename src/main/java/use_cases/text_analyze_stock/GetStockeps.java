@@ -5,11 +5,12 @@ package use_cases.text_analyze_stock;
  * This class maintains a predefined list of stock tickers and their corresponding EPS values.
  * It includes a method to look up the EPS value for a given stock ticker.
  */
-public final class GetStockeps {
+public class GetStockeps {
 
     // Create an array to store stock tickers and their EPS values
     private static final String[] STOCK_TICKERS = {"AAPL", "NVDA", "MFC", "L.TO", "INTC"};
     private static final double[] STOCK_EPS_VALUES = {6.59, 2.13, 2.12, 4.59, -0.40};
+
 
     // Private constructor to prevent instantiation
     private GetStockeps() {

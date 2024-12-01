@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -42,9 +41,6 @@ public class ViewStockView {
     /** Button to buy selected stock. */
     private final JButton buyButton;
 
-    /** Button to favorite selected stock. */
-    private final JButton favoriteButton;
-
     /** Object responsible for displaying stock data. */
     private final StockDataView stockViewObject;
     private SearchView searchView;
@@ -58,8 +54,11 @@ public class ViewStockView {
     private final ViewStockController viewStockController;
     private final SearchController searchController;
 
-    /** Set to store favorited stocks */
-    private final Set<String> favoritedStocks;
+    /** Manager for favorites functionality */
+    private final FavoritesManager favoritesManager;
+
+    /** Panel to hold stock and favorites */
+    private final JPanel stockWithFavorites;
 
     /**
      * Constructs the ViewStockView with the specified ViewModel and Controller.
@@ -73,7 +72,7 @@ public class ViewStockView {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
         this.searchController = searchController;
-        this.favoritedStocks = new HashSet<>();
+        this.favoritesManager = new FavoritesManager();
 
         // Initialize the main panel
         mainPanel = new JPanel();
@@ -101,6 +100,13 @@ public class ViewStockView {
         cardLayout = new CardLayout();
         views = new JPanel(cardLayout);
 
+        // Create a panel to hold stock view and favorites
+        stockWithFavorites = new JPanel(new BorderLayout());
+        stockWithFavorites.add(stockViewObject.getStockView(), BorderLayout.CENTER);
+
+        // Initially, do not add favorites panel to avoid showing on title screen
+        final JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+
         // Manages which panel in views is displayed
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
@@ -116,10 +122,8 @@ public class ViewStockView {
         stockDropdown = new JComboBox<>(new String[]{Constants.NO_STOCKS_SELECTED, "Stock A", "Stock B", "Stock C"});
         bottomPanel.add(stockDropdown);
 
-        // Favorite button
-        favoriteButton = new JButton(Constants.NOT_FAVORITED);
-        favoriteButton.setEnabled(false);
-        bottomPanel.add(favoriteButton);
+        // Favorite button is added to the bottom panel
+        bottomPanel.add(favoritesManager.getFavoriteButton());
 
         // Response to selecting a stock in dropdown menu
         stockDropdown.addActionListener(new ActionListener() {
@@ -131,7 +135,7 @@ public class ViewStockView {
                     stockViewObject.setCompany("Company " + symbol);
 
                     // Update favorite button state
-                    updateFavoriteButtonState(symbol);
+                    favoritesManager.updateFavoriteButtonState(symbol);
 
                     // Generate share prices based on selected stock
                     final List<Double> prices = new ArrayList<>();
@@ -146,6 +150,11 @@ public class ViewStockView {
                     }
                     stockViewObject.setSharePrices(prices);
 
+                    // Add favorites panel to the right side when a stock is selected
+                    rightPanel.removeAll();
+                    rightPanel.add(favoritesManager.getFavoritesPanel());
+                    stockWithFavorites.add(rightPanel, BorderLayout.EAST);
+
                     // Show the stock view
                     cardLayout.show(views, Constants.STOCK_VIEW);
                     viewManagerModel.setState(Constants.STOCK_VIEW);
@@ -155,36 +164,22 @@ public class ViewStockView {
                     stockViewObject.getStockView().repaint();
                 } else {
                     // No stock is selected
+                    // Remove favorites panel when no stock is selected
+                    stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
-                    favoriteButton.setEnabled(false);
+                    favoritesManager.updateFavoriteButtonState(symbol);
                 }
             }
         });
 
         // Favorite button action listener
-        favoriteButton.addActionListener(new ActionListener() {
+        favoritesManager.getFavoriteButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
-
-                if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    if (favoritedStocks.contains(symbol)) {
-                        // Remove from favorites
-                        favoritedStocks.remove(symbol);
-                        favoriteButton.setText(Constants.NOT_FAVORITED);
-                    } else {
-                        // Add to favorites
-                        favoritedStocks.add(symbol);
-                        favoriteButton.setText(Constants.FAVORITED);
-                    }
-                }
+                favoritesManager.toggleFavorite(symbol);
             }
         });
-
-        // adding views to views and all of them to mainPanel
-        views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
-        views.add(stockViewObject.getStockView(), Constants.STOCK_VIEW);
-        mainPanel.add(views, BorderLayout.CENTER);
 
         // Input box and button for searching stocks
         final JTextField searchField = new JTextField(8);
@@ -208,6 +203,11 @@ public class ViewStockView {
             }
         });
 
+        // adding views to views and all of them to mainPanel
+        views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
+        views.add(stockWithFavorites, Constants.STOCK_VIEW);
+        mainPanel.add(views, BorderLayout.CENTER);
+
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");
         bottomPanel.add(compareButton);
@@ -218,19 +218,6 @@ public class ViewStockView {
 
         // Add bottom panel to the main panel
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-    }
-
-    /**
-     * Updates the favorite button state based on the current selected stock.
-     * @param symbol the stock symbol
-     */
-    private void updateFavoriteButtonState(String symbol) {
-        favoriteButton.setEnabled(true);
-        if (favoritedStocks.contains(symbol)) {
-            favoriteButton.setText(Constants.FAVORITED);
-        } else {
-            favoriteButton.setText(Constants.NOT_FAVORITED);
-        }
     }
 
     // Getter for the main panel
@@ -264,7 +251,7 @@ public class ViewStockView {
      * @return Set of favorited stock symbols
      */
     public Set<String> getFavoritedStocks() {
-        return new HashSet<>(favoritedStocks);
+        return favoritesManager.getFavoritedStocks();
     }
 
     public void setCompareButtonListener(ActionListener actionListener) {

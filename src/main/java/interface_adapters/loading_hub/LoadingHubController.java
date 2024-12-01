@@ -24,7 +24,7 @@ public class LoadingHubController {
      * @param endDate the end date
      */
     public void execute(String stockSymbol, Date startDate, Date endDate) {
-        final LoadingHubInputData loadingHubInputData = new LoadingHubInputData(startDate, endDate);
+        final LoadingHubInputData loadingHubInputData = new LoadingHubInputData(stockSymbol, startDate, endDate);
         loadingHubUseCaseInteractor.execute(loadingHubInputData);
     }
 

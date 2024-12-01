@@ -8,5 +8,5 @@ public interface LoadingHubOutputBoundary {
      * Prepares the success view for the Signup Use Case.
      * @param outputData the output data
      */
-    // void prepareSuccessView(SignupOutputData outputData);
+    void displayResult(LoadingHubOutputData outputData);
 }

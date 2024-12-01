@@ -284,23 +284,12 @@ public class ViewStockView {
 
                 final Date startDate = startDateCalendar.getTime();
                 final Date endDate = endDateCalendar.getTime();
-                // TODO: stocksYMBOL
-                final String stockSymbol = "";
+                // final String stockSymbol = stockDropdown.getSelectedItem().toString();
+                // set to stockSymbol = "INTC"
+                // TODO: Fix this by changing
+                final String stockSymbol = "INTC";
 
                 loadingHubController.execute(stockSymbol, startDate, endDate);
-
-                // TODO: NOT DONE
-                /*
-                final String input = searchField.getText();
-                searchController.execute(input);
-                searchView.updateSearchResult();
-
-                cardLayout.show(views, Constants.SEARCH_VIEW);
-                viewManagerModel.setState(Constants.SEARCH_VIEW);
-                viewManagerModel.firePropertyChanged();
-                searchView.getMainPanel().revalidate();
-                searchView.getMainPanel().repaint();
-                 */
             }
         });
 

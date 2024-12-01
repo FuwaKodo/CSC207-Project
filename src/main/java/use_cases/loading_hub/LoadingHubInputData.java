@@ -8,10 +8,16 @@ import java.util.Date;
 public class LoadingHubInputData {
     private final Date startDate;
     private final Date endDate;
+    private final String stockSymbol;
 
-    public LoadingHubInputData(Date startDate, Date endDate) {
+    public LoadingHubInputData(String stockSymbol, Date startDate, Date endDate) {
+        this.stockSymbol = stockSymbol;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public String getStockSymbol() {
+        return stockSymbol;
     }
 
     public Date getStartDate() {

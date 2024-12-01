@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 import entities.SharePrices;
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.gateways.StockDataLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.loading_hub.LoadingHubUseCaseFactory;
 import interface_adapters.loading_hub.LoadingHubViewModel;
@@ -62,13 +63,7 @@ public class MainStockApplication {
                 return List.of("AAPL", "NVDA", "MFC", "L", "INTC");
             }
         };
-        final LoadingHubAccessInterface loadingHubAccessInterface = new LoadingHubAccessInterface() {
-
-            @Override
-            public SharePrices getSharePrices(Date startDate, Date endDate) {
-                return null;
-            }
-        };
+        final StockDataInterface loadingHubAccessInterface = StockDataLoader;
 
         final ViewStockController viewStockController =
                 ViewStockUseCaseFactory.create(viewManagerModel, viewStockViewModel, viewStockDataAccessInterface);

@@ -23,11 +23,13 @@ import javax.swing.SwingConstants;
 
 import app.Constants;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
+import use_cases.SymbolNameDataAccessInterface;
 
 /**
  * View for the application that displays stock information and allows users to favorite stocks.
@@ -84,6 +86,7 @@ public class ViewStockView {
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
         this.favoritesManager = new FavoritesManager();
+        final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Initialize the main panel
         mainPanel = new JPanel();
@@ -129,7 +132,11 @@ public class ViewStockView {
         bottomPanel.setLayout(new FlowLayout());
 
         // Dropdown menu for selecting stocks
-        stockDropdown = new JComboBox<>(new String[]{Constants.NO_STOCKS_SELECTED, "Stock A", "Stock B", "Stock C"});
+        final List<String> stocksList = new ArrayList<>();
+        stocksList.add(Constants.NO_STOCKS_SELECTED);
+        stocksList.addAll(symbolDataAccessObject.getSymbols());
+        final String[] stocksArray = stocksList.toArray(new String[0]);
+        stockDropdown = new JComboBox<>(stocksArray);
         bottomPanel.add(stockDropdown);
 
         // Favorite button is added to the bottom panel
@@ -145,7 +152,7 @@ public class ViewStockView {
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    // viewStockController.execute(symbol);
+                    viewStockController.execute(symbol);
 
                     stockViewObject.setSymbol(symbol);
                     stockViewObject.setCompany("Company " + symbol);
@@ -156,9 +163,9 @@ public class ViewStockView {
                     // Generate share prices based on selected stock
                     final List<Double> prices = new ArrayList<>();
                     final double basePrice = switch (symbol) {
-                        case "Stock A" -> 100.0;
-                        case "Stock B" -> 150.0;
-                        case "Stock C" -> 200.0;
+                        case "AAPL" -> 100.0;
+                        case "NVDA" -> 150.0;
+                        case "MFC" -> 200.0;
                         default -> 100.0;
                     };
                     for (int i = 0; i < 10; i++) {

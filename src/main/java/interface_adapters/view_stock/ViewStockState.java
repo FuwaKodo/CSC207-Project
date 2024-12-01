@@ -25,13 +25,12 @@ public class ViewStockState {
     /** A set of favorite stock symbols. */
     private Set<String> favorites = new HashSet<>();
 
-    /**
-     * Returns the current stock symbol.
-     *
-     * @return the stock symbol
-     */
     public String getSymbol() {
         return symbol;
+    }
+
+    public String getCompany() {
+        return company;
     }
 
     public SharePrices getSharePrices() {
@@ -42,20 +41,10 @@ public class ViewStockState {
         return viewStockError;
     }
 
-    /**
-     * Sets the stock symbol to be viewed.
-     *
-     * @param symbol the stock symbol to set
-     */
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 
-    /**
-     * Sets the company name associated with the stock symbol.
-     *
-     * @param company the company name to set
-     */
     public void setCompany(String company) {
         this.company = company;
     }

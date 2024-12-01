@@ -1,6 +1,5 @@
 package app;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFrame;
@@ -8,6 +7,7 @@ import javax.swing.SwingUtilities;
 
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchUseCaseFactory;
 import interface_adapters.search.SearchViewModel;
@@ -41,6 +41,8 @@ public class MainStockApplication {
         final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
         final SearchViewModel searchViewModel = new SearchViewModel();
 
+        // data loader for search use case
+        final SearchDataAccessInterface searchDataAccessObject = new StockSymbolsLoader();
         // Create a temporary implementation of the ViewStockDataAccessInterface
         final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
             @Override
@@ -49,19 +51,11 @@ public class MainStockApplication {
             }
         };
 
-        // Create a temporary implementation of the SearchDataAccessInterface
-        final SearchDataAccessInterface searchDataAccessInterface = new SearchDataAccessInterface() {
-            @Override
-            public List<String> getSymbols() {
-                return List.of("AAPL", "NVDA", "MFC", "L", "INTC");
-            }
-        };
-
         // Initialize FavoriteStockFileStorage and create FavoriteStockInteractor
-        FavoriteStockFileStorage favoriteStockFileStorage = new FavoriteStockFileStorage();
+        final FavoriteStockFileStorage favoriteStockFileStorage = new FavoriteStockFileStorage();
 
         // Create FavoriteStockOutputBoundary implementation (presenter)
-        FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {
+        final FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {
             @Override
             public void presentFavoriteToggled(String symbol, boolean isFavorited) {
                 // Implement presentation logic for favorite toggle
@@ -91,7 +85,7 @@ public class MainStockApplication {
 
         // Create the SearchController
         final SearchController searchController =
-                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessInterface);
+                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessObject);
 
         // Use SwingUtilities to ensure the GUI is created on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
@@ -99,7 +93,8 @@ public class MainStockApplication {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(Constants.MAIN_FRAME_DIMENSION);
             frame.setMinimumSize(Constants.MAIN_FRAME_MIN_DIMENSION);
-            frame.setLocationRelativeTo(null); // Center the window
+            // Center the window
+            frame.setLocationRelativeTo(null);
 
             // Create the view and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(

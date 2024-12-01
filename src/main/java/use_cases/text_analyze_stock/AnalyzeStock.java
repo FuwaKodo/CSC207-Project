@@ -39,7 +39,7 @@ public class AnalyzeStock {
         if (projectedPrice1 - currentPrice >= Constants.WANTED_DIFFERENCE) {
             action = "buy";
         }
-        else if (projectedPrice1 - currentPrice >= Constants.WANTED_DIFFERENCE_NEGATIVE && projectedPrice1
+        else if (projectedPrice1 - currentPrice >= -Constants.WANTED_DIFFERENCE_NEGATIVE && projectedPrice1
                 - currentPrice <= Constants.WANTED_DIFFERENCE) {
             action = "hold";
         }

@@ -13,18 +13,12 @@ public class Stock {
     private final Metrics metrics;
     private boolean isFavorite;
 
-    public Stock(StockDataLoader loader) {
-        this.company = loader.getCompany();
-        this.symbol = loader.getSymbol();
-
-        this.metrics = new Metrics(
-                loader.getSharePrices(),
-                loader.getEarnings(),
-                loader.getVolumes(),
-                loader.getDividends()
-        );
-        // Initialize isFavorite to false
-        this.isFavorite = false;
+    public Stock(StockDataLoader loader, String company, String symbol) {
+        // TODO: Issue here because getCompany no longer possible!
+        // Getting symbol and company must be obtained from different instantiation
+        this.symbol = symbol;
+        this.company = company;
+        metrics = null;
     }
 
     public String getCompany() {

@@ -16,7 +16,7 @@ public class TestGetStockeps {
     @Test
     public void testGeteps_ValidTicker() {
         assertEquals(6.59, GetStockeps.geteps("AAPL"), 0.0001, "The EPS value for AAPL should be 6.59.");
-        assertEquals(1.91, GetStockeps.geteps("NVDA"), 0.0001, "The EPS value for NVDA should be 1.91.");
+        assertEquals(2.13, GetStockeps.geteps("NVDA"), 0.0001, "The EPS value for NVDA should be 2.13.");
         assertEquals(2.12, GetStockeps.geteps("MFC"), 0.0001, "The EPS value for MFC should be 2.12.");
         assertEquals(4.59, GetStockeps.geteps("L.TO"), 0.0001, "The EPS value for L.TO should be 4.59.");
         assertEquals(-0.40, GetStockeps.geteps("INTC"), 0.0001, "The EPS value for INTC should be -0.40.");

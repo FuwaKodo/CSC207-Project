@@ -1,5 +1,7 @@
 package use_cases.text_analyze_stock;
 
+import app.Constants;
+
 /**
  * A class containing the methods to analyze the stock properties and to issue predictions.
  */
@@ -34,10 +36,11 @@ public class AnalyzeStock {
         }
 
         final String action;
-        if (projectedPrice1 - currentPrice >= 3) {
+        if (projectedPrice1 - currentPrice >= Constants.WANTED_DIFFERENCE) {
             action = "buy";
         }
-        else if (projectedPrice1 - currentPrice >= -3 && projectedPrice1 - currentPrice <= 3) {
+        else if (projectedPrice1 - currentPrice >= Constants.WANTED_DIFFERENCE_NEGATIVE && projectedPrice1
+                - currentPrice <= Constants.WANTED_DIFFERENCE) {
             action = "hold";
         }
         else {

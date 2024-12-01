@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +70,13 @@ public class SearchView {
         mainPanel.add(buttonPanel);
         mainPanel.add(infoPanel);
         mainPanel.add(Box.createVerticalGlue());
+
+        searchViewModel.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                updateSearchResult();
+            }
+        });
     }
 
     private JPanel initiateButtonPanel() {

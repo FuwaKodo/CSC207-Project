@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -54,10 +54,10 @@ public class ViewStockView {
     private final ViewStockController viewStockController;
     private final SearchController searchController;
 
-    /** Manager for favorites functionality */
+    /** Manager for favorites functionality. */
     private final FavoritesManager favoritesManager;
 
-    /** Panel to hold stock and favorites */
+    /** Panel to hold stock and favorites. */
     private final JPanel stockWithFavorites;
 
     /**
@@ -65,6 +65,7 @@ public class ViewStockView {
      *
      * @param viewStockViewModel the ViewModel managing the stock view state
      * @param viewStockController the Controller handling business logic for the stock view
+     * @param searchController the controller for search use case
      */
     public ViewStockView(ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,

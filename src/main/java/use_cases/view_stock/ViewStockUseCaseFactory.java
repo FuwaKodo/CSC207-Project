@@ -27,7 +27,7 @@ public class ViewStockUseCaseFactory {
             FavoriteStockInputBoundary favoriteStockUseCaseInteractor) {
 
         // Create the presenter that will handle presentation logic, using the view model
-        final ViewStockPresenter viewStockPresenter = new ViewStockPresenter(
+        final ViewStockOutputBoundary viewStockPresenter = new ViewStockPresenter(
                 viewManagerModel,
                 viewStockViewModel
         );

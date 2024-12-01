@@ -12,11 +12,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import entities.MetricValues;
 import entities.SharePrices;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import use_cases.StockDataInterface;
 
 /**

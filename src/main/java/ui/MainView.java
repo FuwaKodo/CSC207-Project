@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -32,7 +33,7 @@ import interface_adapters.view_stock.ViewStockViewModel;
 /**
  * View for the application that displays stock information and allows users to favorite stocks.
  */
-public class MainView {
+public class ViewStockView {
     /** Main panel that holds all components of the view. */
     private final JPanel mainPanel;
 
@@ -72,15 +73,15 @@ public class MainView {
      * @param viewStockController the Controller handling business logic for the stock view
      * @param searchController the controller for search use case
      */
-    public MainView(ViewStockViewModel viewStockViewModel,
-                    ViewStockController viewStockController,
-                    SearchController searchController,
-                    LoadingHubController loadingHubController) {
+    public ViewStockView(ViewStockViewModel viewStockViewModel,
+                         ViewStockController viewStockController,
+                         SearchController searchController,
+                         LoadingHubController loadingHubController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
-        // this.favoritedStocks = new HashSet<>();
+        this.favoritesManager = new FavoritesManager();
 
         // Initialize the main panel
         mainPanel = new JPanel();

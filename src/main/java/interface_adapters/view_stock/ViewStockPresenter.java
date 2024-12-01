@@ -44,8 +44,7 @@ public class ViewStockPresenter implements ViewStockOutputBoundary {
         final ViewStockState state = stockViewModel.getState();
         if (isFavorited) {
             state.addFavorite(symbol);
-        }
-        else {
+        } else {
             state.removeFavorite(symbol);
         }
         stockViewModel.setState(state);

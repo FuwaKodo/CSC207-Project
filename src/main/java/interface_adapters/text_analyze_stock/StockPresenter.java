@@ -33,8 +33,8 @@ public class StockPresenter {
      */
     public static void main(String[] args) {
         // Perform stock analysis
-        final StockAnalysisResult result = AnalyzeStock.calculateProjectedPrice("AAPL",
-                237.33, 185);
+        final StockAnalysisResult result = AnalyzeStock.calculateProjectedPrice("MFC",
+                45.7, 27);
 
         // Create a new frame to display the result
         final JFrame frame = new JFrame("Stock Analysis Result");

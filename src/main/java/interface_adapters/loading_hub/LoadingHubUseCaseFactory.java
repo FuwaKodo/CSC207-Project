@@ -1,16 +1,11 @@
 package interface_adapters.loading_hub;
 
 import interface_adapters.ViewManagerModel;
-import interface_adapters.search.SearchController;
-import interface_adapters.search.SearchViewModel;
-import use_cases.loading_hub.LoadingHubAccessInterface;
+import interface_adapters.view_stock.ViewStockViewModel;
+import use_cases.StockDataInterface;
 import use_cases.loading_hub.LoadingHubInputBoundary;
 import use_cases.loading_hub.LoadingHubInteractor;
 import use_cases.loading_hub.LoadingHubOutputBoundary;
-import use_cases.search.SearchDataAccessInterface;
-import use_cases.search.SearchInputBoundary;
-import use_cases.search.SearchInteractor;
-import use_cases.search.SearchOutputBoundary;
 
 /**
  * Factory class responsible for creating and assembling all components needed for the LoadingHub use case.
@@ -28,8 +23,8 @@ public class LoadingHubUseCaseFactory {
      */
     public static LoadingHubController create(
             ViewManagerModel viewManagerModel,
-            LoadingHubViewModel loadingHubViewModel,
-            LoadingHubAccessInterface dataAccessObject) {
+            ViewStockViewModel loadingHubViewModel,
+            StockDataInterface dataAccessObject) {
 
         // Create the presenter with its required dependencies
         final LoadingHubOutputBoundary loadingHubPresenter =

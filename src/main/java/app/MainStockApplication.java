@@ -1,21 +1,16 @@
 package app;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import entities.SharePrices;
 import entities.Stock;
-import frameworks.FavoriteStockData;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.gateways.StockDataLoader;
 import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.loading_hub.LoadingHubUseCaseFactory;
-import interface_adapters.loading_hub.LoadingHubViewModel;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchUseCaseFactory;
 import interface_adapters.search.SearchViewModel;
@@ -24,9 +19,9 @@ import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
 import use_cases.StockDataInterface;
+import use_cases.favorites.FavoriteStockInputBoundary;
+import use_cases.favorites.FavoriteStockInteractor;
 import use_cases.favorites.FavoriteStockOutputBoundary;
-import use_cases.loading_hub.LoadingHubAccessInterface;
-import use_cases.loading_hub.LoadingHubInteractor;
 import use_cases.search.SearchDataAccessInterface;
 import use_cases.view_stock.ViewStockDataAccessInterface;
 import use_cases.view_stock.ViewStockUseCaseFactory;
@@ -48,7 +43,7 @@ public class MainStockApplication {
         // Create the ViewStockViewModel and SearchViewModel
         final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
         final SearchViewModel searchViewModel = new SearchViewModel();
-        final LoadingHubViewModel loadingHubViewModel = new LoadingHubViewModel();
+        final ViewStockViewModel loadingHubViewModel = new ViewStockViewModel();
 
         // data loader for search use case
         final SearchDataAccessInterface searchDataAccessObject = new StockSymbolsLoader();
@@ -56,10 +51,10 @@ public class MainStockApplication {
         final ViewStockDataAccessInterface viewStockDataAccessInterface = new ViewStockDataAccessInterface() {
             @Override
             public Stock getStock(String symbol) {
-                return null; // Placeholder implementation
+                // Placeholder implementation
+                return null;
             }
         };
-
 
         // Create FavoriteStockOutputBoundary implementation (presenter)
         final FavoriteStockOutputBoundary favoriteStockPresenter = new FavoriteStockOutputBoundary() {
@@ -93,7 +88,9 @@ public class MainStockApplication {
 
         // Create the SearchController
         final SearchController searchController =
-                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessInterface);
+                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, searchDataAccessObject);
+
+        // Create the LoadingHubController
         final LoadingHubController loadingHubController =
                 LoadingHubUseCaseFactory.create(viewManagerModel, loadingHubViewModel, loadingHubAccessInterface);
 

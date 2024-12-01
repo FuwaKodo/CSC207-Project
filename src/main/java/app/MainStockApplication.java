@@ -2,6 +2,7 @@ package app;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -11,6 +12,7 @@ import entities.Stock;
 import frameworks.FavoriteStockData;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.gateways.StockDataLoader;
+import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.loading_hub.LoadingHubUseCaseFactory;
 import interface_adapters.loading_hub.LoadingHubViewModel;
@@ -21,6 +23,8 @@ import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
+import use_cases.StockDataInterface;
+import use_cases.favorites.FavoriteStockOutputBoundary;
 import use_cases.loading_hub.LoadingHubAccessInterface;
 import use_cases.loading_hub.LoadingHubInteractor;
 import use_cases.search.SearchDataAccessInterface;
@@ -69,7 +73,7 @@ public class MainStockApplication {
                 // Implement presentation logic for favorites list
             }
         };
-        final StockDataInterface loadingHubAccessInterface = StockDataLoader;
+        final StockDataInterface loadingHubAccessInterface = new StockDataLoader();
 
         // Create FavoriteStockInteractor with the file storage
         final FavoriteStockInputBoundary favoriteStockInputBoundary =

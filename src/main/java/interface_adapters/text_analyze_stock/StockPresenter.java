@@ -1,7 +1,9 @@
 package interface_adapters.text_analyze_stock;
 
 import java.awt.Font;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,16 +38,21 @@ public class StockPresenter {
      * @param args command line arguments passed to the application.
      */
     public static void main(String[] args) {
-        final String stockSymbol = "AAPL";
-        final Calendar myCalendar = new GregorianCalendar(2014, 2, 11);
-        final Date myDate = myCalendar.getTime();
-        // Call the method to retrieve share prices
-        final StockDataInterface stockData = new StockDataLoader();
-        final SharePrices sharePrices = stockData.getSharePrice(stockSymbol, myDate);
-        // Perform stock analysis
+        final String stockSymbol = "INTC";
+        // Original Date
+        final Calendar myCalendarStart = new GregorianCalendar(2023, 10, 6);
+        final Date myDateInitial = myCalendarStart.getTime();
+        final StockDataInterface stockDataInitial = new StockDataLoader();
+        final SharePrices sharePricesInitial = stockDataInitial.getSharePrice(stockSymbol, myDateInitial);
+        System.out.println(sharePricesInitial.getHighPrices().get(0));
+        // Current Date
+        final Calendar myCalendarCurrent = new GregorianCalendar(2024, 10, 5);
+        final Date myDateCurrent = myCalendarCurrent.getTime();
+        final StockDataInterface stockDataCurrent = new StockDataLoader();
+        final SharePrices sharePricesCurrent = stockDataCurrent.getSharePrice(stockSymbol, myDateCurrent);
         final StockAnalysisResult result = AnalyzeStock.calculateProjectedPrice(stockSymbol,
-                sharePrices.getHighPrices().get(0), 27);
-
+                sharePricesCurrent.getHighPrices().get(0), sharePricesInitial.getHighPrices().get(0));
+        System.out.println(sharePricesCurrent.getHighPrices().get(0));
         // Create a new frame to display the result
         final JFrame frame = new JFrame("Stock Analysis Result");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

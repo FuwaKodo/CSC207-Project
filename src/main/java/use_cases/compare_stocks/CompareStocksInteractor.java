@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import entities.Stock;
-import use_cases.StockDataAccessInterface;
+import use_cases.StockDataInterface;
 
 /**
  * The use case to compare stocks using earnings per share, dividends, and
@@ -13,21 +13,18 @@ import use_cases.StockDataAccessInterface;
  */
 public class CompareStocksInteractor implements CompareStocksInputBoundary {
     private final CompareStocksOutputBoundary presenter;
-    private final StockDataAccessInterface dataAccess;
+    private final StockDataInterface dataAccess;
 
-    public CompareStocksInteractor(CompareStocksOutputBoundary presenter, StockDataAccessInterface dataAccess) {
+    public CompareStocksInteractor(CompareStocksOutputBoundary presenter, StockDataInterface dataAccess) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
     }
 
     @Override
     public void execute(CompareStocksInputData inputData) {
-        final Stock stock1 = dataAccess.getStockByCompany(inputData.getFirstStockName());
-        final Stock stock2 = dataAccess.getStockByCompany(inputData.getSecondStockName());
-
         final String summary = getComparisonSummary(
-                stock1,
-                stock2,
+                inputData.getFirstStockSymbol(),
+                inputData.getSecondStockSymbol(),
                 inputData.getStartDate(),
                 inputData.getEndDate()
                 );
@@ -38,7 +35,7 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
         return dataAccess.getAllCompanyNames();
     }
 
-    private String getComparisonSummary(Stock stock1, Stock stock2, Date start, Date end) {
+    private String getComparisonSummary(String symbol1, String symbol2, Date start, Date end) {
         // Compare earnings per share
         final Double stock1EPS = stock1.getEarningsPerShare(start, end);
         final Double stock2EPS = stock2.getEarningsPerShare(start, end);

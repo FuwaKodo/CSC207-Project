@@ -30,11 +30,11 @@ public class CompareStocksInputData {
         this.endDate = endDate;
     }
 
-    public String getFirstStockName() {
+    public String getFirstStockSymbol() {
         return stock1Name;
     }
 
-    public String getSecondStockName() {
+    public String getSecondStockSymbol() {
         return stock2Name;
     }
 

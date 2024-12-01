@@ -1,6 +1,5 @@
 package interface_adapters.compare_stocks;
 
-import use_cases.compare_stocks.CompareStocksInputBoundary;
 import use_cases.compare_stocks.CompareStocksInputData;
 import use_cases.compare_stocks.CompareStocksInteractor;
 

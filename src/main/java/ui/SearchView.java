@@ -75,6 +75,8 @@ public class SearchView {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 updateSearchResult();
+                getMainPanel().revalidate();
+                getMainPanel().repaint();
             }
         });
     }

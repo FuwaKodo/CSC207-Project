@@ -68,11 +68,14 @@ public class ViewStockView {
     /**
      * Constructs the ViewStockView with the specified ViewModel and Controller.
      *
+     * @param viewManagerModel the view manager model responsible for switching view
      * @param viewStockViewModel the ViewModel managing the stock view state
      * @param viewStockController the Controller handling business logic for the stock view
      * @param searchController the controller for search use case
+     * @param loadingHubController the controller for loading hub use case
      */
-    public ViewStockView(ViewStockViewModel viewStockViewModel,
+    public ViewStockView(ViewManagerModel viewManagerModel,
+                         ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,
                          SearchController searchController,
                          LoadingHubController loadingHubController) {
@@ -108,16 +111,15 @@ public class ViewStockView {
         cardLayout = new CardLayout();
         views = new JPanel(cardLayout);
 
+        // Manages which panel in views is displayed
+        new ViewManager(views, cardLayout, viewManagerModel);
+
         // Create a panel to hold stock view and favorites
         stockWithFavorites = new JPanel(new BorderLayout());
         stockWithFavorites.add(stockViewObject.getMainPanel(), BorderLayout.CENTER);
 
         // Initially, do not add favorites panel to avoid showing on title screen
         final JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-
-        // Manages which panel in views is displayed
-        final ViewManagerModel viewManagerModel = new ViewManagerModel();
-        new ViewManager(views, cardLayout, viewManagerModel);
 
         // Make sure the stock view panel has a preferred size
         stockViewObject.getMainPanel().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
@@ -143,7 +145,7 @@ public class ViewStockView {
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    viewStockController.execute(symbol);
+                    // viewStockController.execute(symbol);
 
                     stockViewObject.setSymbol(symbol);
                     stockViewObject.setCompany("Company " + symbol);
@@ -206,15 +208,8 @@ public class ViewStockView {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final String input = searchField.getText();
-                searchController.execute(input);
-                searchView.updateSearchResult();
-
-                cardLayout.show(views, Constants.SEARCH_VIEW);
-                viewManagerModel.setState(Constants.SEARCH_VIEW);
-                viewManagerModel.firePropertyChanged();
-                searchView.getMainPanel().revalidate();
-                searchView.getMainPanel().repaint();
+                // executes search use case with input from searchField
+                searchController.execute(searchField.getText());
             }
         });
 
@@ -320,7 +315,11 @@ public class ViewStockView {
         buyButton = new JButton("Buy Stock");
         bottomPanel.add(buyButton);
 
-        // Add bottom panel to the main panel
+        // adding views to views
+        views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
+        views.add(stockWithFavorites, Constants.STOCK_VIEW);
+
+        // adding panels to mainPanel
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
         mainPanel.add(views, BorderLayout.CENTER);
         mainPanel.add(datePanel, BorderLayout.NORTH);

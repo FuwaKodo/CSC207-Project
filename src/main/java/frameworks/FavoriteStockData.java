@@ -1,4 +1,4 @@
-package use_cases.favorites;
+package frameworks;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FavoriteStockFileStorage {
+public class FavoriteStockData {
     private static final String FAVORITE_STOCKS_FILE = "src/main/java/use_cases/favorites/favorites_stocks.txt";
 
     public Set<String> loadFavoriteStocks() {

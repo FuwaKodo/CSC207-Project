@@ -72,4 +72,10 @@ class StockTest {
         final Double expectedValue = dataLoader.getDividends().getValue(testDate);
         assertEquals(stock.getDividendsPerShare(testDate), expectedValue);
     }
+
+    @Test
+    void favoritingFeature() {
+        stock.setFavorite(true);
+        assertTrue(stock.isFavorite());
+    }
 }

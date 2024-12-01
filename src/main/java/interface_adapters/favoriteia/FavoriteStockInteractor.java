@@ -1,4 +1,9 @@
-package use_cases.favorites;
+package interface_adapters.favoriteia;
+
+import use_cases.favorites.FavoriteStockFileStorage;
+import use_cases.favorites.FavoriteStockInputBoundary;
+import use_cases.favorites.FavoriteStockInputData;
+import use_cases.favorites.FavoriteStockOutputBoundary;
 
 import java.util.HashSet;
 import java.util.Set;

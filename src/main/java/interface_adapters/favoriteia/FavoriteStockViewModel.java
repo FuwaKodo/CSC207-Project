@@ -1,4 +1,6 @@
-package use_cases.favorites;
+package interface_adapters.favoriteia;
+
+import use_cases.favorites.FavoriteStockState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import entities.Stock;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.favoriteia.FavoriteStockInteractor;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.ViewStockView;

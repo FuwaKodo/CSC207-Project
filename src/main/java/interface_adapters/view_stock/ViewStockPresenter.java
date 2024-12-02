@@ -52,15 +52,4 @@ public class ViewStockPresenter implements ViewStockOutputBoundary {
         stockViewModel.firePropertyChanged();
     }
 
-    /**
-     * Displays error.
-     * @param error the error name
-     */
-    @Override
-    public void error(String error) {
-        final ViewStockState viewStockState = stockViewModel.getState();
-        viewStockState.setViewStockError(error);
-        stockViewModel.setState(viewStockState);
-        stockViewModel.firePropertyChanged();
-    }
 }

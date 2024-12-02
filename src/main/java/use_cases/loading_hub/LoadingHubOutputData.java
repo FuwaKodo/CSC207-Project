@@ -8,6 +8,7 @@ import entities.SharePrices;
  */
 public class LoadingHubOutputData {
     private String stockSymbol;
+    private String companyName;
     private SharePrices sharePrices;
     private MetricValues volumes;
     private MetricValues afterHours;

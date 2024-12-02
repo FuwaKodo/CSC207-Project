@@ -154,14 +154,6 @@ public class ViewStockView {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
                     viewStockController.execute(symbol);
-
-                    // Update favorite button state
-                    favoritesController.updateFavoriteButtonState(symbol);
-
-                    // Add favorites panel to the right side when a stock is selected
-                    rightPanel.removeAll();
-                    rightPanel.add(favoritesController.getFavoritesPanel());
-                    stockWithFavorites.add(rightPanel, BorderLayout.EAST);
                 }
                 else {
                     // No stock is selected
@@ -181,6 +173,17 @@ public class ViewStockView {
                 stockViewObject.setSharePrices(currentState.getSharePrices().getHighPrices());
                 stockViewObject.getStockView().revalidate();
                 stockViewObject.getStockView().repaint();
+
+                // changes dropdown menu item to current stock
+                stockDropdown.setSelectedItem(currentState.getSymbol());
+
+                // Update favorite button state
+                favoritesController.updateFavoriteButtonState(currentState.getSymbol());
+
+                // Add favorites panel to the right side when a stock is selected
+                rightPanel.removeAll();
+                rightPanel.add(favoritesController.getFavoritesPanel());
+                stockWithFavorites.add(rightPanel, BorderLayout.EAST);
             }
         });
 

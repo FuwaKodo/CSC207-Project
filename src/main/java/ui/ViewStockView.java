@@ -14,16 +14,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import app.Constants;
-import entities.SharePrices;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.favoritesIA.FavoritesController;
 import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
-import interface_adapters.search.SearchController;
-import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
+import interface_adapters.view_stock.ViewStockState;
 import interface_adapters.view_stock.ViewStockViewModel;
 import use_cases.SymbolNameDataAccessInterface;
 
@@ -54,11 +58,10 @@ public class ViewStockView {
 
     /** Controller to handle stock view logic. */
     private final ViewStockController viewStockController;
-    private final SearchController searchController;
     private final LoadingHubController loadingHubController;
 
     /** Manager for favorites functionality. */
-    private final FavoritesManager favoritesManager;
+    private final FavoritesController favoritesController;
 
     /** Panel to hold stock and favorites. */
     private final JPanel stockWithFavorites;
@@ -69,19 +72,19 @@ public class ViewStockView {
      * @param viewManagerModel the view manager model responsible for switching view
      * @param viewStockViewModel the ViewModel managing the stock view state
      * @param viewStockController the Controller handling business logic for the stock view
-     * @param searchController the controller for search use case
+     * @param injectedSearchView the view for search result
      * @param loadingHubController the controller for loading hub use case
      */
     public ViewStockView(ViewManagerModel viewManagerModel,
                          ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,
-                         SearchController searchController,
+                         SearchView injectedSearchView,
                          LoadingHubController loadingHubController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
-        this.searchController = searchController;
+        this.searchView = injectedSearchView;
         this.loadingHubController = loadingHubController;
-        this.favoritesManager = new FavoritesManager();
+        this.favoritesController = new FavoritesController();
         final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Initialize the main panel
@@ -136,7 +139,7 @@ public class ViewStockView {
         bottomPanel.add(stockDropdown);
 
         // Favorite button is added to the bottom panel
-        bottomPanel.add(favoritesManager.getFavoriteButton());
+        bottomPanel.add(favoritesController.getFavoriteButton());
 
         // Date panel to hold buttons and dropdown
         final JPanel datePanel = new JPanel();
@@ -148,26 +151,26 @@ public class ViewStockView {
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    // Execute the view stock use case
                     viewStockController.execute(symbol);
-
-                    // Set symbol and company from the state
-                    stockViewObject.setSymbol(viewStockViewModel.getState().getSymbol());
-                    stockViewObject.setCompany(viewStockViewModel.getState().getCompany());
+                    final ViewStockState currentState = viewStockViewModel.getState();
+                    stockViewObject.setSymbol(currentState.getSymbol());
+                    stockViewObject.setCompany(currentState.getCompany());
 
                     // Update favorite button state
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
 
-                    // Use share prices from the state
-                    final SharePrices sharePrices = viewStockViewModel.getState().getSharePrices();
-                    if (sharePrices != null) {
-                        // Use close prices for the stock view
-                        stockViewObject.setSharePrices(sharePrices.getClosePrices());
+                    // Generate random share prices for demonstration
+                    List<Double> prices = new ArrayList<>();
+                    double basePrice = 100.0; // Default base price
+                    for (int i = 0; i < 10; i++) {
+                        prices.add(basePrice + Math.random() * 20);
                     }
+                    stockViewObject.setSharePrices(prices);
+                    stockViewObject.setSharePrices(currentState.getSharePrices().getHighPrices());
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
-                    rightPanel.add(favoritesManager.getFavoritesPanel());
+                    rightPanel.add(favoritesController.getFavoritesPanel());
                     stockWithFavorites.add(rightPanel, BorderLayout.EAST);
 
                     // Show the stock view
@@ -175,41 +178,30 @@ public class ViewStockView {
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
-                    stockViewObject.getMainPanel().revalidate();
-                    stockViewObject.getMainPanel().repaint();
+                    stockViewObject.getStockView().revalidate();
+                    stockViewObject.getStockView().repaint();
                 }
                 else {
                     // No stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
                 }
             }
         });
 
         // Favorite button action listener
-        favoritesManager.getFavoriteButton().addActionListener(new ActionListener() {
+        favoritesController.getFavoriteButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
-                favoritesManager.toggleFavorite(symbol);
+                favoritesController.toggleFavorite(symbol);
             }
         });
 
         // Input box and button for searching stocks
-        final JTextField searchField = new JTextField(8);
-        bottomPanel.add(searchField);
-        final JButton searchButton = new JButton("Search");
-        bottomPanel.add(searchButton);
-
-        // Response to clicking searchButton
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // executes search use case with input from searchField
-                searchController.execute(searchField.getText());
-            }
-        });
+        bottomPanel.add(searchView.getSearchField());
+        bottomPanel.add(searchView.getSearchButton());
 
         // Calendar Input 1
         final JLabel date1Label = new JLabel("Start Date: ");
@@ -350,7 +342,6 @@ public class ViewStockView {
             }
         });
 
-
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");
         bottomPanel.add(compareButton);
@@ -362,6 +353,7 @@ public class ViewStockView {
         // adding views to views
         views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
         views.add(stockWithFavorites, Constants.STOCK_VIEW);
+        views.add(injectedSearchView.getMainPanel(), injectedSearchView.getViewName());
 
         // adding panels to mainPanel
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
@@ -461,20 +453,11 @@ public class ViewStockView {
     }
 
     /**
-     * Initializes searchView and add it to mainPanel.
-     * @param searchViewModel SearchViewModel object
-     */
-    public void setSearchView(SearchViewModel searchViewModel) {
-        this.searchView = new SearchView(searchViewModel, viewStockController);
-        views.add(searchView.getMainPanel(), searchView.getViewName());
-    }
-
-    /**
      * Get the set of favorited stocks.
      * @return Set of favorited stock symbols
      */
     public Set<String> getFavoritedStocks() {
-        return favoritesManager.getFavoritedStocks();
+        return favoritesController.getFavoritedStocks();
     }
 
     public void setCompareButtonListener(ActionListener actionListener) {

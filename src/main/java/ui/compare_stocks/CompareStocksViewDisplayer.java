@@ -9,16 +9,19 @@ import use_cases.StockDataInterface;
 import use_cases.compare_stocks.CompareStocksInteractor;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class CompareStocksViewDisplayer {
     private CompareStocksViewDisplayer() {}
 
     public static void showDialog(JFrame parentFrame) {
         final ViewModel<CompareStocksState> vm = new ViewModel<>("Compare Stocks");
+        vm.setState(new CompareStocksState());
         final CompareStocksController controller = makeController(vm);
         final CompareStocksView view = new CompareStocksView(controller, vm);
 
         final JDialog dialog = new JDialog(parentFrame, "Compare Stocks", true);
+        dialog.setMinimumSize(new Dimension(600, 400));
         dialog.getContentPane().add(view);
         dialog.pack();
         dialog.setVisible(true);

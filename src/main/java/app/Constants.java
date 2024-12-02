@@ -13,6 +13,7 @@ public final class Constants {
     public static final int FIVE_YEARS = 5 * 365;
     public static final int THREE_YEARS = 3 * 365;
     public static final int ONE_YEAR = 365;
+    public static final int ONE_WEEK = 7;
 
     // Display font
     public static final String FONT = "Arial";

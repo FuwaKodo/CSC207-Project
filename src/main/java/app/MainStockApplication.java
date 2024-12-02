@@ -87,7 +87,8 @@ public class MainStockApplication {
         final LoadingHubController loadingHubController = LoadingHubUseCaseFactory.create(
                         viewManagerModel,
                         loadingHubViewModel,
-                        loadingHubAccessInterface);
+                        loadingHubAccessInterface,
+                symbolDataAccessObject);
         final StockController predictController = StockControllerFactory.createStockController(
                         stockViewModel,
                         stockDataAccessObject);

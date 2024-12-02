@@ -29,7 +29,7 @@ public class SharePrices extends MetricValues {
                 this.lowPrices.remove(i);
                 this.closePrices.remove(i);
                 this.openPrices.remove(i);
-                getDates().remove(i);
+                removeDates(i);
             }
         }
     }

@@ -1,5 +1,6 @@
 package interface_adapters.loading_hub;
 
+import app.Constants;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.view_stock.ViewStockState;
 import interface_adapters.view_stock.ViewStockViewModel;
@@ -28,6 +29,7 @@ public class LoadingHubPresenter implements LoadingHubOutputBoundary {
     public void displayResult(LoadingHubOutputData outputData) {
         final ViewStockState loadingHubState = loadingHubViewModel.getState();
         loadingHubState.setSymbol(outputData.getStockSymbol());
+        loadingHubState.setCompany(outputData.getCompanyName());
         loadingHubState.setSharePrices(outputData.getSharePrices());
         this.loadingHubViewModel.setState(loadingHubState);
         this.loadingHubViewModel.firePropertyChanged();

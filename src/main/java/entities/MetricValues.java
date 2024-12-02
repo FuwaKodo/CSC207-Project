@@ -81,7 +81,7 @@ public class MetricValues {
         return Objects.hash(values, dates);
     }
 
-    public ArrayList<Date> getDates() {
-        return dates;
+    public void removeDates(int index) {
+        dates.remove(dates.get(index));
     }
 }

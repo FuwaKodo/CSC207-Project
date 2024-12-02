@@ -187,6 +187,7 @@ public class ViewStockView {
             }
         });
 
+
         // Favorite button action listener
         favoritesController.getFavoriteButton().addActionListener(new ActionListener() {
             @Override
@@ -332,10 +333,12 @@ public class ViewStockView {
 
                 // Assuming stockSymbol is predefined or fetched from another component
                 // Replace with actual logic to get stock symbol
-                String stockSymbol = "INTC";
-
-                // Execute business logic
-                loadingHubController.execute(stockSymbol, startDate, endDate);
+                final String stockSymbol = stockDropdown.getSelectedItem().toString();
+                if (!stockSymbol.equals(Constants.NO_STOCKS_SELECTED)) {
+                    // Execute business logic
+                    loadingHubController.execute(stockSymbol, startDate, endDate);
+                    viewStockController.execute(stockSymbol);
+                }
             }
         });
 

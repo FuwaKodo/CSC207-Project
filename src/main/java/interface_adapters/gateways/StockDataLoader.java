@@ -213,7 +213,8 @@ public class StockDataLoader implements StockDataInterface {
      */
     public boolean matchesStockSymbolAndDate(String stockSymbol, Date date, JSONObject jsonObject) {
         boolean isValidEntry = false;
-        if (jsonObject.getString("from").equals(dateToString(date))
+        if (jsonObject.has("symbol")
+                && jsonObject.getString("from").equals(dateToString(date))
                 && jsonObject.getString("symbol").equals(stockSymbol)) {
             isValidEntry = true;
         }

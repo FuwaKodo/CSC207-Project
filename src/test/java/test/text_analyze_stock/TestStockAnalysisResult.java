@@ -1,4 +1,4 @@
-package test;
+package test.text_analyze_stock;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;

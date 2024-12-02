@@ -157,4 +157,6 @@
 {"symbol":"AAPL","from":"2020-02-05","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2020-02-06","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2020-02-07","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
-{"symbol":"INTC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}
+{"symbol":"INTC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"","from":"2024-11-06","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},,
+{"volume":25673,"symbol":"INTL","high":23.07,"preMarket":24,"low":22.885,"from":"2024-11-06","afterHours":23.25,"api":"polygon","message":"Data found.","close":23.0302,"open":23.07,"status":"OK"}

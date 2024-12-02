@@ -1,29 +1,54 @@
 package interface_adapters.favoritesIA;
 
-import use_cases.favorites.*;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import use_cases.favorites.FavoriteStockInputData;
+import use_cases.favorites.FavoriteStockInteractor;
+
+/**
+ * Controller class for managing favorite stocks functionality.
+ */
 public class FavoritesController {
+    /** Width of the favorites panel. */
+    private static final int PANEL_WIDTH = 150;
+    /** Height of the favorites panel. */
+    private static final int PANEL_HEIGHT = 300;
+    /** Vertical spacing between favorite items. */
+    private static final int HEIGHT = 5;
+    /** Star symbol for favorite button when selected. */
+    private static final String STAR_FILLED = "\u2605";
+    /** Star symbol for favorite button when not selected. */
+    private static final String STAR_EMPTY = "\u2606";
+    /** Message displayed when no stock is selected. */
+    private static final String NO_STOCK_SELECTED = "No stocks selected";
+
     private final JButton favoriteButton;
     private final JPanel favoritesPanel;
     private final Set<String> favoritedStocks;
     private final FavoriteStockInteractor favoriteStockInteractor;
 
     public FavoritesController() {
-        this.favoriteButton = new JButton("★");
+        this.favoriteButton = new JButton(STAR_EMPTY);
         this.favoritesPanel = new JPanel();
         this.favoritesPanel.setLayout(new BoxLayout(favoritesPanel, BoxLayout.Y_AXIS));
         this.favoritedStocks = new HashSet<>();
 
         // Create the ViewModel and add a listener for updates
-        FavoriteStockViewModel viewModel = new FavoriteStockViewModel();
-        PropertyChangeListener viewModelListener = evt -> {
+        final FavoriteStockViewModel viewModel = new FavoriteStockViewModel();
+        final PropertyChangeListener viewModelListener = evt -> {
             if (evt.getPropertyName().equals(FavoriteStockViewModel.FAVORITES_CHANGED)) {
-                FavoriteStockState state = (FavoriteStockState) evt.getNewValue();
+                final FavoriteStockState state = (FavoriteStockState) evt.getNewValue();
                 favoritedStocks.clear();
                 favoritedStocks.addAll(state.getFavoriteStocks());
                 updateFavoritesPanel();
@@ -32,7 +57,7 @@ public class FavoritesController {
         viewModel.addPropertyChangeListener(viewModelListener);
 
         // Create the presenter and interactor
-        FavoriteStockPresenter presenter = new FavoriteStockPresenter(viewModel);
+        final FavoriteStockPresenter presenter = new FavoriteStockPresenter(viewModel);
         this.favoriteStockInteractor = new FavoriteStockInteractor(presenter);
 
         // Load initial favorites
@@ -43,33 +68,51 @@ public class FavoritesController {
 
     private void setupFavoritesPanel() {
         favoritesPanel.setBorder(BorderFactory.createTitledBorder("Favorites"));
-        favoritesPanel.setPreferredSize(new Dimension(150, 300));
+        favoritesPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         updateFavoritesPanel();
     }
 
-    public void toggleFavorite(String symbol) {
-        if (!symbol.equals("No stocks selected")) {
+    /**
+     * Toggles the favorite status of a stock symbol.
+     *
+     * @param symbol The stock symbol to toggle
+     */
+    public void toggleFavorite(final String symbol) {
+        if (!NO_STOCK_SELECTED.equals(symbol)) {
             favoriteStockInteractor.toggleFavorite(new FavoriteStockInputData(symbol));
         }
     }
 
-    public void updateFavoriteButtonState(String symbol) {
-        if (symbol.equals("No stocks selected")) {
+    /**
+     * Updates the state of the favorite button based on the selected symbol.
+     *
+     * @param symbol The stock symbol to update the button state for
+     */
+    public void updateFavoriteButtonState(final String symbol) {
+        if (NO_STOCK_SELECTED.equals(symbol)) {
             favoriteButton.setEnabled(false);
-            favoriteButton.setText("★");
-        } else {
+            favoriteButton.setText(STAR_EMPTY);
+        }
+        else {
             favoriteButton.setEnabled(true);
-            favoriteButton.setText(favoritedStocks.contains(symbol) ? "★" : "☆");
+            final String buttonText;
+            if (favoritedStocks.contains(symbol)) {
+                buttonText = STAR_FILLED;
+            }
+            else {
+                buttonText = STAR_EMPTY;
+            }
+            favoriteButton.setText(buttonText);
         }
     }
 
     private void updateFavoritesPanel() {
         favoritesPanel.removeAll();
         for (String stock : favoritedStocks) {
-            JLabel label = new JLabel(stock);
+            final JLabel label = new JLabel(stock);
             label.setAlignmentX(Component.CENTER_ALIGNMENT);
             favoritesPanel.add(label);
-            favoritesPanel.add(Box.createVerticalStrut(5));
+            favoritesPanel.add(Box.createVerticalStrut(HEIGHT));
         }
         favoritesPanel.revalidate();
         favoritesPanel.repaint();

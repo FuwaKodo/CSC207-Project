@@ -57,10 +57,6 @@ public final class Constants {
     public static final int SIMILAR_AS_SUBSTRING = 2;
     public static final int EXACTLY_SAME = 3;
 
-    // constants for favourite stock use case
-    public static final String NOT_FAVORITED = "☆ Favorite";
-    public static final String FAVORITED = "★ Favorited";
-
     //
     public static final int WANTED_DIFFERENCE = 3;
     public static final int WANTED_DIFFERENCE_NEGATIVE = 3;
@@ -69,6 +65,7 @@ public final class Constants {
     public static final int THREE_HUNDRED = 300;
     public static final int FOUR_HUNDRED = 400;
     public static final int SIZE = 17;
+
     // prevents instantiation
     private Constants() {
 

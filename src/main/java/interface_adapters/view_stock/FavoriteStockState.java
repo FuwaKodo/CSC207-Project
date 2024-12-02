@@ -12,9 +12,6 @@ public class FavoriteStockState {
     /** A set to store the symbols of favorited stocks. */
     private Set<String> favoritedStocks = new HashSet<>();
 
-    /** An optional error message related to favorite stock operations. */
-    private String error = null;
-
     /**
      * Returns a copy of the current set of favorited stocks.
      *

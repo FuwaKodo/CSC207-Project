@@ -1,8 +1,5 @@
-package ui;
+package interface_adapters.favoritesIA;
 
-import interface_adapters.favoritesIA.FavoriteStockPresenter;
-import interface_adapters.favoritesIA.FavoriteStockState;
-import interface_adapters.favoritesIA.FavoriteStockViewModel;
 import use_cases.favorites.*;
 import javax.swing.*;
 import java.awt.*;
@@ -10,13 +7,13 @@ import java.beans.PropertyChangeListener;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FavoritesManager {
+public class FavoritesController {
     private final JButton favoriteButton;
     private final JPanel favoritesPanel;
     private final Set<String> favoritedStocks;
     private final FavoriteStockInteractor favoriteStockInteractor;
 
-    public FavoritesManager() {
+    public FavoritesController() {
         this.favoriteButton = new JButton("★");
         this.favoritesPanel = new JPanel();
         this.favoritesPanel.setLayout(new BoxLayout(favoritesPanel, BoxLayout.Y_AXIS));

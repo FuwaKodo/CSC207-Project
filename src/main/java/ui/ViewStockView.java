@@ -19,6 +19,7 @@ import javax.swing.*;
 import app.Constants;
 import entities.SharePrices;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.favoritesIA.FavoritesController;
 import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.search.SearchController;
@@ -58,7 +59,7 @@ public class ViewStockView {
     private final LoadingHubController loadingHubController;
 
     /** Manager for favorites functionality. */
-    private final FavoritesManager favoritesManager;
+    private final FavoritesController favoritesController;
 
     /** Panel to hold stock and favorites. */
     private final JPanel stockWithFavorites;
@@ -81,7 +82,7 @@ public class ViewStockView {
         this.viewStockController = viewStockController;
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
-        this.favoritesManager = new FavoritesManager();
+        this.favoritesController = new FavoritesController();
         final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Initialize the main panel
@@ -136,7 +137,7 @@ public class ViewStockView {
         bottomPanel.add(stockDropdown);
 
         // Favorite button is added to the bottom panel
-        bottomPanel.add(favoritesManager.getFavoriteButton());
+        bottomPanel.add(favoritesController.getFavoriteButton());
 
         // Date panel to hold buttons and dropdown
         final JPanel datePanel = new JPanel();
@@ -146,28 +147,25 @@ public class ViewStockView {
         stockDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
+                String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    // Execute the view stock use case
-                    viewStockController.execute(symbol);
-
-                    // Set symbol and company from the state
-                    stockViewObject.setSymbol(viewStockViewModel.getState().getSymbol());
-                    stockViewObject.setCompany(viewStockViewModel.getState().getCompany());
+                    stockViewObject.setSymbol(symbol);
+                    stockViewObject.setCompany(symbol + " Company"); // Or fetch actual company name
 
                     // Update favorite button state
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
 
-                    // Use share prices from the state
-                    final SharePrices sharePrices = viewStockViewModel.getState().getSharePrices();
-                    if (sharePrices != null) {
-                        // Use close prices for the stock view
-                        stockViewObject.setSharePrices(sharePrices.getClosePrices());
+                    // Generate random share prices for demonstration
+                    List<Double> prices = new ArrayList<>();
+                    double basePrice = 100.0; // Default base price
+                    for (int i = 0; i < 10; i++) {
+                        prices.add(basePrice + Math.random() * 20);
                     }
+                    stockViewObject.setSharePrices(prices);
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
-                    rightPanel.add(favoritesManager.getFavoritesPanel());
+                    rightPanel.add(favoritesController.getFavoritesPanel());
                     stockWithFavorites.add(rightPanel, BorderLayout.EAST);
 
                     // Show the stock view
@@ -175,24 +173,24 @@ public class ViewStockView {
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
-                    stockViewObject.getMainPanel().revalidate();
-                    stockViewObject.getMainPanel().repaint();
-                }
-                else {
+                    stockViewObject.getStockView().revalidate();
+                    stockViewObject.getStockView().repaint();
+                } else {
                     // No stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
                 }
             }
         });
 
+
         // Favorite button action listener
-        favoritesManager.getFavoriteButton().addActionListener(new ActionListener() {
+        favoritesController.getFavoriteButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
-                favoritesManager.toggleFavorite(symbol);
+                favoritesController.toggleFavorite(symbol);
             }
         });
 
@@ -211,12 +209,11 @@ public class ViewStockView {
             }
         });
 
-        // Button for startDate and endDate
+        // Calendar Input 1
         final JLabel date1Label = new JLabel("Start Date: ");
+        final JPanel dateSelector1 = new JPanel();
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        // date1Panel
-        final JPanel dateSelector1 = new JPanel();
         dateSelector1.setLayout(new GridLayout(Constants.DATE_SELECTOR_GRID_ROWS,
                 Constants.DATE_SELECTOR_GRID_COLS,
                 Constants.DATE_SELECTOR_GRID_HGAP,
@@ -229,6 +226,7 @@ public class ViewStockView {
         for (int i = Constants.LATEST_YEAR; i <= currentYear; i++) {
             yearBox1.addItem(i);
         }
+
         dateSelector1.add(dayBox1);
         dateSelector1.add(monthBox1);
         dateSelector1.add(yearBox1);
@@ -240,13 +238,12 @@ public class ViewStockView {
         monthBox1.addActionListener(actionEvent -> {
             final int selectedYear = (int) yearBox1.getSelectedItem();
             final Object selectedMonth = monthBox1.getSelectedItem();
-
             if (selectedMonth != null) {
                 updateDays(dayBox1, selectedYear, (int) selectedMonth);
             }
         });
 
-        // dateSelector1 property setup
+        // dateSelector2 property setup
         dateSelector1.putClientProperty("day", dayBox1);
         dateSelector1.putClientProperty("month", monthBox1);
         dateSelector1.putClientProperty("year", yearBox1);
@@ -256,7 +253,6 @@ public class ViewStockView {
 
         // Calendar Input 2
         final JLabel date2Label = new JLabel("  End Date: ");
-        // date1Panel
         final JPanel dateSelector2 = new JPanel();
         dateSelector2.setLayout(new GridLayout(Constants.DATE_SELECTOR_GRID_ROWS,
                 Constants.DATE_SELECTOR_GRID_COLS,
@@ -476,7 +472,7 @@ public class ViewStockView {
      * @return Set of favorited stock symbols
      */
     public Set<String> getFavoritedStocks() {
-        return favoritesManager.getFavoritedStocks();
+        return favoritesController.getFavoritedStocks();
     }
 
     public void setCompareButtonListener(ActionListener actionListener) {

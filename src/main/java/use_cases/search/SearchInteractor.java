@@ -44,7 +44,8 @@ public class SearchInteractor implements SearchInputBoundary {
         for (String s: allSymbols) {
             final String symbol = s.strip().toUpperCase();
 
-            if (!symbol.isEmpty() && similarIndex(input, symbol) != Constants.NOT_SIMILAR) {
+            if (!symbol.isEmpty()
+                    && similarIndex(input, symbol) != Constants.NOT_SIMILAR) {
                 listTable.get(similarIndex(input, symbol)).add(symbol);
             }
         }
@@ -56,7 +57,8 @@ public class SearchInteractor implements SearchInputBoundary {
         symbols.addAll(listTable.get(Constants.SIMILAR_BY_SOME_CHAR));
 
         // output data
-        final SearchOutputData searchOutputData = new SearchOutputData(searchInputData.getInput(), symbols);
+        final SearchOutputData searchOutputData =
+                new SearchOutputData(searchInputData.getInput(), symbols);
 
         searchPresenter.displayResult(searchOutputData);
     }

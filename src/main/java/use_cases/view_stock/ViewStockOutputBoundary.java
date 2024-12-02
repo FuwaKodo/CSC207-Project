@@ -9,10 +9,4 @@ public interface ViewStockOutputBoundary {
      * @param viewStockOutputData the output data
      */
     void displayStock(ViewStockOutputData viewStockOutputData);
-
-    /**
-     * Display error.
-     * @param error the error name
-     */
-    void error(String error);
 }

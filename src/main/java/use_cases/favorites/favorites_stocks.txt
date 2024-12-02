@@ -1,3 +1,1 @@
-Select stock
-Stock B
 Stock C

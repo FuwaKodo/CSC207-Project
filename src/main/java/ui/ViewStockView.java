@@ -1,12 +1,15 @@
 package ui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -19,12 +22,15 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import app.Constants;
+import entities.SharePrices;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
+import use_cases.SymbolNameDataAccessInterface;
 
 /**
  * View for the application that displays stock information and allows users to favorite stocks.
@@ -65,11 +71,14 @@ public class ViewStockView {
     /**
      * Constructs the ViewStockView with the specified ViewModel and Controller.
      *
+     * @param viewManagerModel the view manager model responsible for switching view
      * @param viewStockViewModel the ViewModel managing the stock view state
      * @param viewStockController the Controller handling business logic for the stock view
      * @param searchController the controller for search use case
+     * @param loadingHubController the controller for loading hub use case
      */
-    public ViewStockView(ViewStockViewModel viewStockViewModel,
+    public ViewStockView(ViewManagerModel viewManagerModel,
+                         ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,
                          SearchController searchController,
                          LoadingHubController loadingHubController) {
@@ -78,6 +87,7 @@ public class ViewStockView {
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
         this.favoritesManager = new FavoritesManager();
+        final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Initialize the main panel
         mainPanel = new JPanel();
@@ -105,26 +115,29 @@ public class ViewStockView {
         cardLayout = new CardLayout();
         views = new JPanel(cardLayout);
 
+        // Manages which panel in views is displayed
+        new ViewManager(views, cardLayout, viewManagerModel);
+
         // Create a panel to hold stock view and favorites
         stockWithFavorites = new JPanel(new BorderLayout());
-        stockWithFavorites.add(stockViewObject.getStockView(), BorderLayout.CENTER);
+        stockWithFavorites.add(stockViewObject.getMainPanel(), BorderLayout.CENTER);
 
         // Initially, do not add favorites panel to avoid showing on title screen
         final JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
-        // Manages which panel in views is displayed
-        final ViewManagerModel viewManagerModel = new ViewManagerModel();
-        new ViewManager(views, cardLayout, viewManagerModel);
-
         // Make sure the stock view panel has a preferred size
-        stockViewObject.getStockView().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
+        stockViewObject.getMainPanel().setPreferredSize(Constants.STOCK_VIEW_DIMENSION);
 
         // Bottom panel to hold buttons and dropdown
         final JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
 
         // Dropdown menu for selecting stocks
-        stockDropdown = new JComboBox<>(new String[]{Constants.NO_STOCKS_SELECTED, "Stock A", "Stock B", "Stock C"});
+        final List<String> stocksList = new ArrayList<>();
+        stocksList.add(Constants.NO_STOCKS_SELECTED);
+        stocksList.addAll(symbolDataAccessObject.getSymbols());
+        final String[] stocksArray = stocksList.toArray(new String[0]);
+        stockDropdown = new JComboBox<>(stocksArray);
         bottomPanel.add(stockDropdown);
 
         // Favorite button is added to the bottom panel
@@ -140,24 +153,22 @@ public class ViewStockView {
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    stockViewObject.setSymbol(symbol);
-                    stockViewObject.setCompany("Company " + symbol);
+                    // Execute the view stock use case
+                    viewStockController.execute(symbol);
+
+                    // Set symbol and company from the state
+                    stockViewObject.setSymbol(viewStockViewModel.getState().getSymbol());
+                    stockViewObject.setCompany(viewStockViewModel.getState().getCompany());
 
                     // Update favorite button state
                     favoritesManager.updateFavoriteButtonState(symbol);
 
-                    // Generate share prices based on selected stock
-                    final List<Double> prices = new ArrayList<>();
-                    final double basePrice = switch (symbol) {
-                        case "Stock A" -> 100.0;
-                        case "Stock B" -> 150.0;
-                        case "Stock C" -> 200.0;
-                        default -> 100.0;
-                    };
-                    for (int i = 0; i < 10; i++) {
-                        prices.add(basePrice + Math.random() * 20);
+                    // Use share prices from the state
+                    SharePrices sharePrices = viewStockViewModel.getState().getSharePrices();
+                    if (sharePrices != null) {
+                        // Use close prices for the stock view
+                        stockViewObject.setSharePrices(sharePrices.getClosePrices());
                     }
-                    stockViewObject.setSharePrices(prices);
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
@@ -169,11 +180,11 @@ public class ViewStockView {
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
-                    stockViewObject.getStockView().revalidate();
-                    stockViewObject.getStockView().repaint();
-                } else {
+                    stockViewObject.getMainPanel().revalidate();
+                    stockViewObject.getMainPanel().repaint();
+                }
+                else {
                     // No stock is selected
-                    // Remove favorites panel when no stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
                     favoritesManager.updateFavoriteButtonState(symbol);
@@ -200,15 +211,8 @@ public class ViewStockView {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final String input = searchField.getText();
-                searchController.execute(input);
-                searchView.updateSearchResult();
-
-                cardLayout.show(views, Constants.SEARCH_VIEW);
-                viewManagerModel.setState(Constants.SEARCH_VIEW);
-                viewManagerModel.firePropertyChanged();
-                searchView.getMainPanel().revalidate();
-                searchView.getMainPanel().repaint();
+                // executes search use case with input from searchField
+                searchController.execute(searchField.getText());
             }
         });
 
@@ -314,7 +318,11 @@ public class ViewStockView {
         buyButton = new JButton("Buy Stock");
         bottomPanel.add(buyButton);
 
-        // Add bottom panel to the main panel
+        // adding views to views
+        views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
+        views.add(stockWithFavorites, Constants.STOCK_VIEW);
+
+        // adding panels to mainPanel
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
         mainPanel.add(views, BorderLayout.CENTER);
         mainPanel.add(datePanel, BorderLayout.NORTH);

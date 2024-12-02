@@ -39,33 +39,39 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
     }
 
     private String getComparisonSummary(String symbol1, String symbol2, Date start, Date end) {
+        final String result;
+
         if (start.after(end)) {
-            return "The end date must be after the start date!";
+            result = "The end date must be after the start date!";
+        }
+        else {
+            // Compare stock volumes
+            final Double stock1Volumes = dataAccess.getVolume(symbol1, end);
+            final Double stock2Volumes = dataAccess.getVolume(symbol2, end);
+            // Compare growth percentages
+            final SharePrices stock1SharePrices = dataAccess.getSharePrices(symbol1, start, end);
+            final SharePrices stock2SharePrices = dataAccess.getSharePrices(symbol2, start, end);
+
+            final String volumesSummary = String.format(
+                    "At the end of %s, the volume of %s is %.1f shares and the volume of %s is %.1f shares.",
+                    formattedDateString(end),
+                    symbol1, stock1Volumes,
+                    symbol2, stock2Volumes
+            );
+
+            final String growthSummary = String.format(
+                    "From %s to %s, %s changed from $%.1f per share to $%.1f per share and "
+                            +
+                            "%s changed from $%.1f per share to $%.1f per share.",
+                    formattedDateString(start), formattedDateString(end),
+                    symbol1, stock1SharePrices.getValue(start), stock1SharePrices.getValue(end),
+                    symbol2, stock2SharePrices.getValue(start), stock2SharePrices.getValue(end)
+            );
+
+            result = volumesSummary + "\n" + growthSummary;
         }
 
-        // Compare stock volumes
-        final Double stock1Volumes = dataAccess.getVolume(symbol1, end);
-        final Double stock2Volumes = dataAccess.getVolume(symbol2, end);
-        // Compare growth percentages
-        final SharePrices stock1SharePrices = dataAccess.getSharePrices(symbol1, start, end);
-        final SharePrices stock2SharePrices = dataAccess.getSharePrices(symbol2, start, end);
-
-        final String volumesSummary = String.format(
-                "At the end of %s, the volume of %s is %.1f shares and the volume of %s is %.1f shares.",
-                formattedDateString(end),
-                symbol1, stock1Volumes,
-                symbol2, stock2Volumes
-        );
-
-        final String growthSummary = String.format(
-                "From %s to %s, %s changed from $%.1f per share to $%.1f per share and " +
-                        "%s changed from $%.1f per share to $%.1f per share.",
-                formattedDateString(start), formattedDateString(end),
-                symbol1, stock1SharePrices.getValue(start), stock1SharePrices.getValue(end),
-                symbol2, stock2SharePrices.getValue(start), stock2SharePrices.getValue(end)
-        );
-
-        return volumesSummary + "\n" + growthSummary;
+        return result;
     }
 
     private String formattedDateString(Date date) {

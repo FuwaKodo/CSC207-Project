@@ -14,12 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import app.Constants;
 import entities.SharePrices;
@@ -303,32 +298,60 @@ public class ViewStockView {
         final JButton updateButton = new JButton("Update");
         datePanel.add(updateButton, BorderLayout.EAST);
 
-        // Response to clicking updateButton
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final Calendar startDateCalendar = Calendar.getInstance();
+                // Safely get values from dateSelector1 (startDate)
+                JComboBox<Integer> dayBox1 = (JComboBox<Integer>) dateSelector1.getClientProperty("day");
+                JComboBox<Integer> monthBox1 = (JComboBox<Integer>) dateSelector1.getClientProperty("month");
+                JComboBox<Integer> yearBox1 = (JComboBox<Integer>) dateSelector1.getClientProperty("year");
+
+                // Safely get values from dateSelector2 (endDate)
+                JComboBox<Integer> dayBox2 = (JComboBox<Integer>) dateSelector2.getClientProperty("day");
+                JComboBox<Integer> monthBox2 = (JComboBox<Integer>) dateSelector2.getClientProperty("month");
+                JComboBox<Integer> yearBox2 = (JComboBox<Integer>) dateSelector2.getClientProperty("year");
+
+                // Check for null to avoid null pointer exceptions
+                if (dayBox1.getSelectedItem() == null || monthBox1.getSelectedItem() == null || yearBox1.getSelectedItem() == null ||
+                        dayBox2.getSelectedItem() == null || monthBox2.getSelectedItem() == null || yearBox2.getSelectedItem() == null) {
+                    // Display error message or exit early
+                    JOptionPane.showMessageDialog(mainPanel, "Please select valid dates.", "Invalid Date", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Create Calendar instances for start and end dates
+                Calendar startDateCalendar = Calendar.getInstance();
                 startDateCalendar.set((int) yearBox1.getSelectedItem(),
                         (int) monthBox1.getSelectedItem() - 1,
                         (int) dayBox1.getSelectedItem());
-                clearTimeFields(startDateCalendar);
 
-                final Calendar endDateCalendar = Calendar.getInstance();
+                Calendar endDateCalendar = Calendar.getInstance();
                 endDateCalendar.set((int) yearBox2.getSelectedItem(),
                         (int) monthBox2.getSelectedItem() - 1,
                         (int) dayBox2.getSelectedItem());
-                clearTimeFields(endDateCalendar);
 
-                final Date startDate = startDateCalendar.getTime();
-                final Date endDate = endDateCalendar.getTime();
-                // final String stockSymbol = stockDropdown.getSelectedItem().toString();
-                // set to stockSymbol = "INTC"
-                // TODO: Fix this by changing
-                final String stockSymbol = "INTC";
+                // Validate that start date is not after end date
+                if (startDateCalendar.after(endDateCalendar)) {
+                    JOptionPane.showMessageDialog(mainPanel,
+                            "Start date cannot be after End date. Please adjust the dates.",
+                            "Date Validation Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
+                // Proceed with logic if dates are valid
+                Date startDate = startDateCalendar.getTime();
+                Date endDate = endDateCalendar.getTime();
+
+                // Assuming stockSymbol is predefined or fetched from another component
+                // Replace with actual logic to get stock symbol
+                String stockSymbol = "INTC";
+
+                // Execute business logic
                 loadingHubController.execute(stockSymbol, startDate, endDate);
             }
         });
+
 
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");

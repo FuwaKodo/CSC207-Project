@@ -33,6 +33,10 @@ public class StockViewModel {
         return projectedPrices;
     }
 
+    /**
+     * The list of Projected Prices.
+     * @param prices The prices of the projected prices.
+     */
     public void setProjectedPrices(double... prices) {
         projectedPrices.clear();
         for (double price : prices) {

@@ -6,7 +6,7 @@ import use_cases.text_analyze_stock.StockAnalysisResult;
 public class StockPresenterNew implements FutureStockOutputBoundary {
     private final StockViewModel viewModel;
 
-    public StockPresenterNew (StockViewModel viewModel) {
+    public StockPresenterNew(StockViewModel viewModel) {
         this.viewModel = viewModel;
     }
     @Override

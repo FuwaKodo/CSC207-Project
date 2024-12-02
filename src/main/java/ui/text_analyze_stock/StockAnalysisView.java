@@ -1,17 +1,14 @@
 package ui.text_analyze_stock;
 
 import app.Constants;
-import entities.SharePrices;
 import interface_adapters.gateways.StockDataLoader;
 import interface_adapters.text_analyze_stock.StockController;
 import interface_adapters.text_analyze_stock.StockViewModel;
 import interface_adapters.view_stock.ViewStockState;
 import interface_adapters.view_stock.ViewStockViewModel;
-import use_cases.StockDataInterface;
-import use_cases.text_analyze_stock.StockInteractor;
-import use_cases.text_analyze_stock.StockAnalysisResult;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,7 +21,8 @@ public class StockAnalysisView {
     private final ViewStockViewModel viewModel;
     private final StockController predictController;
     private JLabel label = new JLabel();
-    public StockAnalysisView (StockViewModel predictViewModel, ViewStockViewModel viewModel,
+
+    public StockAnalysisView(StockViewModel predictViewModel, ViewStockViewModel viewModel,
                               StockController predictController) {
         this.predictViewModel = predictViewModel;
         this.viewModel = viewModel;
@@ -55,16 +53,17 @@ public class StockAnalysisView {
         frame.setVisible(true);
 
     }
+
     private void updateData(){
-        final ViewStockState current_state = viewModel.getState();
+        final ViewStockState currentState = viewModel.getState();
         final StockDataLoader stockDataLoader = new StockDataLoader();
         final Calendar myCalendarStart = new GregorianCalendar(2023, 10, 6);
         final Calendar myCalendarCurrent = new GregorianCalendar(2024, 10, 5);
         final Date myDateCurrent = myCalendarCurrent.getTime();
         final Date myDateInitial = myCalendarStart.getTime();
-        predictController.execute(current_state.getSymbol(),
-                stockDataLoader.getSharePrice(current_state.getSymbol(), myDateCurrent).getHighPrices().get(0),
-                stockDataLoader.getSharePrice(current_state.getSymbol(), myDateInitial).getHighPrices().get(0));
+        predictController.execute(currentState.getSymbol(),
+                stockDataLoader.getSharePrice(currentState.getSymbol(), myDateCurrent).getHighPrices().get(0),
+                stockDataLoader.getSharePrice(currentState.getSymbol(), myDateInitial).getHighPrices().get(0));
         // Set variable breaks to the value of <br>
         final String breaks = "<br>";
         // Format the result text

@@ -24,6 +24,11 @@ public class SearchTest {
         public String getCompany(String symbol) {
             return "";
         }
+
+        @Override
+        public String getSymbol(String company) {
+            return "";
+        }
     };
 
     @Test

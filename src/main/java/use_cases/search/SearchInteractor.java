@@ -8,7 +8,7 @@ import app.Constants;
 import use_cases.SymbolNameDataAccessInterface;
 
 /**
- * Interactor of the use case.
+ * Interactor of the search use case.
  */
 public class SearchInteractor implements SearchInputBoundary {
 

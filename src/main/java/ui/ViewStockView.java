@@ -147,24 +147,21 @@ public class ViewStockView {
         stockDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
+                String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    // Execute the view stock use case
-                    viewStockController.execute(symbol);
-
-                    // Set symbol and company from the state
-                    stockViewObject.setSymbol(viewStockViewModel.getState().getSymbol());
-                    stockViewObject.setCompany(viewStockViewModel.getState().getCompany());
+                    stockViewObject.setSymbol(symbol);
+                    stockViewObject.setCompany(symbol + " Company"); // Or fetch actual company name
 
                     // Update favorite button state
                     favoritesController.updateFavoriteButtonState(symbol);
 
-                    // Use share prices from the state
-                    final SharePrices sharePrices = viewStockViewModel.getState().getSharePrices();
-                    if (sharePrices != null) {
-                        // Use close prices for the stock view
-                        stockViewObject.setSharePrices(sharePrices.getClosePrices());
+                    // Generate random share prices for demonstration
+                    List<Double> prices = new ArrayList<>();
+                    double basePrice = 100.0; // Default base price
+                    for (int i = 0; i < 10; i++) {
+                        prices.add(basePrice + Math.random() * 20);
                     }
+                    stockViewObject.setSharePrices(prices);
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
@@ -176,10 +173,9 @@ public class ViewStockView {
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
-                    stockViewObject.getMainPanel().revalidate();
-                    stockViewObject.getMainPanel().repaint();
-                }
-                else {
+                    stockViewObject.getStockView().revalidate();
+                    stockViewObject.getStockView().repaint();
+                } else {
                     // No stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
@@ -187,6 +183,7 @@ public class ViewStockView {
                 }
             }
         });
+
 
         // Favorite button action listener
         favoritesController.getFavoriteButton().addActionListener(new ActionListener() {

@@ -211,12 +211,11 @@ public class ViewStockView {
             }
         });
 
-        // Button for startDate and endDate
+        // Calendar Input 1
         final JLabel date1Label = new JLabel("Start Date: ");
+        final JPanel dateSelector1 = new JPanel();
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        // date1Panel
-        final JPanel dateSelector1 = new JPanel();
         dateSelector1.setLayout(new GridLayout(Constants.DATE_SELECTOR_GRID_ROWS,
                 Constants.DATE_SELECTOR_GRID_COLS,
                 Constants.DATE_SELECTOR_GRID_HGAP,
@@ -229,6 +228,7 @@ public class ViewStockView {
         for (int i = Constants.LATEST_YEAR; i <= currentYear; i++) {
             yearBox1.addItem(i);
         }
+
         dateSelector1.add(dayBox1);
         dateSelector1.add(monthBox1);
         dateSelector1.add(yearBox1);
@@ -240,13 +240,12 @@ public class ViewStockView {
         monthBox1.addActionListener(actionEvent -> {
             final int selectedYear = (int) yearBox1.getSelectedItem();
             final Object selectedMonth = monthBox1.getSelectedItem();
-
             if (selectedMonth != null) {
                 updateDays(dayBox1, selectedYear, (int) selectedMonth);
             }
         });
 
-        // dateSelector1 property setup
+        // dateSelector2 property setup
         dateSelector1.putClientProperty("day", dayBox1);
         dateSelector1.putClientProperty("month", monthBox1);
         dateSelector1.putClientProperty("year", yearBox1);
@@ -256,7 +255,6 @@ public class ViewStockView {
 
         // Calendar Input 2
         final JLabel date2Label = new JLabel("  End Date: ");
-        // date1Panel
         final JPanel dateSelector2 = new JPanel();
         dateSelector2.setLayout(new GridLayout(Constants.DATE_SELECTOR_GRID_ROWS,
                 Constants.DATE_SELECTOR_GRID_COLS,

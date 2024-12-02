@@ -1,5 +1,6 @@
 package ui.compare_stocks;
 
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.ZoneId;
@@ -76,6 +77,7 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
     private JTextArea comparisonSummaryComponent() {
         comparisonSummaryDisplay = new JTextArea();
         comparisonSummaryDisplay.setEditable(false);
+        comparisonSummaryDisplay.setLineWrap(true);
         return comparisonSummaryDisplay;
     }
 
@@ -98,6 +100,7 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
 
         final JPanel parentPanel = new JPanel();
         parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.X_AXIS));
+        parentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         parentPanel.add(startDatePanel);
         parentPanel.add(endDatePanel);
 

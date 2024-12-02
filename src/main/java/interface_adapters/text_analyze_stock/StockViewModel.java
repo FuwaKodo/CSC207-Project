@@ -33,6 +33,10 @@ public class StockViewModel {
         return projectedPrices;
     }
 
+    /**
+     * Sets the projected prices for year 1, year 2, and year 3.
+     * @param prices The list of the prices.
+     */
     public void setProjectedPrices(double... prices) {
         projectedPrices.clear();
         for (double price : prices) {

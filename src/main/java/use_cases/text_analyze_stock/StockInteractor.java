@@ -10,6 +10,7 @@ import use_cases.StockDataInterface;
 public class StockInteractor implements FutureStockInputBoundary {
     private final FutureStockOutputBoundary presenter;
     private final StockDataInterface dataLoader;
+
     public StockInteractor(FutureStockOutputBoundary presenter, StockDataInterface dataLoader) {
         this.presenter = presenter;
         this.dataLoader = dataLoader;
@@ -19,7 +20,6 @@ public class StockInteractor implements FutureStockInputBoundary {
      * @param stockName The Name of the stock
      * @param currentPrice The current price of the stock
      * @param startingPrice The price of the stock 1 year ago
-     * @return Projected Prices for the stock, and buying decision
      */
 
     @Override

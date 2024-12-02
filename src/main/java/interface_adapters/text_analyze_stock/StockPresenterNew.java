@@ -3,12 +3,16 @@ package interface_adapters.text_analyze_stock;
 import use_cases.text_analyze_stock.FutureStockOutputBoundary;
 import use_cases.text_analyze_stock.StockAnalysisResult;
 
+/**
+ * The main stock presenter class.
+ */
 public class StockPresenterNew implements FutureStockOutputBoundary {
     private final StockViewModel viewModel;
 
-    public StockPresenterNew (StockViewModel viewModel) {
+    public StockPresenterNew(StockViewModel viewModel) {
         this.viewModel = viewModel;
     }
+
     @Override
     public void displayResult(StockAnalysisResult result) {
         viewModel.setStockName(result.getStockName());

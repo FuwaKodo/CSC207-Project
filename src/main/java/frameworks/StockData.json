@@ -247,4 +247,9 @@
 {"symbol":"MFC","from":"2024-11-28","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
 {"volume":790252,"symbol":"MFC","high":32.17,"preMarket":32.04,"low":31.88,"from":"2024-11-29","afterHours":32.21,"api":"polygon","message":"Data found.","close":32.13,"open":32.02,"status":"OK"},
 {"symbol":"MFC","from":"2024-11-30","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
-{"symbol":"MFC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}
+{"symbol":"MFC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"volume":5.2667268E7,"symbol":"INTC","high":31.94,"preMarket":31.92,"low":31.02,"from":"2023-06-01","afterHours":31.2,"api":"polygon","message":"Data found.","close":31.13,"open":31.8,"status":"OK"},
+{"volume":3.6520757E7,"symbol":"INTC","high":31.5899,"preMarket":31.21,"low":30.825,"from":"2023-06-02","afterHours":31.4,"api":"polygon","message":"Data found.","close":31.31,"open":31.398,"status":"OK"},
+{"symbol":"INTC","from":"2023-06-03","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
+{"symbol":"INTC","from":"2023-06-04","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
+{"volume":4.8244128E7,"symbol":"INTC","high":31.4,"preMarket":31.4,"low":29.83,"from":"2023-06-05","afterHours":29.7,"api":"polygon","message":"Data found.","close":29.86,"open":31.31,"status":"OK"}

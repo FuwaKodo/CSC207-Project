@@ -9,8 +9,8 @@ import java.util.Date;
 public class CompareStocksInputData {
     private final String stock1Name;
     private final String stock2Name;
-    private final Date beginDate; // The date of beginning of the period of comparison.
-    private final Date endDate;   // The date of the end of the period of comparison.
+    private final Date beginDate;
+    private final Date endDate;
 
     /**
      * Initialize the compare stock use case input data.

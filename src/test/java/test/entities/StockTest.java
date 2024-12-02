@@ -95,5 +95,11 @@ class StockTest {
     private LocalDate toLocalDate(Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
+
+    @Test
+    void favoritingFeature() {
+        stock.setFavorite(true);
+        assertTrue(stock.isFavorite());
+    }
 }
-*/
+}*/

@@ -1,5 +1,4 @@
 AAPL
 NVDA
 MFC
-L
 INTC

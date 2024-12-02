@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -119,8 +122,27 @@ public class ViewStockView {
         final JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
 
-        // Dropdown menu for selecting stocks
-        stockDropdown = new JComboBox<>(new String[]{Constants.NO_STOCKS_SELECTED, "Stock A", "Stock B", "Stock C"});
+        // Read stock symbols from file
+        List<String> stockSymbols = new ArrayList<>();
+        stockSymbols.add(Constants.NO_STOCKS_SELECTED); // Add default option
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/java/frameworks/StockSymbols.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    stockSymbols.add(line.trim());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // If file reading fails, add some default stocks
+            stockSymbols.add("AAPL");
+            stockSymbols.add("NVDA");
+            stockSymbols.add("MFC");
+        }
+
+        // Create the dropdown with the loaded stock symbols
+        stockDropdown = new JComboBox<>(stockSymbols.toArray(new String[0]));
         bottomPanel.add(stockDropdown);
 
         // Favorite button is added to the bottom panel
@@ -130,22 +152,17 @@ public class ViewStockView {
         stockDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
+                String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
                     stockViewObject.setSymbol(symbol);
-                    stockViewObject.setCompany("Company " + symbol);
+                    stockViewObject.setCompany(symbol + " Company"); // Or fetch actual company name
 
                     // Update favorite button state
                     favoritesManager.updateFavoriteButtonState(symbol);
 
-                    // Generate share prices based on selected stock
-                    final List<Double> prices = new ArrayList<>();
-                    final double basePrice = switch (symbol) {
-                        case "Stock A" -> 100.0;
-                        case "Stock B" -> 150.0;
-                        case "Stock C" -> 200.0;
-                        default -> 100.0;
-                    };
+                    // Generate random share prices for demonstration
+                    List<Double> prices = new ArrayList<>();
+                    double basePrice = 100.0; // Default base price
                     for (int i = 0; i < 10; i++) {
                         prices.add(basePrice + Math.random() * 20);
                     }
@@ -165,7 +182,6 @@ public class ViewStockView {
                     stockViewObject.getStockView().repaint();
                 } else {
                     // No stock is selected
-                    // Remove favorites panel when no stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
                     favoritesManager.updateFavoriteButtonState(symbol);

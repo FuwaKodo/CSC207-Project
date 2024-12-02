@@ -1,5 +1,4 @@
 AAPL-Apple
 NVDA-Nvidia
 MFC-Manulife
-L-Loblaws
 INTC-Intel

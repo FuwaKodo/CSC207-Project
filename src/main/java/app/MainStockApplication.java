@@ -17,7 +17,9 @@ import interface_adapters.text_analyze_stock.StockController;
 import interface_adapters.text_analyze_stock.StockControllerFactory;
 import interface_adapters.text_analyze_stock.StockViewModel;
 import interface_adapters.view_stock.ViewStockController;
+import interface_adapters.view_stock.ViewStockUseCaseFactory;
 import interface_adapters.view_stock.ViewStockViewModel;
+import ui.SearchView;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
 import ui.text_analyze_stock.StockAnalysisView;
@@ -26,7 +28,6 @@ import use_cases.SymbolNameDataAccessInterface;
 import use_cases.favorites.FavoriteStockInputBoundary;
 import use_cases.favorites.FavoriteStockInteractor;
 import use_cases.favorites.FavoriteStockOutputBoundary;
-import use_cases.view_stock.ViewStockUseCaseFactory;
 
 /**
  * Main class for launching the Stock Analysis Application.
@@ -73,27 +74,26 @@ public class MainStockApplication {
         // Load favorite stocks on startup
         favoriteStockInputBoundary.getFavorites();
 
-        // Create the ViewStockController using the factory
-        final ViewStockController viewStockController =
-                ViewStockUseCaseFactory.create(
+        // Create the controllers
+        final ViewStockController viewStockController = ViewStockUseCaseFactory.create(
                         viewManagerModel,
                         viewStockViewModel,
                         stockDataAccessObject,
-                        symbolDataAccessObject,
-                        favoriteStockInputBoundary
-                );
+                        symbolDataAccessObject);
+        final SearchController searchController = SearchUseCaseFactory.create(
+                        viewManagerModel,
+                        searchViewModel,
+                        symbolDataAccessObject);
+        final LoadingHubController loadingHubController = LoadingHubUseCaseFactory.create(
+                        viewManagerModel,
+                        loadingHubViewModel,
+                        loadingHubAccessInterface);
+        final StockController predictController = StockControllerFactory.createStockController(
+                        stockViewModel,
+                        stockDataAccessObject);
 
-        // Create the SearchController
-        final SearchController searchController =
-                SearchUseCaseFactory.create(viewManagerModel, searchViewModel, symbolDataAccessObject);
-
-        // Create the LoadingHubController
-        final LoadingHubController loadingHubController =
-                LoadingHubUseCaseFactory.create(viewManagerModel, loadingHubViewModel, loadingHubAccessInterface);
-
-        // Create the Stock Controller
-        final StockController predictController = StockControllerFactory.createStockController(stockViewModel,
-                stockDataAccessObject);
+        // initializes search view
+        final SearchView searchView = new SearchView(searchViewModel, searchController, viewStockController);
 
         // Use SwingUtilities to ensure the GUI is created on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
@@ -106,15 +106,14 @@ public class MainStockApplication {
 
             // Create the view and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(
-                    viewManagerModel, viewStockViewModel, viewStockController, searchController, loadingHubController);
+                    viewManagerModel, viewStockViewModel,
+                    viewStockController, searchView, loadingHubController);
             // Initialize ViewStockView and add it to the frame
             viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
 
             // Initialize Stock Analysis View
             final StockAnalysisView stockAnalysisView = new StockAnalysisView(stockViewModel, viewStockViewModel,
                     predictController);
-            // Initialize search view
-            viewStockView.setSearchView(searchViewModel);
             
             frame.add(viewStockView.getMainPanel());
 

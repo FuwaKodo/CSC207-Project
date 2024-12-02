@@ -19,6 +19,7 @@ import javax.swing.*;
 import app.Constants;
 import entities.SharePrices;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.favoritesIA.FavoritesController;
 import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.search.SearchController;
@@ -58,7 +59,7 @@ public class ViewStockView {
     private final LoadingHubController loadingHubController;
 
     /** Manager for favorites functionality. */
-    private final FavoritesManager favoritesManager;
+    private final FavoritesController favoritesController;
 
     /** Panel to hold stock and favorites. */
     private final JPanel stockWithFavorites;
@@ -81,7 +82,7 @@ public class ViewStockView {
         this.viewStockController = viewStockController;
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
-        this.favoritesManager = new FavoritesManager();
+        this.favoritesController = new FavoritesController();
         final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Initialize the main panel
@@ -136,7 +137,7 @@ public class ViewStockView {
         bottomPanel.add(stockDropdown);
 
         // Favorite button is added to the bottom panel
-        bottomPanel.add(favoritesManager.getFavoriteButton());
+        bottomPanel.add(favoritesController.getFavoriteButton());
 
         // Date panel to hold buttons and dropdown
         final JPanel datePanel = new JPanel();
@@ -156,7 +157,7 @@ public class ViewStockView {
                     stockViewObject.setCompany(viewStockViewModel.getState().getCompany());
 
                     // Update favorite button state
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
 
                     // Use share prices from the state
                     final SharePrices sharePrices = viewStockViewModel.getState().getSharePrices();
@@ -167,7 +168,7 @@ public class ViewStockView {
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
-                    rightPanel.add(favoritesManager.getFavoritesPanel());
+                    rightPanel.add(favoritesController.getFavoritesPanel());
                     stockWithFavorites.add(rightPanel, BorderLayout.EAST);
 
                     // Show the stock view
@@ -182,17 +183,17 @@ public class ViewStockView {
                     // No stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
                 }
             }
         });
 
         // Favorite button action listener
-        favoritesManager.getFavoriteButton().addActionListener(new ActionListener() {
+        favoritesController.getFavoriteButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
-                favoritesManager.toggleFavorite(symbol);
+                favoritesController.toggleFavorite(symbol);
             }
         });
 
@@ -476,7 +477,7 @@ public class ViewStockView {
      * @return Set of favorited stock symbols
      */
     public Set<String> getFavoritedStocks() {
-        return favoritesManager.getFavoritedStocks();
+        return favoritesController.getFavoritedStocks();
     }
 
     public void setCompareButtonListener(ActionListener actionListener) {

@@ -33,6 +33,12 @@ public final class Constants {
     public static final String NO_STOCKS_SELECTED = "Select stock";
     // other view names
     public static final String SEARCH_VIEW = "search view state name";
+    // view for load hub
+    public static final int LATEST_YEAR = 2023;
+    public static final int DATE_SELECTOR_GRID_ROWS = 1;
+    public static final int DATE_SELECTOR_GRID_COLS = 3;
+    public static final int DATE_SELECTOR_GRID_HGAP = 5;
+    public static final int DATE_SELECTOR_GRID_VGAP = 5;
 
     // search view constants
     public static final int MAX_STOCK_PER_PAGE = 5;

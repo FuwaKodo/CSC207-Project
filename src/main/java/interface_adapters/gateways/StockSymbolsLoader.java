@@ -50,4 +50,23 @@ public class StockSymbolsLoader implements SymbolNameDataAccessInterface {
         return result;
     }
 
+    @Override
+    public String getSymbol(String company) {
+        final List<String> symbolNameList = new ArrayList<>();
+        String result = "";
+        try {
+            symbolNameList.addAll(Files.readAllLines(Path.of(filePath)));
+        }
+        catch (IOException exception) {
+            System.out.println("Error reading file: " + exception.getMessage());
+        }
+        for (String str: symbolNameList) {
+            if (str.contains(company)) {
+                result = str.substring(0, str.indexOf('-'));
+                break;
+            }
+        }
+        return result;
+    }
+
 }

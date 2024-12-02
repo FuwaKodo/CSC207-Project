@@ -150,7 +150,7 @@ public class ViewStockView {
                 String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
                     stockViewObject.setSymbol(symbol);
-                    stockViewObject.setCompany(symbol + " Company"); // Or fetch actual company name
+                    stockViewObject.setCompany(symbol + " Company");
 
                     // Update favorite button state
                     favoritesController.updateFavoriteButtonState(symbol);

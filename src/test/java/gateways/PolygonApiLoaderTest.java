@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
 public class PolygonApiLoaderTest {
     private PolygonApiLoader polygonApiLoaderExample = new PolygonApiLoader();
 
-    //TODO: Ask because the test is for interface should I make a test for interface?
     @Test
     public void buildApiUrl() {
         String baseUrl = "https://api.polygon.io/v1/";

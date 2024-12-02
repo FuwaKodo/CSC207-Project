@@ -243,7 +243,12 @@ public class ViewStockView {
         });
 
         monthBox1.addActionListener(actionEvent -> {
-            monthBoxEvent(yearBox1, monthBox1, dayBox1);
+            final int selectedYear = (int) yearBox1.getSelectedItem();
+            final Object selectedMonth = monthBox1.getSelectedItem();
+
+            if (selectedMonth != null) {
+                updateDays(dayBox1, selectedYear, (int) selectedMonth);
+            }
         });
 
         // dateSelector1 property setup
@@ -280,7 +285,11 @@ public class ViewStockView {
         });
 
         monthBox2.addActionListener(actionEvent -> {
-            monthBoxEvent(yearBox2, monthBox2, dayBox2);
+            final int selectedYear = (int) yearBox2.getSelectedItem();
+            final Object selectedMonth = monthBox2.getSelectedItem();
+            if (selectedMonth != null) {
+                updateDays(dayBox2, selectedYear, (int) selectedMonth);
+            }
         });
 
         // dateSelector2 property setup
@@ -339,48 +348,6 @@ public class ViewStockView {
         mainPanel.add(datePanel, BorderLayout.NORTH);
     }
 
-    private void updateMaxDateSelector1(
-            JComboBox<Integer> dayBox1, JComboBox<Integer> monthBox1, JComboBox<Integer> yearBox1,
-            JComboBox<Integer> dayBox2, JComboBox<Integer> monthBox2, JComboBox<Integer> yearBox2) {
-
-        int endYear = (int) yearBox2.getSelectedItem();
-        int endMonth = (int) monthBox2.getSelectedItem();
-        int endDay = (int) dayBox2.getSelectedItem();
-
-        // Update the yearBox1 to allow only up to endYear
-        yearBox1.removeAllItems();
-        for (int i = Constants.LATEST_YEAR; i <= endYear; i++) {
-            yearBox1.addItem(i);
-        }
-
-        // Update the monthBox1 to allow only up to the endMonth if the year matches
-        int selectedYear = (int) yearBox1.getSelectedItem();
-        populateMonthBox(monthBox1, selectedYear);
-        if (selectedYear == endYear) {
-            while (monthBox1.getItemCount() > endMonth) {
-                monthBox1.removeItemAt(monthBox1.getItemCount() - 1);
-            }
-        }
-
-        // Update the dayBox1 to allow only up to the endDay if the month matches
-        int selectedMonth = (int) monthBox1.getSelectedItem();
-        populateDays(dayBox1, selectedYear, selectedMonth);
-        if (selectedYear == endYear && selectedMonth == endMonth) {
-            while (dayBox1.getItemCount() > endDay) {
-                dayBox1.removeItemAt(dayBox1.getItemCount() - 1);
-            }
-        }
-    }
-
-    private void monthBoxEvent(JComboBox<Integer> yearBox1, JComboBox<Integer> monthBox1, JComboBox<Integer> dayBox1) {
-        final int selectedYear = (int) yearBox1.getSelectedItem();
-        final Object selectedMonth = monthBox1.getSelectedItem();
-
-        if (selectedMonth != null) {
-            updateDays(dayBox1, selectedYear, (int) selectedMonth);
-        }
-    }
-
     private void yearBoxEvent(JComboBox<Integer> yearBox1, JComboBox<Integer> monthBox1) {
         final int selectedYear = (int) yearBox1.getSelectedItem();
         final ActionListener[] monthListeners = monthBox1.getActionListeners();
@@ -409,7 +376,6 @@ public class ViewStockView {
         final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         // Months are 0-based
         final int lastMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        System.out.println(lastMonth);
 
         // If the selected year is the current year, limit months to the current month
         // Otherwise, populate all 12 months
@@ -426,7 +392,7 @@ public class ViewStockView {
 
     private void populateDays(JComboBox<Integer> dayBox, int year, int month) {
         dayBox.removeAllItems();
-        int daysInMonth = getDaysInMonth(year, month);
+        final int daysInMonth = getDaysInMonth(year, month);
         Calendar today = Calendar.getInstance();
 
         for (int i = 1; i <= daysInMonth; i++) {

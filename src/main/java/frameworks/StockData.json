@@ -258,4 +258,9 @@
 {"symbol":"AAPL","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"INTC","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2023-01-01","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
-{"symbol":"NVDA","from":"2023-01-01","api":"polygon","message":"Data not found.","status":"NOT_FOUND"}
+{"symbol":"NVDA","from":"2023-01-01","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
+{"volume":1.79228758E8,"symbol":"NVDA","high":148.85,"preMarket":148.5,"low":143.57,"from":"2024-11-11","afterHours":144.76,"api":"polygon","message":"Data found.","close":145.26,"open":148.68,"status":"OK"},
+{"volume":1.93657762E8,"symbol":"NVDA","high":149.65,"preMarket":144.9,"low":146.01,"from":"2024-11-12","afterHours":148.2,"api":"polygon","message":"Data found.","close":148.29,"open":146.78,"status":"OK"},
+{"volume":1.82678299E8,"symbol":"NVDA","high":149.33,"preMarket":148.65,"low":145.9,"from":"2024-11-13","afterHours":146.75,"api":"polygon","message":"Data found.","close":146.27,"open":149.07,"status":"OK"},
+{"volume":1.88152423E8,"symbol":"NVDA","high":149,"preMarket":146.9,"low":145.55,"from":"2024-11-14","afterHours":146.3181,"api":"polygon","message":"Data found.","close":146.76,"open":147.64,"status":"OK"},
+{"volume":2.48079941E8,"symbol":"NVDA","high":145.24,"preMarket":145.83,"low":140.08,"from":"2024-11-15","afterHours":142.6999,"api":"polygon","message":"Data found.","close":141.98,"open":144.87,"status":"OK"}

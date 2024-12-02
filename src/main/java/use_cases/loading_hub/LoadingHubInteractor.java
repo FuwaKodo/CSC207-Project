@@ -43,7 +43,7 @@ public class LoadingHubInteractor implements LoadingHubInputBoundary {
                 loadingHubInputData.getStartDate(),
                 loadingHubInputData.getEndDate());
 
-        Constants.HALF_MONTH = 15;
+        Constants.HALF_MONTH += 1;
 
         // output data
         final LoadingHubOutputData outputData = new LoadingHubOutputData(loadingHubInputData.getStockSymbol(),

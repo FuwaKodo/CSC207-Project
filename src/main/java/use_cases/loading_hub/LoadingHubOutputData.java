@@ -14,9 +14,10 @@ public class LoadingHubOutputData {
     private MetricValues afterHours;
     private MetricValues preMarket;
 
-    public LoadingHubOutputData(String stockSymbol, SharePrices sharePrices, MetricValues volumes,
+    public LoadingHubOutputData(String stockSymbol, String companyName, SharePrices sharePrices, MetricValues volumes,
                                 MetricValues afterHours, MetricValues preMarket) {
         this.stockSymbol = stockSymbol;
+        this.companyName = companyName;
         this.sharePrices = sharePrices;
         this.volumes = volumes;
         this.afterHours = afterHours;
@@ -25,6 +26,10 @@ public class LoadingHubOutputData {
 
     public String getStockSymbol() {
         return stockSymbol;
+    }
+
+    public String getCompanyName() {
+        return companyName;
     }
 
     public SharePrices getSharePrices() {

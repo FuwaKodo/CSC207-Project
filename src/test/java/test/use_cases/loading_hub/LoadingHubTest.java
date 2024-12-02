@@ -3,8 +3,10 @@ package test.use_cases.loading_hub;
 import entities.MetricValues;
 import entities.SharePrices;
 import interface_adapters.gateways.StockDataLoader;
+import interface_adapters.gateways.StockSymbolsLoader;
 import org.junit.Test;
 import use_cases.StockDataInterface;
+import use_cases.SymbolNameDataAccessInterface;
 import use_cases.loading_hub.LoadingHubInputBoundary;
 import use_cases.loading_hub.LoadingHubInputData;
 import use_cases.loading_hub.LoadingHubInteractor;
@@ -18,6 +20,7 @@ import java.util.List;
 
 public class LoadingHubTest {
     final private StockDataInterface dataAccessObject = new StockDataLoader();
+    final private SymbolNameDataAccessInterface symbolNameDataAccessInterface = new StockSymbolsLoader();
 
     /**
      * Sets the given Calendar object to the specified day and resets the time to midnight (00:00:00.000).
@@ -78,6 +81,7 @@ public class LoadingHubTest {
                 MetricValues preMarket = new MetricValues(preMarkets, dates);
 
                 assert(outputData.getStockSymbol().equals("INTC"));
+                assert(outputData.getCompanyName().equals("Intel"));
                 assert(outputData.getSharePrices().equals(sharePrice));
                 assert(outputData.getVolumes().equals(volume));
                 assert(outputData.getAfterHours().equals(afterHour));
@@ -89,7 +93,8 @@ public class LoadingHubTest {
         Date startDate = setDay(myCalendar, 2024, 10, 6);
         Date endDate = setDay(myCalendar, 2024, 10, 6);
         LoadingHubInputData inputData = new LoadingHubInputData("INTC", startDate, endDate);
-        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject);
+        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject,
+                symbolNameDataAccessInterface);
 
         loadingHubInteractor.execute(inputData);
     }
@@ -106,13 +111,9 @@ public class LoadingHubTest {
                 dates.add(currDay);
 
                 List<Double> openPrices = new ArrayList<>();
-                openPrices.add(Double.NaN);
                 List<Double> closePrices = new ArrayList<>();
-                closePrices.add(Double.NaN);
                 List<Double> highPrices = new ArrayList<>();
-                highPrices.add(Double.NaN);
                 List<Double> lowPrices = new ArrayList<>();
-                lowPrices.add(Double.NaN);
 
                 List<Double> volumes = new ArrayList<>();
                 volumes.add(Double.NaN);
@@ -129,6 +130,7 @@ public class LoadingHubTest {
                 MetricValues preMarket = new MetricValues(preMarkets, dates);
 
                 assert(outputData.getStockSymbol().equals("AAPL"));
+                assert(outputData.getCompanyName().equals("Apple"));
                 assert(outputData.getSharePrices().equals(sharePrice));
                 assert(outputData.getVolumes().equals(volume));
                 assert(outputData.getAfterHours().equals(afterHour));
@@ -140,7 +142,8 @@ public class LoadingHubTest {
         Date startDate = setDay(myCalendar, 2020, 0, 1);
         Date endDate = setDay(myCalendar, 2020, 0, 1);
         LoadingHubInputData inputData = new LoadingHubInputData("AAPL", startDate, endDate);
-        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject);
+        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject,
+                symbolNameDataAccessInterface);
 
         loadingHubInteractor.execute(inputData);
     }
@@ -188,6 +191,7 @@ public class LoadingHubTest {
                 MetricValues preMarket = new MetricValues(preMarkets, dates);
 
                 assert(outputData.getStockSymbol().equals("INTC"));
+                assert(outputData.getCompanyName().equals("Intel"));
                 assert(outputData.getSharePrices().equals(sharePrice));
                 assert(outputData.getVolumes().equals(volume));
                 assert(outputData.getAfterHours().equals(afterHour));
@@ -199,7 +203,8 @@ public class LoadingHubTest {
         Date startDate = setDay(myCalendar, 2024, 10, 6);
         Date endDate = setDay(myCalendar, 2024, 10, 7);
         LoadingHubInputData inputData = new LoadingHubInputData("INTC", startDate, endDate);
-        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject);
+        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject,
+                symbolNameDataAccessInterface);
 
         loadingHubInteractor.execute(inputData);
     }
@@ -216,6 +221,7 @@ public class LoadingHubTest {
                 Date secondDate = setDay(calendar, 2024, 10, 7);
                 Date thirdDate = setDay(calendar, 2024, 10, 8);
                 Date fourthDate = setDay(calendar, 2024, 10, 9);
+
                 dates.add(startDate);
                 dates.add(secondDate);
                 dates.add(thirdDate);
@@ -225,25 +231,21 @@ public class LoadingHubTest {
                 openPrices.add(24.3);
                 openPrices.add(25.43);
                 openPrices.add(26d);
-                openPrices.add(Double.NaN);
 
                 List<Double> closePrices = new ArrayList<>();
                 closePrices.add(25.05);
                 closePrices.add(26.23);
                 closePrices.add(26.2);
-                closePrices.add(Double.NaN);
 
                 List<Double> highPrices = new ArrayList<>();
                 highPrices.add(25.12);
                 highPrices.add(26.3799);
                 highPrices.add(26.43);
-                highPrices.add(Double.NaN);
 
                 List<Double> lowPrices = new ArrayList<>();
                 lowPrices.add(24.05);
                 lowPrices.add(25.19);
                 lowPrices.add(25.83);
-                lowPrices.add(Double.NaN);
 
                 List<Double> volumes = new ArrayList<>();
                 volumes.add(1.14559359e08);
@@ -264,12 +266,30 @@ public class LoadingHubTest {
                 preMarkets.add(Double.NaN);
 
                 SharePrices sharePrice = new SharePrices(dates, openPrices, closePrices, highPrices, lowPrices);
-                MetricValues volume = new MetricValues(volumes, dates);
-                MetricValues afterHour = new MetricValues(afterHours, dates);
-                MetricValues preMarket = new MetricValues(preMarkets, dates);
 
                 assert(outputData.getStockSymbol().equals("INTC"));
+                assert(outputData.getCompanyName().equals("Intel"));
+
+                assert(outputData.getSharePrices().getHighPrices().equals(highPrices));
+                assert(outputData.getSharePrices().getLowPrices().equals(lowPrices));
+
+                // Doesn't run
+                assert(outputData.getSharePrices().getOpenPrices().equals(openPrices));
+                System.out.println("hello");
+
                 assert(outputData.getSharePrices().equals(sharePrice));
+
+                List<Date> newDate = new ArrayList<>();
+                newDate.add(startDate);
+                newDate.add(secondDate);
+                newDate.add(thirdDate);
+                // Date fourthDate = setDay(calendar, 2024, 10, 9);
+                newDate.add(fourthDate);
+
+                MetricValues volume = new MetricValues(volumes, newDate);
+                MetricValues afterHour = new MetricValues(afterHours, newDate);
+                MetricValues preMarket = new MetricValues(preMarkets, newDate);
+
                 assert(outputData.getVolumes().equals(volume));
                 assert(outputData.getAfterHours().equals(afterHour));
                 assert(outputData.getPreMarket().equals(preMarket));
@@ -280,7 +300,8 @@ public class LoadingHubTest {
         Date startDate = setDay(myCalendar, 2024, 10, 6);
         Date endDate = setDay(myCalendar, 2024, 10, 9);
         LoadingHubInputData inputData = new LoadingHubInputData("INTC", startDate, endDate);
-        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject);
+        LoadingHubInputBoundary loadingHubInteractor = new LoadingHubInteractor(loadingHubPresenter, dataAccessObject,
+                symbolNameDataAccessInterface);
 
         loadingHubInteractor.execute(inputData);
     }

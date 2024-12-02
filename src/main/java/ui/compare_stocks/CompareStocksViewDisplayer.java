@@ -1,6 +1,5 @@
 package ui.compare_stocks;
 
-import entities.Stock;
 import interface_adapters.ViewModel;
 import interface_adapters.compare_stocks.CompareStocksController;
 import interface_adapters.compare_stocks.CompareStocksPresenter;
@@ -10,7 +9,6 @@ import use_cases.StockDataInterface;
 import use_cases.compare_stocks.CompareStocksInteractor;
 
 import javax.swing.*;
-import java.util.List;
 
 public class CompareStocksViewDisplayer {
     private CompareStocksViewDisplayer() {}

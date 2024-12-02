@@ -6,7 +6,6 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -28,7 +27,6 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
     private DatePicker startDatePicker;
     private DatePicker endDatePicker;
     private JTextArea comparisonSummaryDisplay;
-    private JButton compareButton;
 
     public CompareStocksView(CompareStocksController controller, ViewModel<CompareStocksState> viewModel) {
         this.controller = controller;
@@ -40,7 +38,7 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
         final JPanel chooseStocksPanel = chooseStocksPanel();
         final JPanel pickTimeIntervalPanel = pickTimeIntervalPanel();
         final JTextArea comparisonSummary = comparisonSummaryComponent();
-        compareButton = new JButton("Compare");
+        JButton compareButton = new JButton("Compare");
 
         this.add(chooseStocksPanel);
         this.add(pickTimeIntervalPanel);

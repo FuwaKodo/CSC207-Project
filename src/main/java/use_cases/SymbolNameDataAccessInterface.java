@@ -21,4 +21,11 @@ public interface SymbolNameDataAccessInterface {
      */
     String getCompany(String symbol);
 
+    /**
+     * Retrives stock symbol by its company.
+     * @param company company name
+     * @return stock symbol
+     */
+    String getSymbol(String company);
+
 }

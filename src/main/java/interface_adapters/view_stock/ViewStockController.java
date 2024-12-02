@@ -2,8 +2,6 @@ package interface_adapters.view_stock;
 
 import use_cases.view_stock.ViewStockInputBoundary;
 import use_cases.view_stock.ViewStockInputData;
-import use_cases.favorites.FavoriteStockInputBoundary;
-import use_cases.favorites.FavoriteStockInputData;
 
 /**
  * Controller for the view stock use case and favorites management.
@@ -11,13 +9,10 @@ import use_cases.favorites.FavoriteStockInputData;
 public class ViewStockController {
 
     private final ViewStockInputBoundary viewStockUseCaseInteractor;
-    private final FavoriteStockInputBoundary favoriteStockUseCaseInteractor;
 
     public ViewStockController(
-            ViewStockInputBoundary viewStockUseCaseInteractor,
-            FavoriteStockInputBoundary favoriteStockUseCaseInteractor) {
+            ViewStockInputBoundary viewStockUseCaseInteractor) {
         this.viewStockUseCaseInteractor = viewStockUseCaseInteractor;
-        this.favoriteStockUseCaseInteractor = favoriteStockUseCaseInteractor;
     }
 
     /**

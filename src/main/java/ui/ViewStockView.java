@@ -17,6 +17,7 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -25,8 +26,6 @@ import entities.SharePrices;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
-import interface_adapters.search.SearchController;
-import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockViewModel;
 import use_cases.SymbolNameDataAccessInterface;
@@ -72,14 +71,17 @@ public class ViewStockView {
      * @param viewManagerModel the view manager model responsible for switching view
      * @param viewStockViewModel the ViewModel managing the stock view state
      * @param viewStockController the Controller handling business logic for the stock view
+     * @param injectedSearchView the view for search result
      * @param loadingHubController the controller for loading hub use case
      */
     public ViewStockView(ViewManagerModel viewManagerModel,
                          ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,
+                         SearchView injectedSearchView,
                          LoadingHubController loadingHubController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
+        this.searchView = injectedSearchView;
         this.loadingHubController = loadingHubController;
         this.favoritesManager = new FavoritesManager();
         final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
@@ -341,7 +343,6 @@ public class ViewStockView {
             }
         });
 
-
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");
         bottomPanel.add(compareButton);
@@ -353,6 +354,7 @@ public class ViewStockView {
         // adding views to views
         views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
         views.add(stockWithFavorites, Constants.STOCK_VIEW);
+        views.add(injectedSearchView.getMainPanel(), injectedSearchView.getViewName());
 
         // adding panels to mainPanel
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
@@ -449,16 +451,6 @@ public class ViewStockView {
 
     public JButton getBuyButton() {
         return buyButton;
-    }
-
-    /**
-     * Initializes searchView and add it to mainPanel.
-     * @param searchViewModel SearchViewModel object
-     * @param searchController controller for search
-     */
-    public void setSearchView(SearchViewModel searchViewModel, SearchController searchController) {
-        this.searchView = new SearchView(searchViewModel, searchController, viewStockController);
-        views.add(searchView.getMainPanel(), searchView.getViewName());
     }
 
     /**

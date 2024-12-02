@@ -25,7 +25,7 @@ public class ViewStockViewBuilder {
      * @return a compare button
      */
     public JButton makeCompareButton() {
-        JButton button = new JButton("Compare Stocks");
+        final JButton button = new JButton("Compare Stocks");
         return button;
     }
 }

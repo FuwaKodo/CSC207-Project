@@ -157,4 +157,6 @@
 {"symbol":"AAPL","from":"2020-02-05","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2020-02-06","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2020-02-07","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
-{"symbol":"INTC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}
+{"symbol":"INTC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"AAPL","from":"2024-11-23","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
+{"symbol":"INTC","from":"2024-11-23","api":"polygon","message":"Data not found.","status":"NOT_FOUND"}

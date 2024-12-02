@@ -33,19 +33,19 @@ public class SearchView {
     private final JPanel pagesPanel;
     private final CardLayout pagesCardLayout;
     private final JLabel info;
-    private final JButton searchButton;
-    private final JTextField searchField;
+    private final JButton searchButton = new JButton("Search");
+    private final JTextField searchField = new JTextField(8);
     private final String viewName = Constants.SEARCH_VIEW;
 
     private final SearchViewModel searchViewModel;
+    private final SearchController searchController;
     private final ViewStockController viewStockController;
 
-    SearchView(SearchViewModel searchViewModel, SearchController searchController,
+    public SearchView(SearchViewModel searchViewModel, SearchController searchController,
                ViewStockController viewStockController) {
         this.searchViewModel = searchViewModel;
+        this.searchController = searchController;
         this.viewStockController = viewStockController;
-        this.searchButton = new JButton("Search");
-        this.searchField = new JTextField(8);
         searchResultButtons = new ArrayList<JButton>();
         // Response to clicking searchButton
         searchButton.addActionListener(new ActionListener() {

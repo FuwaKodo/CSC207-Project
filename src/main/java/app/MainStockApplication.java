@@ -13,16 +13,12 @@ import interface_adapters.loading_hub.LoadingHubUseCaseFactory;
 import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchUseCaseFactory;
 import interface_adapters.search.SearchViewModel;
-import interface_adapters.text_analyze_stock.StockController;
-import interface_adapters.text_analyze_stock.StockControllerFactory;
-import interface_adapters.text_analyze_stock.StockViewModel;
 import interface_adapters.view_stock.ViewStockController;
 import interface_adapters.view_stock.ViewStockUseCaseFactory;
 import interface_adapters.view_stock.ViewStockViewModel;
 import ui.SearchView;
 import ui.ViewStockView;
 import ui.compare_stocks.CompareStocksViewDisplayer;
-import ui.text_analyze_stock.StockAnalysisView;
 import use_cases.StockDataInterface;
 import use_cases.SymbolNameDataAccessInterface;
 import use_cases.favorites.FavoriteStockInputBoundary;
@@ -47,7 +43,6 @@ public class MainStockApplication {
         final ViewStockViewModel viewStockViewModel = new ViewStockViewModel();
         final SearchViewModel searchViewModel = new SearchViewModel();
         final ViewStockViewModel loadingHubViewModel = new ViewStockViewModel();
-        final StockViewModel stockViewModel = new StockViewModel();
 
         // data loaders
         final StockDataInterface stockDataAccessObject = new StockDataLoader();
@@ -88,9 +83,6 @@ public class MainStockApplication {
                         viewManagerModel,
                         loadingHubViewModel,
                         loadingHubAccessInterface);
-        final StockController predictController = StockControllerFactory.createStockController(
-                        stockViewModel,
-                        stockDataAccessObject);
 
         // initializes search view
         final SearchView searchView = new SearchView(searchViewModel, searchController, viewStockController);
@@ -110,10 +102,6 @@ public class MainStockApplication {
                     viewStockController, searchView, loadingHubController);
             // Initialize ViewStockView and add it to the frame
             viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
-
-            // Initialize Stock Analysis View
-            final StockAnalysisView stockAnalysisView = new StockAnalysisView(stockViewModel, viewStockViewModel,
-                    predictController);
             
             frame.add(viewStockView.getMainPanel());
 

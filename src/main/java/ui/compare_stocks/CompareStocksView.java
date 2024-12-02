@@ -23,7 +23,6 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
     private final ViewModel<CompareStocksState> viewModel;
     private final CompareStocksController controller;
 
-    private GroupLayout layout;
     private JComboBox<String> firstStockDropdown;
     private JComboBox<String> secondStockDropdown;
     private DatePicker startDatePicker;
@@ -36,17 +35,17 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
         this.viewModel = viewModel;
         viewModel.addPropertyChangeListener(this);
 
-        layout = new GroupLayout(this);
-        this.setLayout(layout);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        final JPanel chooseStocksPanel = chooseStocksPanel();
+        final JPanel pickTimeIntervalPanel = pickTimeIntervalPanel();
+        final JTextArea comparisonSummary = comparisonSummaryComponent();
         compareButton = new JButton("Compare");
-        layout.setVerticalGroup(
-                layout.createSequentialGroup()
-                        .addComponent(chooseStocksPanel())
-                        .addComponent(pickTimeIntervalPanel())
-                        .addComponent(comparisonSummaryComponent())
-                        .addComponent(compareButton)
-        );
+
+        this.add(chooseStocksPanel);
+        this.add(pickTimeIntervalPanel);
+        this.add(comparisonSummary);
+        this.add(compareButton);
 
         compareButton.addActionListener(_ -> getNewComparisonSummary());
     }
@@ -84,10 +83,10 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
 
     private JPanel datePickerPanel() {
         final JPanel startDatePanel = new JPanel();
-        final JLabel startDateLabel = new JLabel("Start date:");
-
-        startDatePicker = new DatePicker();
         startDatePanel.setLayout(new BoxLayout(startDatePanel, BoxLayout.Y_AXIS));
+
+        final JLabel startDateLabel = new JLabel("Start date:");
+        startDatePicker = new DatePicker();
         startDatePanel.add(startDateLabel);
         startDatePanel.add(startDatePicker);
 
@@ -101,6 +100,9 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
 
         final JPanel parentPanel = new JPanel();
         parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.X_AXIS));
+        parentPanel.add(startDatePanel);
+        parentPanel.add(endDatePanel);
+
         return parentPanel;
     }
 

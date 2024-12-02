@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import entities.SharePrices;
-import entities.Stock;
 import interface_adapters.gateways.StockSymbolsLoader;
 import use_cases.StockDataInterface;
 
@@ -35,7 +34,7 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
         presenter.displayComparisonSummary(summary);
     }
 
-    public List<String> getStockNames() {
+    public List<String> getStockSymbols() {
         return symbolsLoader.getSymbols();
     }
 

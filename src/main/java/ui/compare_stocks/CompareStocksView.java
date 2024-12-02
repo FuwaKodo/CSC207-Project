@@ -1,12 +1,12 @@
 package ui.compare_stocks;
 
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.ZoneId;
 import java.util.Date;
 
 import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -23,30 +23,28 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
     private final ViewModel<CompareStocksState> viewModel;
     private final CompareStocksController controller;
 
-    private GroupLayout layout;
     private JComboBox<String> firstStockDropdown;
     private JComboBox<String> secondStockDropdown;
     private DatePicker startDatePicker;
     private DatePicker endDatePicker;
     private JTextArea comparisonSummaryDisplay;
-    private JButton compareButton;
 
     public CompareStocksView(CompareStocksController controller, ViewModel<CompareStocksState> viewModel) {
         this.controller = controller;
         this.viewModel = viewModel;
         viewModel.addPropertyChangeListener(this);
 
-        layout = new GroupLayout(this);
-        this.setLayout(layout);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        compareButton = new JButton("Compare");
-        layout.setVerticalGroup(
-                layout.createSequentialGroup()
-                        .addComponent(chooseStocksPanel())
-                        .addComponent(pickTimeIntervalPanel())
-                        .addComponent(comparisonSummaryComponent())
-                        .addComponent(compareButton)
-        );
+        final JPanel chooseStocksPanel = chooseStocksPanel();
+        final JPanel pickTimeIntervalPanel = pickTimeIntervalPanel();
+        final JTextArea comparisonSummary = comparisonSummaryComponent();
+        JButton compareButton = new JButton("Compare");
+
+        this.add(chooseStocksPanel);
+        this.add(pickTimeIntervalPanel);
+        this.add(comparisonSummary);
+        this.add(compareButton);
 
         compareButton.addActionListener(_ -> getNewComparisonSummary());
     }
@@ -79,15 +77,16 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
     private JTextArea comparisonSummaryComponent() {
         comparisonSummaryDisplay = new JTextArea();
         comparisonSummaryDisplay.setEditable(false);
+        comparisonSummaryDisplay.setLineWrap(true);
         return comparisonSummaryDisplay;
     }
 
     private JPanel datePickerPanel() {
         final JPanel startDatePanel = new JPanel();
-        final JLabel startDateLabel = new JLabel("Start date:");
-
-        startDatePicker = new DatePicker();
         startDatePanel.setLayout(new BoxLayout(startDatePanel, BoxLayout.Y_AXIS));
+
+        final JLabel startDateLabel = new JLabel("Start date:");
+        startDatePicker = new DatePicker();
         startDatePanel.add(startDateLabel);
         startDatePanel.add(startDatePicker);
 
@@ -101,6 +100,10 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
 
         final JPanel parentPanel = new JPanel();
         parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.X_AXIS));
+        parentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        parentPanel.add(startDatePanel);
+        parentPanel.add(endDatePanel);
+
         return parentPanel;
     }
 

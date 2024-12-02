@@ -17,6 +17,6 @@ public class CompareStocksController {
     }
 
     public List<String> getStockNames() {
-        return interactor.getStockNames();
+        return interactor.getStockSymbols();
     }
 }

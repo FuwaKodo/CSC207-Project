@@ -95,6 +95,9 @@ public class StockDataView {
         // Refresh the graph when new data is set
         graphPanel.repaint();
     }
+    public JPanel getStockView() {
+        return stockView;
+    }
 
     /**
      * Custom panel for drawing the stock price graph.

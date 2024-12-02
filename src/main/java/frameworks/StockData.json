@@ -253,3 +253,5 @@
 {"symbol":"INTC","from":"2023-06-03","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
 {"symbol":"INTC","from":"2023-06-04","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
 {"volume":4.8244128E7,"symbol":"INTC","high":31.4,"preMarket":31.4,"low":29.83,"from":"2023-06-05","afterHours":29.7,"api":"polygon","message":"Data found.","close":29.86,"open":31.31,"status":"OK"}
+,
+{"volume":1.86931044E8,"symbol":"NVDA","high":139.3,"preMarket":136.05,"low":135.67,"from":"2024-11-26","afterHours":136.27,"api":"polygon","message":"Data found.","close":136.92,"open":137.7,"status":"OK"}

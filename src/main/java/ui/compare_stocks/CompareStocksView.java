@@ -1,6 +1,6 @@
 package ui.compare_stocks;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.ZoneId;
@@ -19,7 +19,14 @@ import interface_adapters.compare_stocks.CompareStocksController;
 import interface_adapters.compare_stocks.CompareStocksState;
 import use_cases.compare_stocks.CompareStocksInputData;
 
+/**
+ * A user interface component for comparing stocks.
+ * This class allows users to select stocks, specify a date range,
+ * and view the comparison results.
+ */
 public class CompareStocksView extends JPanel implements PropertyChangeListener {
+    private static final int DATE_PANEL_HEIGHT = 60;
+
     private final ViewModel<CompareStocksState> viewModel;
     private final CompareStocksController controller;
 
@@ -29,6 +36,12 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
     private DatePicker endDatePicker;
     private JTextArea comparisonSummaryDisplay;
 
+    /**
+     * Constructs the CompareStocksView with the given controller and view model.
+     *
+     * @param controller the controller for handling stock comparison logic (cannot be null)
+     * @param viewModel  the view model for observing changes to the comparison state (cannot be null)
+     */
     public CompareStocksView(CompareStocksController controller, ViewModel<CompareStocksState> viewModel) {
         this.controller = controller;
         this.viewModel = viewModel;
@@ -39,14 +52,14 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
         final JPanel chooseStocksPanel = chooseStocksPanel();
         final JPanel pickTimeIntervalPanel = pickTimeIntervalPanel();
         final JTextArea comparisonSummary = comparisonSummaryComponent();
-        JButton compareButton = new JButton("Compare");
+        final JButton compareButton = new JButton("Compare");
 
         this.add(chooseStocksPanel);
         this.add(pickTimeIntervalPanel);
         this.add(comparisonSummary);
         this.add(compareButton);
 
-        compareButton.addActionListener(_ -> getNewComparisonSummary());
+        compareButton.addActionListener(event -> getNewComparisonSummary());
     }
 
     private JPanel chooseStocksPanel() {
@@ -100,7 +113,7 @@ public class CompareStocksView extends JPanel implements PropertyChangeListener 
 
         final JPanel parentPanel = new JPanel();
         parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.X_AXIS));
-        parentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        parentPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, DATE_PANEL_HEIGHT));
         parentPanel.add(startDatePanel);
         parentPanel.add(endDatePanel);
 

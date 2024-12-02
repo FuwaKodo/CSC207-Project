@@ -39,6 +39,10 @@ public class CompareStocksInteractor implements CompareStocksInputBoundary {
     }
 
     private String getComparisonSummary(String symbol1, String symbol2, Date start, Date end) {
+        if (start.after(end)) {
+            return "The end date must be after the start date!";
+        }
+
         // Compare stock volumes
         final Double stock1Volumes = dataAccess.getVolume(symbol1, end);
         final Double stock2Volumes = dataAccess.getVolume(symbol2, end);

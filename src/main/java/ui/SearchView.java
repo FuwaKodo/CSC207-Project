@@ -16,8 +16,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import app.Constants;
+import interface_adapters.search.SearchController;
 import interface_adapters.search.SearchState;
 import interface_adapters.search.SearchViewModel;
 import interface_adapters.view_stock.ViewStockController;
@@ -31,15 +33,28 @@ public class SearchView {
     private final JPanel pagesPanel;
     private final CardLayout pagesCardLayout;
     private final JLabel info;
+    private final JButton searchButton = new JButton("Search");
+    private final JTextField searchField = new JTextField(8);
     private final String viewName = Constants.SEARCH_VIEW;
 
     private final SearchViewModel searchViewModel;
+    private final SearchController searchController;
     private final ViewStockController viewStockController;
 
-    SearchView(SearchViewModel searchViewModel, ViewStockController viewStockController) {
+    public SearchView(SearchViewModel searchViewModel, SearchController searchController,
+               ViewStockController viewStockController) {
         this.searchViewModel = searchViewModel;
+        this.searchController = searchController;
         this.viewStockController = viewStockController;
         searchResultButtons = new ArrayList<JButton>();
+        // Response to clicking searchButton
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // executes search use case with input from searchField
+                searchController.execute(searchField.getText());
+            }
+        });
 
         // initializes panel
         mainPanel = new JPanel();
@@ -214,5 +229,13 @@ public class SearchView {
 
     public String getViewName() {
         return viewName;
+    }
+
+    public JButton getSearchButton() {
+        return searchButton;
+    }
+
+    public JTextField getSearchField() {
+        return searchField;
     }
 }

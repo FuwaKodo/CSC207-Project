@@ -158,5 +158,8 @@
 {"symbol":"AAPL","from":"2020-02-06","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2020-02-07","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"INTC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
-{"symbol":"AAPL","from":"2024-11-23","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
-{"symbol":"INTC","from":"2024-11-23","api":"polygon","message":"Data not found.","status":"NOT_FOUND"}
+{"volume":4.2295293E7,"symbol":"INTC","high":31.45,"preMarket":29.8,"low":29.695,"from":"2023-06-06","afterHours":30.93,"api":"polygon","message":"Data found.","close":30.96,"open":29.77,"status":"OK"},
+{"volume":3.9097992E7,"symbol":"INTC","high":31.37,"preMarket":30.85,"low":30.93,"from":"2023-06-07","afterHours":31.21,"api":"polygon","message":"Data found.","close":31.28,"open":31.03,"status":"OK"},
+{"symbol":"AAPL","from":"2020-02-08","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"AAPL","from":"2020-02-09","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"AAPL","from":"2020-02-10","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}

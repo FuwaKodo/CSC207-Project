@@ -12,7 +12,7 @@ public final class Constants {
     public static final int PERCENTAGE = 100;
     public static final int ONE_YEAR = 365;
     public static final int ONE_MONTH = 30;
-    public static final int HALF_MONTH = 15;
+    public static int HALF_MONTH = 10;
     public static final int ONE_WEEK = 7;
 
     // Display font

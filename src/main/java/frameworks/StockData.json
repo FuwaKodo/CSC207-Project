@@ -256,4 +256,6 @@
 {"symbol":"NVDA","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"MFC","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
-{"symbol":"INTC","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}
+{"symbol":"INTC","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"AAPL","from":"2023-01-01","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
+{"symbol":"NVDA","from":"2023-01-01","api":"polygon","message":"Data not found.","status":"NOT_FOUND"}

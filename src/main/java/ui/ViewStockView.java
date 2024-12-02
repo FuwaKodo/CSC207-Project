@@ -184,6 +184,7 @@ public class ViewStockView {
             }
         });
 
+
         // Favorite button action listener
         favoritesController.getFavoriteButton().addActionListener(new ActionListener() {
             @Override
@@ -333,6 +334,7 @@ public class ViewStockView {
                 if (!stockSymbol.equals(Constants.NO_STOCKS_SELECTED)) {
                     // Execute business logic
                     loadingHubController.execute(stockSymbol, startDate, endDate);
+                    viewStockController.execute(stockSymbol);
                 }
             }
         });

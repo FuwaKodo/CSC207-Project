@@ -1,5 +1,6 @@
 package use_cases.loading_hub;
 
+import app.Constants;
 import entities.MetricValues;
 import entities.SharePrices;
 import use_cases.StockDataInterface;
@@ -41,6 +42,8 @@ public class LoadingHubInteractor implements LoadingHubInputBoundary {
         final MetricValues premarkets = loadingHubAccessObject.getPremarkets(loadingHubInputData.getStockSymbol(),
                 loadingHubInputData.getStartDate(),
                 loadingHubInputData.getEndDate());
+
+        Constants.HALF_MONTH = 15;
 
         // output data
         final LoadingHubOutputData outputData = new LoadingHubOutputData(loadingHubInputData.getStockSymbol(),

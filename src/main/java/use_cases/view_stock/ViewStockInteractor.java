@@ -1,10 +1,5 @@
 package use_cases.view_stock;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-
-import app.Constants;
 import entities.SharePrices;
 import use_cases.StockDataInterface;
 import use_cases.SymbolNameDataAccessInterface;
@@ -36,15 +31,10 @@ public class ViewStockInteractor implements ViewStockInputBoundary {
         final String symbol = inputData.getSymbol();
         final String company = symbolNameDataAccessObject.getCompany(symbol);
         final SharePrices sharePrices = viewStockDataAccessObject.getSharePrices(symbol,
-                toDate(LocalDate.now().minusDays(Constants.HALF_MONTH)),
-                toDate(LocalDate.now()));
+                inputData.getStartDate(), inputData.getEndDate());
 
         final ViewStockOutputData viewStockOutputData = new ViewStockOutputData(company, symbol, sharePrices);
 
         viewStockPresenter.displayStock(viewStockOutputData);
-    }
-
-    private static Date toDate(LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 }

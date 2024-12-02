@@ -22,6 +22,16 @@ public class SharePrices extends MetricValues {
         this.closePrices = closePrices;
         this.highPrices = highPrices;
         this.lowPrices = lowPrices;
+
+        for (int i = 0; i < highPrices.size(); i++) {
+            if (highPrices.get(i).equals(Double.NaN)) {
+                this.highPrices.remove(i);
+                this.lowPrices.remove(i);
+                this.closePrices.remove(i);
+                this.openPrices.remove(i);
+                getDates().remove(i);
+            }
+        }
     }
 
     public List<Double> getOpenPrices() {

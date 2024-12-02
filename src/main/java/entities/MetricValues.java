@@ -80,4 +80,8 @@ public class MetricValues {
     public int hashCode() {
         return Objects.hash(values, dates);
     }
+
+    public ArrayList<Date> getDates() {
+        return dates;
+    }
 }

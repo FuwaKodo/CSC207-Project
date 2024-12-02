@@ -7,6 +7,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -152,34 +154,14 @@ public class ViewStockView {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
                     viewStockController.execute(symbol);
-                    final ViewStockState currentState = viewStockViewModel.getState();
-                    stockViewObject.setSymbol(currentState.getSymbol());
-                    stockViewObject.setCompany(currentState.getCompany());
 
                     // Update favorite button state
                     favoritesController.updateFavoriteButtonState(symbol);
-
-                    // Generate random share prices for demonstration
-                    List<Double> prices = new ArrayList<>();
-                    double basePrice = 100.0; // Default base price
-                    for (int i = 0; i < 10; i++) {
-                        prices.add(basePrice + Math.random() * 20);
-                    }
-                    stockViewObject.setSharePrices(prices);
-                    stockViewObject.setSharePrices(currentState.getSharePrices().getHighPrices());
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
                     rightPanel.add(favoritesController.getFavoritesPanel());
                     stockWithFavorites.add(rightPanel, BorderLayout.EAST);
-
-                    // Show the stock view
-                    cardLayout.show(views, Constants.STOCK_VIEW);
-                    viewManagerModel.setState(Constants.STOCK_VIEW);
-                    viewManagerModel.firePropertyChanged();
-
-                    stockViewObject.getStockView().revalidate();
-                    stockViewObject.getStockView().repaint();
                 }
                 else {
                     // No stock is selected
@@ -187,6 +169,18 @@ public class ViewStockView {
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
                     favoritesController.updateFavoriteButtonState(symbol);
                 }
+            }
+        });
+        viewStockViewModel.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                // updates data
+                final ViewStockState currentState = viewStockViewModel.getState();
+                stockViewObject.setSymbol(currentState.getSymbol());
+                stockViewObject.setCompany(currentState.getCompany());
+                stockViewObject.setSharePrices(currentState.getSharePrices().getHighPrices());
+                stockViewObject.getStockView().revalidate();
+                stockViewObject.getStockView().repaint();
             }
         });
 

@@ -36,7 +36,7 @@ public class ViewStockInteractor implements ViewStockInputBoundary {
         final String symbol = inputData.getSymbol();
         final String company = symbolNameDataAccessObject.getCompany(symbol);
         final SharePrices sharePrices = viewStockDataAccessObject.getSharePrices(symbol,
-                toDate(LocalDate.now().minusDays(Constants.ONE_WEEK - 3)),
+                toDate(LocalDate.now().minusDays(Constants.HALF_MONTH)),
                 toDate(LocalDate.now()));
 
         final ViewStockOutputData viewStockOutputData = new ViewStockOutputData(company, symbol, sharePrices);

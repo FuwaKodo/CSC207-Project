@@ -10,9 +10,9 @@ import java.awt.Font;
 public final class Constants {
     // Calculation related constants
     public static final int PERCENTAGE = 100;
-    public static final int FIVE_YEARS = 5 * 365;
-    public static final int THREE_YEARS = 3 * 365;
     public static final int ONE_YEAR = 365;
+    public static final int ONE_MONTH = 30;
+    public static final int HALF_MONTH = 15;
     public static final int ONE_WEEK = 7;
 
     // Display font

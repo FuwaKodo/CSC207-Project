@@ -14,16 +14,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import app.Constants;
 import entities.SharePrices;
 import interface_adapters.ViewManagerModel;
+import interface_adapters.favoritesIA.FavoritesController;
 import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
 import interface_adapters.search.SearchController;
@@ -63,7 +59,7 @@ public class ViewStockView {
     private final LoadingHubController loadingHubController;
 
     /** Manager for favorites functionality. */
-    private final FavoritesManager favoritesManager;
+    private final FavoritesController favoritesController;
 
     /** Panel to hold stock and favorites. */
     private final JPanel stockWithFavorites;
@@ -86,7 +82,7 @@ public class ViewStockView {
         this.viewStockController = viewStockController;
         this.searchController = searchController;
         this.loadingHubController = loadingHubController;
-        this.favoritesManager = new FavoritesManager();
+        this.favoritesController = new FavoritesController();
         final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
 
         // Initialize the main panel
@@ -141,7 +137,7 @@ public class ViewStockView {
         bottomPanel.add(stockDropdown);
 
         // Favorite button is added to the bottom panel
-        bottomPanel.add(favoritesManager.getFavoriteButton());
+        bottomPanel.add(favoritesController.getFavoriteButton());
 
         // Date panel to hold buttons and dropdown
         final JPanel datePanel = new JPanel();
@@ -151,28 +147,25 @@ public class ViewStockView {
         stockDropdown.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
+                String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
-                    // Execute the view stock use case
-                    viewStockController.execute(symbol);
-
-                    // Set symbol and company from the state
-                    stockViewObject.setSymbol(viewStockViewModel.getState().getSymbol());
-                    stockViewObject.setCompany(viewStockViewModel.getState().getCompany());
+                    stockViewObject.setSymbol(symbol);
+                    stockViewObject.setCompany(symbol + " Company"); // Or fetch actual company name
 
                     // Update favorite button state
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
 
-                    // Use share prices from the state
-                    SharePrices sharePrices = viewStockViewModel.getState().getSharePrices();
-                    if (sharePrices != null) {
-                        // Use close prices for the stock view
-                        stockViewObject.setSharePrices(sharePrices.getClosePrices());
+                    // Generate random share prices for demonstration
+                    List<Double> prices = new ArrayList<>();
+                    double basePrice = 100.0; // Default base price
+                    for (int i = 0; i < 10; i++) {
+                        prices.add(basePrice + Math.random() * 20);
                     }
+                    stockViewObject.setSharePrices(prices);
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
-                    rightPanel.add(favoritesManager.getFavoritesPanel());
+                    rightPanel.add(favoritesController.getFavoritesPanel());
                     stockWithFavorites.add(rightPanel, BorderLayout.EAST);
 
                     // Show the stock view
@@ -180,24 +173,24 @@ public class ViewStockView {
                     viewManagerModel.setState(Constants.STOCK_VIEW);
                     viewManagerModel.firePropertyChanged();
 
-                    stockViewObject.getMainPanel().revalidate();
-                    stockViewObject.getMainPanel().repaint();
-                }
-                else {
+                    stockViewObject.getStockView().revalidate();
+                    stockViewObject.getStockView().repaint();
+                } else {
                     // No stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
-                    favoritesManager.updateFavoriteButtonState(symbol);
+                    favoritesController.updateFavoriteButtonState(symbol);
                 }
             }
         });
 
+
         // Favorite button action listener
-        favoritesManager.getFavoriteButton().addActionListener(new ActionListener() {
+        favoritesController.getFavoriteButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
-                favoritesManager.toggleFavorite(symbol);
+                favoritesController.toggleFavorite(symbol);
             }
         });
 
@@ -216,99 +209,145 @@ public class ViewStockView {
             }
         });
 
-        // Button for startDate and endDate
+        // Calendar Input 1
         final JLabel date1Label = new JLabel("Start Date: ");
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        final JPanel dateSelector1 = new JPanel();
+        final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        // date1Panel
-        JPanel dateSelector1 = new JPanel();
-        dateSelector1.setLayout(new GridLayout(1, 3, 5, 5));
-        JComboBox<Integer> dayBox1 = new JComboBox<>();
-        populateDays(dayBox1, 2020, 1);
-        JComboBox<Integer> monthBox1 = new JComboBox<>();
+        dateSelector1.setLayout(new GridLayout(Constants.DATE_SELECTOR_GRID_ROWS,
+                Constants.DATE_SELECTOR_GRID_COLS,
+                Constants.DATE_SELECTOR_GRID_HGAP,
+                Constants.DATE_SELECTOR_GRID_VGAP));
+        final JComboBox<Integer> dayBox1 = new JComboBox<>();
+        populateDays(dayBox1, Constants.LATEST_YEAR, 1);
+        final JComboBox<Integer> monthBox1 = new JComboBox<>();
         populateMonthBox(monthBox1, currentYear);
-        JComboBox<Integer> yearBox1 = new JComboBox<>();
-        for (int i = 2020; i <= currentYear; i++) {
+        final JComboBox<Integer> yearBox1 = new JComboBox<>();
+        for (int i = Constants.LATEST_YEAR; i <= currentYear; i++) {
             yearBox1.addItem(i);
         }
+
         dateSelector1.add(dayBox1);
         dateSelector1.add(monthBox1);
         dateSelector1.add(yearBox1);
-        yearBox1.addActionListener(e -> {
-            int selectedYear = (int) yearBox1.getSelectedItem();
-            populateMonthBox(monthBox1, selectedYear); // Adjust months based on selected year
-            updateDays(dayBox1, selectedYear, (int) monthBox1.getSelectedItem());
+
+        yearBox1.addActionListener(actionEvent -> {
+            yearBoxEvent(yearBox1, monthBox1);
         });
-        monthBox1.addActionListener(e -> {
-            int selectedYear = (int) yearBox1.getSelectedItem();
-            updateDays(dayBox1, selectedYear, (int) monthBox1.getSelectedItem());
+
+        monthBox1.addActionListener(actionEvent -> {
+            final int selectedYear = (int) yearBox1.getSelectedItem();
+            final Object selectedMonth = monthBox1.getSelectedItem();
+            if (selectedMonth != null) {
+                updateDays(dayBox1, selectedYear, (int) selectedMonth);
+            }
         });
+
+        // dateSelector2 property setup
         dateSelector1.putClientProperty("day", dayBox1);
         dateSelector1.putClientProperty("month", monthBox1);
         dateSelector1.putClientProperty("year", yearBox1);
+
         datePanel.add(date1Label, BorderLayout.WEST);
         datePanel.add(dateSelector1, BorderLayout.WEST);
 
         // Calendar Input 2
         final JLabel date2Label = new JLabel("  End Date: ");
-        // date1Panel
         final JPanel dateSelector2 = new JPanel();
-        dateSelector2.setLayout(new GridLayout(1, 3, 5, 5));
-        JComboBox<Integer> dayBox2 = new JComboBox<>();
-        populateDays(dayBox2, 2020, 1);
-        JComboBox<Integer> monthBox2 = new JComboBox<>();
+        dateSelector2.setLayout(new GridLayout(Constants.DATE_SELECTOR_GRID_ROWS,
+                Constants.DATE_SELECTOR_GRID_COLS,
+                Constants.DATE_SELECTOR_GRID_HGAP,
+                Constants.DATE_SELECTOR_GRID_VGAP));
+        final JComboBox<Integer> dayBox2 = new JComboBox<>();
+        populateDays(dayBox2, Constants.LATEST_YEAR, 1);
+        final JComboBox<Integer> monthBox2 = new JComboBox<>();
         populateMonthBox(monthBox2, currentYear);
-        JComboBox<Integer> yearBox2 = new JComboBox<>();
-        for (int i = 2020; i <= currentYear; i++) {
+        final JComboBox<Integer> yearBox2 = new JComboBox<>();
+        for (int i = Constants.LATEST_YEAR; i <= currentYear; i++) {
             yearBox2.addItem(i);
         }
+
         dateSelector2.add(dayBox2);
         dateSelector2.add(monthBox2);
         dateSelector2.add(yearBox2);
-        yearBox2.addActionListener(e -> {
-            int selectedYear = (int) yearBox2.getSelectedItem();
-            populateMonthBox(monthBox2, selectedYear); // Adjust months based on selected year
-            updateDays(dayBox2, selectedYear, (int) monthBox2.getSelectedItem());
+
+        yearBox2.addActionListener(actionEvent -> {
+            yearBoxEvent(yearBox2, monthBox2);
         });
-        monthBox2.addActionListener(e -> {
-            int selectedYear = (int) yearBox2.getSelectedItem();
-            updateDays(dayBox2, selectedYear, (int) monthBox2.getSelectedItem());
+
+        monthBox2.addActionListener(actionEvent -> {
+            final int selectedYear = (int) yearBox2.getSelectedItem();
+            final Object selectedMonth = monthBox2.getSelectedItem();
+            if (selectedMonth != null) {
+                updateDays(dayBox2, selectedYear, (int) selectedMonth);
+            }
         });
+
+        // dateSelector2 property setup
         dateSelector2.putClientProperty("day", dayBox2);
         dateSelector2.putClientProperty("month", monthBox2);
         dateSelector2.putClientProperty("year", yearBox2);
+
         datePanel.add(date2Label, BorderLayout.WEST);
         datePanel.add(dateSelector2, BorderLayout.WEST);
 
         final JButton updateButton = new JButton("Update");
         datePanel.add(updateButton, BorderLayout.EAST);
 
-        // Response to clicking updateButton
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final Calendar startDateCalendar = Calendar.getInstance();
+                // Safely get values from dateSelector1 (startDate)
+                JComboBox<Integer> dayBox1 = (JComboBox<Integer>) dateSelector1.getClientProperty("day");
+                JComboBox<Integer> monthBox1 = (JComboBox<Integer>) dateSelector1.getClientProperty("month");
+                JComboBox<Integer> yearBox1 = (JComboBox<Integer>) dateSelector1.getClientProperty("year");
+
+                // Safely get values from dateSelector2 (endDate)
+                JComboBox<Integer> dayBox2 = (JComboBox<Integer>) dateSelector2.getClientProperty("day");
+                JComboBox<Integer> monthBox2 = (JComboBox<Integer>) dateSelector2.getClientProperty("month");
+                JComboBox<Integer> yearBox2 = (JComboBox<Integer>) dateSelector2.getClientProperty("year");
+
+                // Check for null to avoid null pointer exceptions
+                if (dayBox1.getSelectedItem() == null || monthBox1.getSelectedItem() == null || yearBox1.getSelectedItem() == null ||
+                        dayBox2.getSelectedItem() == null || monthBox2.getSelectedItem() == null || yearBox2.getSelectedItem() == null) {
+                    // Display error message or exit early
+                    JOptionPane.showMessageDialog(mainPanel, "Please select valid dates.", "Invalid Date", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Create Calendar instances for start and end dates
+                Calendar startDateCalendar = Calendar.getInstance();
                 startDateCalendar.set((int) yearBox1.getSelectedItem(),
                         (int) monthBox1.getSelectedItem() - 1,
                         (int) dayBox1.getSelectedItem());
-                clearTimeFields(startDateCalendar);
 
-                final Calendar endDateCalendar = Calendar.getInstance();
+                Calendar endDateCalendar = Calendar.getInstance();
                 endDateCalendar.set((int) yearBox2.getSelectedItem(),
                         (int) monthBox2.getSelectedItem() - 1,
                         (int) dayBox2.getSelectedItem());
-                clearTimeFields(endDateCalendar);
 
-                final Date startDate = startDateCalendar.getTime();
-                final Date endDate = endDateCalendar.getTime();
-                // final String stockSymbol = stockDropdown.getSelectedItem().toString();
-                // set to stockSymbol = "INTC"
-                // TODO: Fix this by changing
-                final String stockSymbol = "INTC";
+                // Validate that start date is not after end date
+                if (startDateCalendar.after(endDateCalendar)) {
+                    JOptionPane.showMessageDialog(mainPanel,
+                            "Start date cannot be after End date. Please adjust the dates.",
+                            "Date Validation Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
+                // Proceed with logic if dates are valid
+                Date startDate = startDateCalendar.getTime();
+                Date endDate = endDateCalendar.getTime();
+
+                // Assuming stockSymbol is predefined or fetched from another component
+                // Replace with actual logic to get stock symbol
+                String stockSymbol = "INTC";
+
+                // Execute business logic
                 loadingHubController.execute(stockSymbol, startDate, endDate);
             }
         });
+
 
         // Button to compare stocks
         compareButton = new JButton("Compare Stocks");
@@ -328,6 +367,18 @@ public class ViewStockView {
         mainPanel.add(datePanel, BorderLayout.NORTH);
     }
 
+    private void yearBoxEvent(JComboBox<Integer> yearBox1, JComboBox<Integer> monthBox1) {
+        final int selectedYear = (int) yearBox1.getSelectedItem();
+        final ActionListener[] monthListeners = monthBox1.getActionListeners();
+        for (ActionListener listener : monthListeners) {
+            monthBox1.removeActionListener(listener);
+        }
+        populateMonthBox(monthBox1, selectedYear);
+        for (ActionListener listener : monthListeners) {
+            monthBox1.addActionListener(listener);
+        }
+    }
+
     /**
      * Clears the time fields of the given Calendar object, setting the time to midnight (00:00:00.000).
      * @param calendar the Calendar object to modify. Must not be null.
@@ -340,22 +391,27 @@ public class ViewStockView {
     }
 
     private void populateMonthBox(JComboBox<Integer> monthBox, int selectedYear) {
-        // TODO: Fix this!
-        // monthBox.removeAllItems();
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        int lastMonth = Calendar.getInstance().get(Calendar.MONTH) + 1; // Months are 0-based
+        monthBox.removeAllItems();
+        final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        // Months are 0-based
+        final int lastMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
 
         // If the selected year is the current year, limit months to the current month
         // Otherwise, populate all 12 months
-        int maxMonths = (selectedYear == currentYear) ? lastMonth : 12;
+        int maxMonths = 12;
+        if (selectedYear == currentYear) {
+            maxMonths = lastMonth;
+        }
+
         for (int i = 1; i <= maxMonths; i++) {
             monthBox.addItem(i);
         }
+        monthBox.setSelectedItem(1);
     }
 
     private void populateDays(JComboBox<Integer> dayBox, int year, int month) {
         dayBox.removeAllItems();
-        int daysInMonth = getDaysInMonth(year, month);
+        final int daysInMonth = getDaysInMonth(year, month);
         Calendar today = Calendar.getInstance();
 
         for (int i = 1; i <= daysInMonth; i++) {
@@ -416,7 +472,7 @@ public class ViewStockView {
      * @return Set of favorited stock symbols
      */
     public Set<String> getFavoritedStocks() {
-        return favoritesManager.getFavoritedStocks();
+        return favoritesController.getFavoritedStocks();
     }
 
     public void setCompareButtonListener(ActionListener actionListener) {

@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import app.Constants;
+import entities.SharePrices;
 import interface_adapters.ViewManagerModel;
 import interface_adapters.gateways.StockSymbolsLoader;
 import interface_adapters.loading_hub.LoadingHubController;
@@ -152,26 +153,22 @@ public class ViewStockView {
             public void actionPerformed(ActionEvent e) {
                 final String symbol = Objects.requireNonNull(stockDropdown.getSelectedItem()).toString();
                 if (!symbol.equals(Constants.NO_STOCKS_SELECTED)) {
+                    // Execute the view stock use case
                     viewStockController.execute(symbol);
 
-                    stockViewObject.setSymbol(symbol);
-                    stockViewObject.setCompany("Company " + symbol);
+                    // Set symbol and company from the state
+                    stockViewObject.setSymbol(viewStockViewModel.getState().getSymbol());
+                    stockViewObject.setCompany(viewStockViewModel.getState().getCompany());
 
                     // Update favorite button state
                     favoritesManager.updateFavoriteButtonState(symbol);
 
-                    // Generate share prices based on selected stock
-                    final List<Double> prices = new ArrayList<>();
-                    final double basePrice = switch (symbol) {
-                        case "AAPL" -> 100.0;
-                        case "NVDA" -> 150.0;
-                        case "MFC" -> 200.0;
-                        default -> 100.0;
-                    };
-                    for (int i = 0; i < 10; i++) {
-                        prices.add(basePrice + Math.random() * 20);
+                    // Use share prices from the state
+                    SharePrices sharePrices = viewStockViewModel.getState().getSharePrices();
+                    if (sharePrices != null) {
+                        // Use close prices for the stock view
+                        stockViewObject.setSharePrices(sharePrices.getClosePrices());
                     }
-                    stockViewObject.setSharePrices(prices);
 
                     // Add favorites panel to the right side when a stock is selected
                     rightPanel.removeAll();
@@ -188,7 +185,6 @@ public class ViewStockView {
                 }
                 else {
                     // No stock is selected
-                    // Remove favorites panel when no stock is selected
                     stockWithFavorites.remove(rightPanel);
                     cardLayout.show(views, Constants.NO_STOCKS_SELECTED);
                     favoritesManager.updateFavoriteButtonState(symbol);

@@ -97,12 +97,12 @@ public class MainStockApplication {
 
             // Create the view and add it to the frame
             final ViewStockView viewStockView = new ViewStockView(
-                    viewManagerModel, viewStockViewModel, viewStockController, searchController, loadingHubController);
+                    viewManagerModel, viewStockViewModel, viewStockController, loadingHubController);
             // Initialize ViewStockView and add it to the frame
             viewStockView.setCompareButtonListener(_ -> CompareStocksViewDisplayer.showDialog(frame));
             
             // Initialize search view
-            viewStockView.setSearchView(searchViewModel);
+            viewStockView.setSearchView(searchViewModel, searchController);
             
             frame.add(viewStockView.getMainPanel());
 

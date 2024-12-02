@@ -146,4 +146,5 @@
 {"symbol":"AAPL","from":"2020-01-25","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2020-01-26","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
 {"symbol":"AAPL","from":"2020-01-27","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
-{"symbol":"AAPL","from":"2020-01-28","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}
+{"symbol":"AAPL","from":"2020-01-28","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"AAPL","from":"2024-11-23","api":"polygon","message":"Data not found.","status":"NOT_FOUND"}

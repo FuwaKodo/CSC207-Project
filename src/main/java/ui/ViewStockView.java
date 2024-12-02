@@ -18,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import app.Constants;
@@ -59,7 +58,6 @@ public class ViewStockView {
 
     /** Controller to handle stock view logic. */
     private final ViewStockController viewStockController;
-    private final SearchController searchController;
     private final LoadingHubController loadingHubController;
 
     /** Manager for favorites functionality. */
@@ -74,17 +72,14 @@ public class ViewStockView {
      * @param viewManagerModel the view manager model responsible for switching view
      * @param viewStockViewModel the ViewModel managing the stock view state
      * @param viewStockController the Controller handling business logic for the stock view
-     * @param searchController the controller for search use case
      * @param loadingHubController the controller for loading hub use case
      */
     public ViewStockView(ViewManagerModel viewManagerModel,
                          ViewStockViewModel viewStockViewModel,
                          ViewStockController viewStockController,
-                         SearchController searchController,
                          LoadingHubController loadingHubController) {
         this.viewStockViewModel = viewStockViewModel;
         this.viewStockController = viewStockController;
-        this.searchController = searchController;
         this.loadingHubController = loadingHubController;
         this.favoritesManager = new FavoritesManager();
         final SymbolNameDataAccessInterface symbolDataAccessObject = new StockSymbolsLoader();
@@ -202,19 +197,8 @@ public class ViewStockView {
         });
 
         // Input box and button for searching stocks
-        final JTextField searchField = new JTextField(8);
-        bottomPanel.add(searchField);
-        final JButton searchButton = new JButton("Search");
-        bottomPanel.add(searchButton);
-
-        // Response to clicking searchButton
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // executes search use case with input from searchField
-                searchController.execute(searchField.getText());
-            }
-        });
+        bottomPanel.add(searchView.getSearchField());
+        bottomPanel.add(searchView.getSearchButton());
 
         // Button for startDate and endDate
         final JLabel date1Label = new JLabel("Start Date: ");
@@ -405,9 +389,10 @@ public class ViewStockView {
     /**
      * Initializes searchView and add it to mainPanel.
      * @param searchViewModel SearchViewModel object
+     * @param searchController controller for search
      */
-    public void setSearchView(SearchViewModel searchViewModel) {
-        this.searchView = new SearchView(searchViewModel, viewStockController);
+    public void setSearchView(SearchViewModel searchViewModel, SearchController searchController) {
+        this.searchView = new SearchView(searchViewModel, searchController, viewStockController);
         views.add(searchView.getMainPanel(), searchView.getViewName());
     }
 

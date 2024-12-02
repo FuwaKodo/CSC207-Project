@@ -47,7 +47,7 @@ public class ViewStockView {
     private final JComboBox<String> stockDropdown;
 
     /** Button to buy selected stock. */
-    private final JButton buyButton;
+    //private final JButton buyButton;
 
     /** Object responsible for displaying stock data. */
     private final StockDataView stockViewObject;
@@ -341,8 +341,8 @@ public class ViewStockView {
         bottomPanel.add(compareButton);
 
         // Button to buy stock
-        buyButton = new JButton("Buy Stock");
-        bottomPanel.add(buyButton);
+//        buyButton = new JButton("Buy Stock");
+//        bottomPanel.add(buyButton);
 
         // adding views to views
         views.add(defaultBox, Constants.NO_STOCKS_SELECTED);
@@ -442,9 +442,9 @@ public class ViewStockView {
         return stockDropdown;
     }
 
-    public JButton getBuyButton() {
-        return buyButton;
-    }
+//    public JButton getBuyButton() {
+//        return buyButton;
+//    }
 
     /**
      * Get the set of favorited stocks.

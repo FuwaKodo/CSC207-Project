@@ -247,4 +247,9 @@
 {"symbol":"MFC","from":"2024-11-28","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
 {"volume":790252,"symbol":"MFC","high":32.17,"preMarket":32.04,"low":31.88,"from":"2024-11-29","afterHours":32.21,"api":"polygon","message":"Data found.","close":32.13,"open":32.02,"status":"OK"},
 {"symbol":"MFC","from":"2024-11-30","api":"polygon","message":"Data not found.","status":"NOT_FOUND"},
-{"symbol":"MFC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}
+{"symbol":"MFC","from":"2024-12-01","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"AAPL","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"volume":1.86931044E8,"symbol":"NVDA","high":139.3,"preMarket":136.05,"low":135.67,"from":"2024-11-26","afterHours":136.27,"api":"polygon","message":"Data found.","close":136.92,"open":137.7,"status":"OK"},
+{"symbol":"NVDA","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"MFC","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"},
+{"symbol":"INTC","from":"2024-12-02","api":"polygon","message":"Fatal error.","status":"FATAL_ERROR"}

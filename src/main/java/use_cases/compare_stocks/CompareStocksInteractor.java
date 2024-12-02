@@ -4,8 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import entities.Stock;
-import use_cases.StockDataAccessInterface;
+import entities.SharePrices;
+import interface_adapters.gateways.StockSymbolsLoader;
+import use_cases.StockDataInterface;
 
 /**
  * The use case to compare stocks using earnings per share, dividends, and
@@ -13,86 +14,59 @@ import use_cases.StockDataAccessInterface;
  */
 public class CompareStocksInteractor implements CompareStocksInputBoundary {
     private final CompareStocksOutputBoundary presenter;
-    private final StockDataAccessInterface dataAccess;
+    private final StockDataInterface dataAccess;
+    private final StockSymbolsLoader symbolsLoader;
 
-    public CompareStocksInteractor(CompareStocksOutputBoundary presenter, StockDataAccessInterface dataAccess) {
+    public CompareStocksInteractor(CompareStocksOutputBoundary presenter, StockDataInterface dataAccess) {
         this.presenter = presenter;
         this.dataAccess = dataAccess;
+        symbolsLoader = new StockSymbolsLoader();
     }
 
     @Override
     public void execute(CompareStocksInputData inputData) {
-        final Stock stock1 = dataAccess.getStockByCompany(inputData.getFirstStockName());
-        final Stock stock2 = dataAccess.getStockByCompany(inputData.getSecondStockName());
-
         final String summary = getComparisonSummary(
-                stock1,
-                stock2,
+                inputData.getFirstStockSymbol(),
+                inputData.getSecondStockSymbol(),
                 inputData.getStartDate(),
                 inputData.getEndDate()
                 );
         presenter.displayComparisonSummary(summary);
     }
 
-    public List<String> getStockNames() {
-        return dataAccess.getAllCompanyNames();
+    public List<String> getStockSymbols() {
+        return symbolsLoader.getSymbols();
     }
 
-    private String getComparisonSummary(Stock stock1, Stock stock2, Date start, Date end) {
-        // Compare earnings per share
-        final Double stock1EPS = stock1.getEarningsPerShare(start, end);
-        final Double stock2EPS = stock2.getEarningsPerShare(start, end);
-        // Compare growth percentage
-        final Double stock1Growth = stock1.getGrowthPercentage(start, end);
-        final Double stock2Growth = stock2.getGrowthPercentage(start, end);
-        //Compare dividends
-        final Double stock1Dividends = stock1.getDividendsPerShare(end);
-        final Double stock2Dividends = stock2.getDividendsPerShare(end);
+    private String getComparisonSummary(String symbol1, String symbol2, Date start, Date end) {
+        // Compare stock volumes
+        final Double stock1Volumes = dataAccess.getVolume(symbol1, end);
+        final Double stock2Volumes = dataAccess.getVolume(symbol2, end);
+        // Compare growth percentages
+        final SharePrices stock1SharePrices = dataAccess.getSharePrices(symbol1, start, end);
+        final SharePrices stock2SharePrices = dataAccess.getSharePrices(symbol2, start, end);
 
-        final String epsSummary = formatSummary(
-                "From %s to %s, %s earned $%.1f earnings per share while %s earned $%.1f earnings per share.",
-                start, end, stock1, stock2, stock1EPS, stock2EPS
-        );
-
-        final String growthSummary = formatSummary(
-                "From %s to %s, %s grew %.1f%% while %s grew %.1f%%.",
-                start, end, stock1, stock2, stock1Growth, stock2Growth
-        );
-
-        final String dividendsSummary = String.format(
-                "On %s, %s featured %.1f dividends per share while %s featured %.1f per share.",
+        final String volumesSummary = String.format(
+                "At the end of %s, the volume of %s is %.1f shares and the volume of %s is %.1f shares.",
                 formattedDateString(end),
-                stock1.getCompany(),
-                stock1Dividends,
-                stock2.getCompany(),
-                stock2Dividends
+                symbol1, stock1Volumes,
+                symbol2, stock2Volumes
         );
 
-        return epsSummary + "\n" + growthSummary + "\n" + dividendsSummary;
+        final String growthSummary = String.format(
+                "From %s to %s, %s changed from $%.1f per share to $%.1f per share and " +
+                        "%s changed from $%.1f per share to $%.1f per share.",
+                formattedDateString(start), formattedDateString(end),
+                symbol1, stock1SharePrices.getValue(start), stock1SharePrices.getValue(end),
+                symbol2, stock2SharePrices.getValue(start), stock2SharePrices.getValue(end)
+        );
+
+        return volumesSummary + "\n" + growthSummary;
     }
 
     private String formattedDateString(Date date) {
         final String pattern = "dd/MM/yyyy";
         final SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(date);
-    }
-
-    private String formatSummary(
-            String format,
-            Date start,
-            Date end,
-            Stock stock1,
-            Stock stock2,
-            Double firstStockVal,
-            Double secondStockVal) {
-        return String.format(
-                format,
-                formattedDateString(start),
-                formattedDateString(end),
-                stock1.getCompany(),
-                firstStockVal,
-                stock2.getCompany(),
-                secondStockVal
-        );
     }
 }

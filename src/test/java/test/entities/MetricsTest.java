@@ -1,4 +1,3 @@
-/*
 package test.entities;
 
 import entities.MetricValues;
@@ -12,12 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 class MetricsTest {
     private Metrics metrics;
     private final List<Double> mockRawValues = MockMetrics.makeRawValues();
-    private final List<LocalDate> mockDates = MockMetrics.makeDates();
+    private final List<Date> mockDates = MockMetrics.makeDates();
 
     @BeforeEach
     void setUp() {
@@ -28,22 +29,22 @@ class MetricsTest {
 
     @Test
     void getSharePrice() {
-        final LocalDate date = mockDates.get(0);
+        final Date date = mockDates.get(0);
         final Double expectedPrice = mockRawValues.get(0);
         assertEquals(metrics.getSharePrice(date), expectedPrice);
     }
 
     @Test
     void getVolume() {
-        final LocalDate date = mockDates.get(0);
+        final Date date = mockDates.get(0);
         final Double expectedVolume = mockRawValues.get(0);
         assertEquals(metrics.getVolume(date), expectedVolume);
     }
 
     @Test
     void getGrowthPercentage() {
-        final LocalDate start = mockDates.get(0);
-        final LocalDate end = mockDates.get(2);
+        final Date start = mockDates.get(0);
+        final Date end = mockDates.get(2);
         final Double startPrice = metrics.getSharePrice(start);
         final Double endPrice = metrics.getSharePrice(end);
         final Double expectedValue = (endPrice - startPrice) / startPrice * 100;
@@ -51,17 +52,8 @@ class MetricsTest {
     }
 
     @Test
-    void getEarningsPerShare() {
-        final LocalDate start = mockDates.get(0);
-        final LocalDate end = mockDates.get(1);
-        final Double totalEarnings = mockRawValues.get(0) + mockRawValues.get(1);
-        assertEquals(metrics.getEarningsPerShare(start, end),
-                totalEarnings / metrics.getSharePrice(mockDates.get(2)));
-    }
-
-    @Test
     void getDividendsPerShare() {
-        final LocalDate date = mockDates.get(0);
+        final Date date = mockDates.get(0);
         final Double expectedValue = mockRawValues.get(0);
         assertEquals(metrics.getDividendsPerShare(date), expectedValue);
     }
@@ -69,10 +61,17 @@ class MetricsTest {
     @Test
     void getNonexistentMetricValue() {
         final int lastIndex = mockDates.size() - 1;
-        final LocalDate latest = mockDates.get(lastIndex);
-        final LocalDate nonexistentDate = latest.plusDays(1);
+        final Date latest = mockDates.get(lastIndex);
+        final Date nonexistentDate = addOneDay(latest);
 
         final Double expectedValue = metrics.getSharePrice(latest);
         assertEquals(expectedValue, metrics.getSharePrice(nonexistentDate));
     }
-}*/
+
+    private Date addOneDay(Date date) {
+        final Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, 1);
+        return c.getTime();
+    }
+}

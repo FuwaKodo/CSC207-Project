@@ -29,23 +29,93 @@ public class FavoriteStockInteractorTest {
         new FavoriteStockInteractor(null);
     }
 
-    @Test
-    public void toggleFavorite_removeExistingStock_success() {
-        // Arrange
-        String symbol = "AAPL";
-        // First add the stock
-        interactor.toggleFavorite(new FavoriteStockInputData(symbol));
-        presenter.lastToggledSymbol = null; // Reset the presenter
-        presenter.lastToggledStatus = false;
 
-        // Act - toggle again to remove
-        interactor.toggleFavorite(new FavoriteStockInputData(symbol));
+    @Test
+    public void toggleFavorite() {
+        // Add a stock to favorites
+        String symbol = "GOOGL";
+        FavoriteStockInputData inputData = new FavoriteStockInputData(symbol);
+
+        // Act
+        interactor.toggleFavorite(inputData);
 
         // Assert
+        assertEquals(symbol, presenter.lastToggledSymbol);
+    }
+
+    @Test
+    public void testToggleFavorite() {
+        // Add multiple stocks and then toggle one off
+        String symbol1 = "AAPL";
+        String symbol2 = "MSFT";
+
+        // Add two stocks
+        interactor.toggleFavorite(new FavoriteStockInputData(symbol1));
+        interactor.toggleFavorite(new FavoriteStockInputData(symbol2));
+
+        // Reset presenter
+        presenter.lastToggledSymbol = null;
+        presenter.lastToggledStatus = false;
+
+        // Remove one stock
+        interactor.toggleFavorite(new FavoriteStockInputData(symbol1));
+
+        // Assert
+        assertEquals(symbol1, presenter.lastToggledSymbol);
+        assertFalse(presenter.lastToggledStatus);
+    }
+
+    @Test
+    public void testGetFavorites() {
+        // Add multiple stocks and retrieve
+        String symbol1 = "AAPL";
+        String symbol2 = "GOOGL";
+
+        interactor.toggleFavorite(new FavoriteStockInputData(symbol1));
+        interactor.toggleFavorite(new FavoriteStockInputData(symbol2));
+
+        // Retrieve favorites
+        interactor.getFavorites();
+
+        // Assert
+        assertNotNull(presenter.lastPresentedFavorites);
+    }
+
+    @Test
+    public void testToggleFavorite1() {
+        // Test multiple toggles of the same stock
+        String symbol = "TSLA";
+
+        // First toggle (add)
+        interactor.toggleFavorite(new FavoriteStockInputData(symbol));
+        assertTrue(presenter.lastToggledStatus);
+
+        // Reset presenter
+        presenter.lastToggledSymbol = null;
+        presenter.lastToggledStatus = false;
+
+        // Second toggle (remove)
+        interactor.toggleFavorite(new FavoriteStockInputData(symbol));
         assertEquals(symbol, presenter.lastToggledSymbol);
         assertFalse(presenter.lastToggledStatus);
     }
 
+    @Test
+    public void testGetFavorites1() {
+        // Test getting favorites with multiple stocks
+        String[] symbols = {"AAPL", "GOOGL", "MSFT", "AMZN", "FB"};
+
+        // Add multiple stocks
+        for (String symbol : symbols) {
+            interactor.toggleFavorite(new FavoriteStockInputData(symbol));
+        }
+
+        // Retrieve favorites
+        interactor.getFavorites();
+
+        // Assert
+        assertNotNull(presenter.lastPresentedFavorites);
+    }
 
     // Test double for the presenter
     private static class TestFavoriteStockPresenter implements FavoriteStockOutputBoundary {

@@ -10,6 +10,7 @@ import use_cases.compare_stocks.CompareStocksInputData;
 import use_cases.compare_stocks.CompareStocksInteractor;
 import use_cases.compare_stocks.CompareStocksOutputBoundary;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -50,5 +51,19 @@ class CompareStocksInteractorTest {
         List<String> names = interactor.getStockSymbols();
         StockSymbolsLoader symbolsLoader = new StockSymbolsLoader();
         assertTrue(names.equals(symbolsLoader.getSymbols()));
+    }
+
+    @Test
+    void testStartDateAfterEndDate() {
+        final Calendar c = Calendar.getInstance();
+        final Date start = c.getTime();
+        c.add(Calendar.DAY_OF_MONTH, -5);
+        final Date end = c.getTime();
+
+        final CompareStocksInputData input = new CompareStocksInputData(
+                "aaa", "bbb", start, end
+        );
+        interactor.execute(input);
+        assertTrue(outputSummary.equals("The end date must be after the start date!"));
     }
 }
